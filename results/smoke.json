@@ -1,0 +1,9 @@
+{
+ "provenance": "run (synthetic smoke test)",
+ "files": 84,
+ "sources": 40,
+ "recovered_lineages": 23,
+ "lineage_split_contamination_true_lineage": 0.0,
+ "random_split_contamination_true_lineage": 0.7619047619047619,
+ "macro_ap_perfect": 1.0
+}

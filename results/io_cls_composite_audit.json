@@ -1,0 +1,16 @@
+{
+ "provenance": "run (reused read-only from the earlier intraoral composite build, dental-method results/cls_dedup_audit.json)",
+ "total_files_walked": 5563,
+ "n_unique_md5": 3899,
+ "n_md5_in_multiple_class_folders": 392,
+ "pairwise_overlap_counts": {
+  "calculus&gingivitis": 368,
+  "calculus&hypodontia": 18,
+  "gingivitis&hypodontia": 18,
+  "calculus&caries": 7,
+  "caries&gingivitis": 7,
+  "calculus&discoloration": 3,
+  "discoloration&gingivitis": 3,
+  "discoloration&hypodontia": 1
+ }
+}

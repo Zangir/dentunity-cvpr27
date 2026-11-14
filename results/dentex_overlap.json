@@ -1,0 +1,23 @@
+{
+ "provenance": "run",
+ "tau": 0.9806216955184937,
+ "dentex_train_images": 705,
+ "dentex_eval_images": 50,
+ "train_images_with_copy_in_dentunity": 0,
+ "eval_images_with_copy_in_dentunity": 0,
+ "eval_images_kept": 50,
+ "max_sim_quantiles": [
+  0.962989330291748,
+  0.9733838319778443,
+  0.9781262826919556,
+  0.9796015620231628
+ ],
+ "eval_boxes_kept": 182,
+ "eval_class_boxes": {
+  "Impacted": 40,
+  "Caries": 101,
+  "Periapical Lesion": 9,
+  "Deep Caries": 32
+ },
+ "train_boxes": 3529
+}

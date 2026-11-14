@@ -1,0 +1,15 @@
+{
+ "provenance": "run (scripts/make_figures.py; 40,000 sampled pairs, seed 0)",
+ "px_random_pairs": 39991,
+ "px_random_q999": 0.9800369280576707,
+ "px_random_share_above_tau": 0.0008251856667750244,
+ "px_reexport_pairs": 7997,
+ "px_reexport_share_above_tau": 0.9913717644116544,
+ "px_reexport_median": 0.9997195601463318,
+ "io_random_pairs": 39978,
+ "io_random_share_above_tau_hi": 0.0005503026664665567,
+ "io_random_share_above_tau_split": 0.3763319825904247,
+ "io_aug_files": 6757,
+ "io_aug_share_above_tau_split": 0.8870800651176558,
+ "io_aug_share_above_tau_hi": 0.19772088204824625
+}

@@ -1,0 +1,215 @@
+{
+ "provenance": "run",
+ "io_cls": {
+  "images": 3899,
+  "split_old_lineage_recipe": {
+   "train": 2646,
+   "val": 416,
+   "test": 837
+  },
+  "lineages": 520,
+  "split_images": {
+   "train": 2697,
+   "val": 394,
+   "test": 808
+  },
+  "split_lineages": {
+   "train": 277,
+   "val": 90,
+   "test": 153
+  },
+  "label_images": {
+   "calculus": 829,
+   "caries": 201,
+   "gingivitis": 1616,
+   "hypodontia": 1242,
+   "tooth discoloration": 176,
+   "mouth ulcer": 243
+  },
+  "multi_label_images": 392,
+  "labels_per_image_mean": 1.1046422159528084
+ },
+ "io_det": {
+  "images": 1373,
+  "boxes": 3129,
+  "split_images": {
+   "test": 273,
+   "val": 137,
+   "train": 963
+  },
+  "split_boxes": {
+   "train": 2216,
+   "val": 308,
+   "test": 605
+  },
+  "class_boxes": {
+   "Caries": 2010,
+   "Ulcer": 338,
+   "Tooth Discoloration": 303,
+   "Gingivitis": 478
+  },
+  "lineages": 318
+ },
+ "px_files": {
+  "files": 13932,
+  "usable_files": 13926,
+  "re_exports": 7997,
+  "boxes_all_files": 136740
+ },
+ "px_det": {
+  "images": 5929,
+  "boxes": 56790,
+  "split_images": {
+   "val": 593,
+   "test": 1186,
+   "train": 4150
+  },
+  "split_boxes": {
+   "train": 39657,
+   "val": 5531,
+   "test": 11602
+  },
+  "class_boxes": {
+   "Caries": 4125,
+   "Crown": 4428,
+   "Filling": 20391,
+   "Implant": 803,
+   "Malaligned": 9,
+   "Mandibular Canal": 362,
+   "Missing teeth": 1502,
+   "Periapical lesion": 1384,
+   "Retained root": 77,
+   "Root Canal Treatment": 6558,
+   "Root Piece": 892,
+   "impacted tooth": 11873,
+   "maxillary sinus": 270,
+   "Bone Loss": 3019,
+   "Fracture teeth": 10,
+   "Permanent Teeth": 11,
+   "Supra Eruption": 48,
+   "TAD": 4,
+   "abutment": 33,
+   "attrition": 44,
+   "bone defect": 1,
+   "gingival former": 9,
+   "metal band": 65,
+   "orthodontic brackets": 136,
+   "permanent retainer": 8,
+   "post - core": 253,
+   "plating": 8,
+   "wire": 231,
+   "Cyst": 5,
+   "Root resorption": 3,
+   "Primary teeth": 228
+  },
+  "class_images": {
+   "Caries": 1264,
+   "Crown": 1603,
+   "Filling": 4179,
+   "Implant": 267,
+   "Malaligned": 6,
+   "Mandibular Canal": 187,
+   "Missing teeth": 701,
+   "Periapical lesion": 864,
+   "Retained root": 34,
+   "Root Canal Treatment": 2289,
+   "Root Piece": 365,
+   "impacted tooth": 4847,
+   "maxillary sinus": 136,
+   "Bone Loss": 1434,
+   "Fracture teeth": 9,
+   "Permanent Teeth": 4,
+   "Supra Eruption": 39,
+   "TAD": 3,
+   "abutment": 22,
+   "attrition": 15,
+   "bone defect": 1,
+   "gingival former": 5,
+   "metal band": 36,
+   "orthodontic brackets": 75,
+   "permanent retainer": 5,
+   "post - core": 140,
+   "plating": 2,
+   "wire": 136,
+   "Cyst": 5,
+   "Root resorption": 2,
+   "Primary teeth": 47
+  },
+  "classes_in_test": 28,
+  "width_1615": 5350,
+  "empty_images": 43
+ },
+ "px_seg": {
+  "images": 5297,
+  "instances": 50754,
+  "polygon_instances": 48537,
+  "split_images": {
+   "val": 532,
+   "test": 1055,
+   "train": 3710
+  },
+  "split_instances": {
+   "train": 35444,
+   "val": 4993,
+   "test": 10317
+  },
+  "classes_present": 29,
+  "polygon_share": 0.956318713795957
+ },
+ "total": {
+  "images": 11201,
+  "annotations": 64226,
+  "tasks": 4,
+  "modalities": 2,
+  "unified_concepts": 36,
+  "distinct_images": 10456,
+  "task_image_instances": 16498
+ },
+ "audit": {
+  "provenance": "run",
+  "io_det_files": 1508,
+  "io_det_exact_duplicate_files_removed": 135,
+  "io_det_duplicate_groups_with_conflicting_boxes": 79,
+  "link_embedding_reproduction_min_cos": 0.9999998211860657,
+  "io_tau_split": 0.7307118773460388,
+  "io_tau_hi": 0.9503251314163208,
+  "io_det_bytes_identical_to_cls": 745,
+  "io_det_max_sim_to_cls_ge_tau_hi": 782,
+  "io_det_edges": 6690,
+  "io_cls_lineages_cached": 530,
+  "io_components": 544,
+  "io_largest_component": 1789,
+  "io_forced_train_components": 1,
+  "io_test_contamination": 0.0,
+  "io_val_contamination": 0.0,
+  "io_det_shipped_val_share_with_train_lineage": 0.9722222222222222,
+  "io_det_shipped_sizes": {
+   "train": 1337,
+   "val": 36
+  },
+  "io_cls_hash_split_test_share_with_train_lineage": 0.9102384291725105,
+  "io_cls_hash_split_sizes": {
+   "train": 2580,
+   "val": 606,
+   "test": 713
+  },
+  "io_det_shipped_val_share_with_cls_train_lineage": 0.6388888888888888,
+  "io_cls_test_share_with_shipped_det_train_lineage": 0.4994026284348865,
+  "io_aug_precision_copies_by_split": {
+   "null": 5421,
+   "train": 899,
+   "test": 299,
+   "val": 138
+  },
+  "px_tau_hi": 0.9806216955184937,
+  "px_registered_links": 47,
+  "px_embedding_edges": 11375,
+  "px_lineages_source_hash_registered": 5931,
+  "px_lineages_final": 5255,
+  "px_shipped_test_share_with_train_lineage": 0.9613924050632912,
+  "px_shipped_valid_share_with_train_lineage": 0.542319749216301,
+  "px_test_contamination": 0.0,
+  "px_test_contamination_incl_reexports_in_train": 0.0,
+  "px_copy_families_used": 5929
+ }
+}

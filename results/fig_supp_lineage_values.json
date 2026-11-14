@@ -1,0 +1,27 @@
+{
+ "provenance": "run (scripts/make_figures.py)",
+ "(a)": {
+  "hist": [
+   223,
+   2896,
+   1681,
+   441,
+   12,
+   0
+  ],
+  "n_lineages": 5253,
+  "max_size": 15
+ },
+ "(b)": {
+  "hist": [
+   112,
+   133,
+   39,
+   166,
+   92,
+   2
+  ],
+  "n_lineages": 544,
+  "max_size": 1789
+ }
+}

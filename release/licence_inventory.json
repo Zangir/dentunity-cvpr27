@@ -1,0 +1,324 @@
+{
+ "schema": "licence_inventory v1",
+ "generated": "2026-11-11",
+ "method": "Metadata only: Kaggle public API endpoints /api/v1/datasets/view, /api/v1/datasets/metadata, /api/v1/datasets/list (file listings; no file downloads), web search, arXiv PDF text. No images or archives downloaded. Roboflow Universe project pages returned HTTP 403 to automated fetching, so no Roboflow licence is recorded verbatim. Filename identifier counts computed locally over the folder listing and COCO JSON file_name fields; no names were written to any output.",
+ "rehost_rule": "Re-host only if a clear licence allows redistribution AND the upstream chain is documented AND no identifiers; otherwise build-kit only.",
+ "sources": [
+  {
+   "source_id": "PANO-DXPD31",
+   "local_subset": "<download>/Opensource Dental Detection-31k/Opensource Dental Detection-31k/Dental-Disease-Detection  (COCO/COCO/{train,valid,test} + annotations/*.json; YOLO/YOLO/{train,valid,test} + data.yaml; also best.pt and checkpoint0033_4scale.pth model weights)",
+   "n_files_local": {
+    "images_declared_in_COCO_json": 13932,
+    "declared_by_split": {
+     "train": 9481,
+     "valid": 2871,
+     "test": 1580
+    },
+    "unique_image_basenames_on_disk": 8956,
+    "jpg_files_on_disk_incl_COCO_YOLO_copies": 17665,
+    "note": "Local snapshot is partial: COCO/train holds 4,271 of the 9,481 train images declared in train_coco.json; YOLO/train holds 4,492 (union of both trees 4,505). Every local file present in the (truncated, 20,200-entry) Kaggle API file listing matches it by path and byte size (11,893 of 11,893)."
+   },
+   "modality": "panoramic dental radiograph (OPG), stored as RGB JPEG; 8,423 images at 640x640 and 5,509 at 1615x840 (declared set)",
+   "tasks": [
+    "object detection (31 classes, COCO boxes)",
+    "polygon/instance segmentation (YOLO polygons)"
+   ],
+   "publisher_url": "https://www.kaggle.com/datasets/lokisilvres/dental-disease-panoramic-detection-dataset",
+   "publisher": "Kaggle user 'lokisilvres' (display name 'Loki Silvres'); dataset 'Dental X-Ray Panoramic Dataset' (id 5760754, version 6, last updated 2024-10-10)",
+   "declared_licence_verbatim": "Apache 2.0",
+   "licence_evidence_quote": "https://www.kaggle.com/api/v1/datasets/view/lokisilvres/dental-disease-panoramic-detection-dataset returns \"licenseName\":\"Apache 2.0\"; https://www.kaggle.com/api/v1/datasets/metadata/lokisilvres/dental-disease-panoramic-detection-dataset returns \"licenses\":[{\"name\":\"apache-2.0\"}] and \"userSpecifiedSources\":\"Roboflow\". Description (verbatim, first lines): \"Dental Disease Panoramic Dataset\\nContains segmentation dataset in yolo and coco formats, along with model weights.\"",
+   "accessed_date": "2026-11-11",
+   "upstream_chain": [
+    {
+     "url": "https://www.kaggle.com/datasets/lokisilvres/dental-disease-panoramic-detection-dataset",
+     "licence_or_null": "Apache 2.0",
+     "evidence": "Licence as declared by the Kaggle uploader (API licenseName). Version notes: v1 2024-09-24 'Initial release'; v2 2024-10-04 'Added model weights: yolov8x-seg for 31 classes'; v4 2024-10-09; v5 2024-10-10 'Added Combined dataset in COCO format'; v6 2024-10-10. The uploader is not shown to be the rights holder of the radiographs."
+    },
+    {
+     "url": "https://universe.roboflow.com/",
+     "licence_or_null": null,
+     "evidence": "Roboflow export is certain but the specific project(s) are not identified: Kaggle metadata \"userSpecifiedSources\":\"Roboflow\"; all 13,932 declared image filenames follow the Roboflow export pattern '<stem>_<ext>.rf.<32-hex>.jpg'; local YOLO data.yaml comment '# path: ../datasets/roboflow'; data.yaml train/val/test are absolute paths under the uploader's home directory and test points to valid/images. COCO JSONs carry no 'info' or 'licenses' blocks."
+    },
+    {
+     "url": "https://universe.roboflow.com/test-cz1yi/pano-fcjgf",
+     "licence_or_null": null,
+     "evidence": "CANDIDATE, UNVERIFIED. Search-engine snippets describe a Roboflow 'pano' project (~8.37k images, 14 classes) whose label list includes 'Malaligned', 'Root Piece', 'Mandibular Canal' and the misspelling 'croen'. The local test_coco.json declares exactly 14 categories including 'croen', and 8,423 declared images are 640x640, consistent with this project being the source of the 640x640 portion. Page returned HTTP 403; licence not read."
+    },
+    {
+     "url": "https://universe.roboflow.com/teja-5u5er/teeth-zadox",
+     "licence_or_null": null,
+     "evidence": "CANDIDATE, UNVERIFIED. Search summary reports a 28-class Roboflow project listing 'Malaligned', 'Root Piece' and 'Supra Eruption' and a CC BY 4.0 licence. Not confirmed (HTTP 403); not linked to the 1615x840 portion by any evidence beyond class names."
+    },
+    {
+     "url": "https://universe.roboflow.com/celldetection-ok5sm/dental-x-ray-panoramic-dataset",
+     "licence_or_null": null,
+     "evidence": "SIBLING/DOWNSTREAM COPIES, UNVERIFIED: several Roboflow Universe projects titled 'Dental X-Ray Panoramic Dataset' with the same 31 classes and ~13.8k images (workspaces celldetection-ok5sm, areeba-gul-o2vxd, opg-unbmz, tooth-training, deepu-1ycwx); search snippets say CC BY 4.0. Their creation dates and fork direction relative to the Kaggle upload could not be read (HTTP 403)."
+    },
+    {
+     "url": "https://www.kaggle.com/datasets/ishantrajkashyap/dental-disease-detection",
+     "licence_or_null": "apache-2.0 (downstream mirror, not upstream)",
+     "evidence": "Downstream Kaggle re-upload (v1 2026-01-19) with the identical description and identical listed size; its userSpecifiedSources states (verbatim) \"All images were selected for research and educational purposes only. No private or proprietary clinical data was used, and all images are anonymized.\" This claim is contradicted by the filename finding below and is not evidence of provenance."
+    }
+   ],
+   "identifiers_risk": "Filenames embed what appear to be personal names and dates: 2,774 of 13,932 declared images (2,483 of 8,956 unique images on disk; 4,956 on-disk file copies) have a filename stem with >=1 purely alphabetic segment of >=2 letters (excluding jpg/png/copy etc.); 2,672 of these have >=2 such segments, 2,771 contain a token absent from an English dictionary, and 2,392 also contain a date-like pattern (d-m-yyyy). ~1,245 distinct such tokens. Heuristic count; names were never printed. The remaining 11,158 stems are numeric ('<n>' or '<n>-jpg_png'). Image-burned-in text not assessed here.",
+   "consent_or_ethics_statement_found": {
+    "found": false,
+    "quote": null,
+    "note": "No consent, ethics approval or de-identification statement in Kaggle description/metadata or in the local data.yaml/COCO JSON. The only 'anonymized' claim found is on a 2026 downstream mirror (quoted above) and is contradicted by the filenames."
+   },
+   "redistribution_decision": "build_kit_only",
+   "rationale": "Although the Kaggle uploader declares Apache 2.0 (which would permit redistribution), (i) the uploader is a re-publisher of Roboflow exports and the original Roboflow project(s), their owners and licences are not documented, so the Apache grant cannot be traced to a rights holder; (ii) ~2.8k filenames embed apparent patient names and dates, so the source is not de-identified; (iii) no consent/ethics statement. Fails two of three re-host conditions. Release a build kit only: Kaggle-API fetch of lokisilvres/dental-disease-panoramic-detection-dataset v6, a sha256 manifest keyed by content hash (never by original filename), a local renamer to hashed names, and our split/label files keyed by sha256. Do not redistribute the bundled best.pt / checkpoint .pth weights."
+  },
+  {
+   "source_id": "ORAL-CALCULUS",
+   "local_subset": "<download>/Dataset_04_11_Intraoral_Expert/Dataset_04_11_Intraoral_Expert/Calculus/Calculus",
+   "n_files_local": 1296,
+   "modality": "intraoral colour photograph (JPEG/PNG)",
+   "tasks": [
+    "image classification (folder label 'Calculus')"
+   ],
+   "publisher_url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+   "publisher": "Kaggle user 'salmansajid05' (display name 'Salman Sajid'); dataset 'Oral Diseases ' (id 2729190, version 3)",
+   "declared_licence_verbatim": "Unknown",
+   "licence_evidence_quote": "https://www.kaggle.com/api/v1/datasets/view/salmansajid05/oral-diseases returns \"licenseName\":\"Unknown\"; https://www.kaggle.com/api/v1/datasets/metadata/salmansajid05/oral-diseases returns \"licenses\":[{\"name\":\"unknown\"}] and \"userSpecifiedSources\":\"\" (no source declared). Kaggle description (verbatim): \"Image Sources: The dataset is a compilation of images sourced from multiple hospitals and reputable dental websites.\"",
+   "accessed_date": "2026-11-11",
+   "upstream_chain": [
+    {
+     "url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+     "licence_or_null": null,
+     "evidence": "Publisher licence field is 'Unknown' (API licenseName \"Unknown\"; metadata licenses [{\"name\":\"unknown\"}]). Versions: v1 2022-12-13 'Initial release', v2 2023-05-28 'Data Update 2023-05-28', v3 2024-04-03 'Update 2024-04-03'. Local copy matches the v3 file listing (API /datasets/list) path-for-path and byte-size-for-size for all 15,373 files (after normalising a trailing space in the remote directory name 'Tooth Discoloration ')."
+    },
+    {
+     "url": null,
+     "licence_or_null": null,
+     "evidence": "Upstream stated only as \"multiple hospitals and reputable dental websites\" (Kaggle description). No hospital, website, URL, collection date, or rights holder is named; no upstream licence found."
+    }
+   ],
+   "identifiers_risk": "Filenames: no name-like or date-like tokens (numeric indices only). Image content not assessed here. Images reportedly partly from 'dental websites', so third-party copyright and possibly identifiable faces/lips cannot be excluded from metadata alone.",
+   "consent_or_ethics_statement_found": {
+    "found": false,
+    "quote": null,
+    "note": "Kaggle description and metadata contain no consent, ethics-approval or de-identification statement."
+   },
+   "redistribution_decision": "unclear_build_kit_only",
+   "rationale": "Declared licence is 'Unknown' (no grant of redistribution rights); upstream sources are undocumented ('multiple hospitals and reputable dental websites'); no consent/ethics statement. Fails the re-host rule on licence and chain. Release only a build kit: Kaggle-API fetch of salmansajid05/oral-diseases v3 + sha256 manifest + our own annotations keyed by sha256."
+  },
+  {
+   "source_id": "ORAL-CARIES",
+   "local_subset": "<download>/Dataset_04_11_Intraoral_Expert/Dataset_04_11_Intraoral_Expert/Data caries/Data caries  ('caries orignal data set/done' 219 + 'caries augmented data set/preview' 2,382)",
+   "n_files_local": 2601,
+   "modality": "intraoral colour photograph (JPEG/PNG)",
+   "tasks": [
+    "image classification (folder label 'Caries'; includes pre-augmented copies)"
+   ],
+   "publisher_url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+   "publisher": "Kaggle user 'salmansajid05' (display name 'Salman Sajid'); dataset 'Oral Diseases ' (id 2729190, version 3)",
+   "declared_licence_verbatim": "Unknown",
+   "licence_evidence_quote": "https://www.kaggle.com/api/v1/datasets/view/salmansajid05/oral-diseases returns \"licenseName\":\"Unknown\"; https://www.kaggle.com/api/v1/datasets/metadata/salmansajid05/oral-diseases returns \"licenses\":[{\"name\":\"unknown\"}] and \"userSpecifiedSources\":\"\" (no source declared). Kaggle description (verbatim): \"Image Sources: The dataset is a compilation of images sourced from multiple hospitals and reputable dental websites.\"",
+   "accessed_date": "2026-11-11",
+   "upstream_chain": [
+    {
+     "url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+     "licence_or_null": null,
+     "evidence": "Publisher licence field is 'Unknown' (API licenseName \"Unknown\"; metadata licenses [{\"name\":\"unknown\"}]). Versions: v1 2022-12-13 'Initial release', v2 2023-05-28 'Data Update 2023-05-28', v3 2024-04-03 'Update 2024-04-03'. Local copy matches the v3 file listing (API /datasets/list) path-for-path and byte-size-for-size for all 15,373 files (after normalising a trailing space in the remote directory name 'Tooth Discoloration ')."
+    },
+    {
+     "url": null,
+     "licence_or_null": null,
+     "evidence": "Upstream stated only as \"multiple hospitals and reputable dental websites\" (Kaggle description). No hospital, website, URL, collection date, or rights holder is named; no upstream licence found."
+    }
+   ],
+   "identifiers_risk": "Filenames: numeric indices and the class word 'caries' only; no name-like or date-like tokens. 2,382 of 2,601 files are augmented derivatives. Image content not assessed here.",
+   "consent_or_ethics_statement_found": {
+    "found": false,
+    "quote": null,
+    "note": "Kaggle description and metadata contain no consent, ethics-approval or de-identification statement."
+   },
+   "redistribution_decision": "unclear_build_kit_only",
+   "rationale": "Declared licence is 'Unknown' (no grant of redistribution rights); upstream sources are undocumented ('multiple hospitals and reputable dental websites'); no consent/ethics statement. Fails the re-host rule on licence and chain. Release only a build kit: Kaggle-API fetch of salmansajid05/oral-diseases v3 + sha256 manifest + our own annotations keyed by sha256."
+  },
+  {
+   "source_id": "ORAL-GINGIVITIS",
+   "local_subset": "<download>/Dataset_04_11_Intraoral_Expert/Dataset_04_11_Intraoral_Expert/Gingivitis/Gingivitis",
+   "n_files_local": 2349,
+   "modality": "intraoral colour photograph (JPEG/PNG)",
+   "tasks": [
+    "image classification (folder label 'Gingivitis')"
+   ],
+   "publisher_url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+   "publisher": "Kaggle user 'salmansajid05' (display name 'Salman Sajid'); dataset 'Oral Diseases ' (id 2729190, version 3)",
+   "declared_licence_verbatim": "Unknown",
+   "licence_evidence_quote": "https://www.kaggle.com/api/v1/datasets/view/salmansajid05/oral-diseases returns \"licenseName\":\"Unknown\"; https://www.kaggle.com/api/v1/datasets/metadata/salmansajid05/oral-diseases returns \"licenses\":[{\"name\":\"unknown\"}] and \"userSpecifiedSources\":\"\" (no source declared). Kaggle description (verbatim): \"Image Sources: The dataset is a compilation of images sourced from multiple hospitals and reputable dental websites.\"",
+   "accessed_date": "2026-11-11",
+   "upstream_chain": [
+    {
+     "url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+     "licence_or_null": null,
+     "evidence": "Publisher licence field is 'Unknown' (API licenseName \"Unknown\"; metadata licenses [{\"name\":\"unknown\"}]). Versions: v1 2022-12-13 'Initial release', v2 2023-05-28 'Data Update 2023-05-28', v3 2024-04-03 'Update 2024-04-03'. Local copy matches the v3 file listing (API /datasets/list) path-for-path and byte-size-for-size for all 15,373 files (after normalising a trailing space in the remote directory name 'Tooth Discoloration ')."
+    },
+    {
+     "url": null,
+     "licence_or_null": null,
+     "evidence": "Upstream stated only as \"multiple hospitals and reputable dental websites\" (Kaggle description). No hospital, website, URL, collection date, or rights holder is named; no upstream licence found."
+    }
+   ],
+   "identifiers_risk": "Filenames: no name-like or date-like tokens (numeric indices only). Image content not assessed here. Images reportedly partly from 'dental websites', so third-party copyright and possibly identifiable faces/lips cannot be excluded from metadata alone.",
+   "consent_or_ethics_statement_found": {
+    "found": false,
+    "quote": null,
+    "note": "Kaggle description and metadata contain no consent, ethics-approval or de-identification statement."
+   },
+   "redistribution_decision": "unclear_build_kit_only",
+   "rationale": "Declared licence is 'Unknown' (no grant of redistribution rights); upstream sources are undocumented ('multiple hospitals and reputable dental websites'); no consent/ethics statement. Fails the re-host rule on licence and chain. Release only a build kit: Kaggle-API fetch of salmansajid05/oral-diseases v3 + sha256 manifest + our own annotations keyed by sha256."
+  },
+  {
+   "source_id": "ORAL-HYPODONTIA",
+   "local_subset": "<download>/Dataset_04_11_Intraoral_Expert/Dataset_04_11_Intraoral_Expert/hypodontia/hypodontia",
+   "n_files_local": 1251,
+   "modality": "intraoral colour photograph (JPEG/PNG)",
+   "tasks": [
+    "image classification (folder label 'Hypodontia')"
+   ],
+   "publisher_url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+   "publisher": "Kaggle user 'salmansajid05' (display name 'Salman Sajid'); dataset 'Oral Diseases ' (id 2729190, version 3)",
+   "declared_licence_verbatim": "Unknown",
+   "licence_evidence_quote": "https://www.kaggle.com/api/v1/datasets/view/salmansajid05/oral-diseases returns \"licenseName\":\"Unknown\"; https://www.kaggle.com/api/v1/datasets/metadata/salmansajid05/oral-diseases returns \"licenses\":[{\"name\":\"unknown\"}] and \"userSpecifiedSources\":\"\" (no source declared). Kaggle description (verbatim): \"Image Sources: The dataset is a compilation of images sourced from multiple hospitals and reputable dental websites.\"",
+   "accessed_date": "2026-11-11",
+   "upstream_chain": [
+    {
+     "url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+     "licence_or_null": null,
+     "evidence": "Publisher licence field is 'Unknown' (API licenseName \"Unknown\"; metadata licenses [{\"name\":\"unknown\"}]). Versions: v1 2022-12-13 'Initial release', v2 2023-05-28 'Data Update 2023-05-28', v3 2024-04-03 'Update 2024-04-03'. Local copy matches the v3 file listing (API /datasets/list) path-for-path and byte-size-for-size for all 15,373 files (after normalising a trailing space in the remote directory name 'Tooth Discoloration ')."
+    },
+    {
+     "url": null,
+     "licence_or_null": null,
+     "evidence": "Upstream stated only as \"multiple hospitals and reputable dental websites\" (Kaggle description). No hospital, website, URL, collection date, or rights holder is named; no upstream licence found."
+    }
+   ],
+   "identifiers_risk": "Filenames: no name-like or date-like tokens (numeric indices only). Image content not assessed here. Images reportedly partly from 'dental websites', so third-party copyright and possibly identifiable faces/lips cannot be excluded from metadata alone.",
+   "consent_or_ethics_statement_found": {
+    "found": false,
+    "quote": null,
+    "note": "Kaggle description and metadata contain no consent, ethics-approval or de-identification statement."
+   },
+   "redistribution_decision": "unclear_build_kit_only",
+   "rationale": "Declared licence is 'Unknown' (no grant of redistribution rights); upstream sources are undocumented ('multiple hospitals and reputable dental websites'); no consent/ethics statement. Fails the re-host rule on licence and chain. Release only a build kit: Kaggle-API fetch of salmansajid05/oral-diseases v3 + sha256 manifest + our own annotations keyed by sha256."
+  },
+  {
+   "source_id": "ORAL-MOUTH-ULCER",
+   "local_subset": "<download>/Dataset_04_11_Intraoral_Expert/Dataset_04_11_Intraoral_Expert/Mouth Ulcer/Mouth Ulcer  ('ulcer original dataset' 265 + 'Mouth_Ulcer_augmented_DataSet/preview' 2,541)",
+   "n_files_local": 2806,
+   "modality": "intraoral colour photograph (JPEG/PNG)",
+   "tasks": [
+    "image classification (folder label 'Mouth Ulcer'; includes pre-augmented copies)"
+   ],
+   "publisher_url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+   "publisher": "Kaggle user 'salmansajid05' (display name 'Salman Sajid'); dataset 'Oral Diseases ' (id 2729190, version 3)",
+   "declared_licence_verbatim": "Unknown",
+   "licence_evidence_quote": "https://www.kaggle.com/api/v1/datasets/view/salmansajid05/oral-diseases returns \"licenseName\":\"Unknown\"; https://www.kaggle.com/api/v1/datasets/metadata/salmansajid05/oral-diseases returns \"licenses\":[{\"name\":\"unknown\"}] and \"userSpecifiedSources\":\"\" (no source declared). Kaggle description (verbatim): \"Image Sources: The dataset is a compilation of images sourced from multiple hospitals and reputable dental websites.\"",
+   "accessed_date": "2026-11-11",
+   "upstream_chain": [
+    {
+     "url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+     "licence_or_null": null,
+     "evidence": "Publisher licence field is 'Unknown' (API licenseName \"Unknown\"; metadata licenses [{\"name\":\"unknown\"}]). Versions: v1 2022-12-13 'Initial release', v2 2023-05-28 'Data Update 2023-05-28', v3 2024-04-03 'Update 2024-04-03'. Local copy matches the v3 file listing (API /datasets/list) path-for-path and byte-size-for-size for all 15,373 files (after normalising a trailing space in the remote directory name 'Tooth Discoloration ')."
+    },
+    {
+     "url": null,
+     "licence_or_null": null,
+     "evidence": "Upstream stated only as \"multiple hospitals and reputable dental websites\" (Kaggle description). No hospital, website, URL, collection date, or rights holder is named; no upstream licence found."
+    }
+   ],
+   "identifiers_risk": "Filenames: numeric indices and the class words 'Mouth_Ulcer' only; no name-like or date-like tokens. 2,541 of 2,806 files are augmented derivatives. Image content (oral soft tissue, possibly lips/face) not assessed here.",
+   "consent_or_ethics_statement_found": {
+    "found": false,
+    "quote": null,
+    "note": "Kaggle description and metadata contain no consent, ethics-approval or de-identification statement."
+   },
+   "redistribution_decision": "unclear_build_kit_only",
+   "rationale": "Declared licence is 'Unknown' (no grant of redistribution rights); upstream sources are undocumented ('multiple hospitals and reputable dental websites'); no consent/ethics statement. Fails the re-host rule on licence and chain. Release only a build kit: Kaggle-API fetch of salmansajid05/oral-diseases v3 + sha256 manifest + our own annotations keyed by sha256."
+  },
+  {
+   "source_id": "ORAL-TOOTH-DISCOLORATION",
+   "local_subset": "<download>/Dataset_04_11_Intraoral_Expert/Dataset_04_11_Intraoral_Expert/Tooth Discoloration/Tooth Discoloration  ('tooth discoloration original dataset' 183 + 'Tooth_discoloration_augmented_dataser/preview' 1,834)",
+   "n_files_local": 2017,
+   "modality": "intraoral colour photograph (JPEG/PNG)",
+   "tasks": [
+    "image classification (folder label 'Tooth Discoloration'; includes pre-augmented copies)"
+   ],
+   "publisher_url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+   "publisher": "Kaggle user 'salmansajid05' (display name 'Salman Sajid'); dataset 'Oral Diseases ' (id 2729190, version 3)",
+   "declared_licence_verbatim": "Unknown",
+   "licence_evidence_quote": "https://www.kaggle.com/api/v1/datasets/view/salmansajid05/oral-diseases returns \"licenseName\":\"Unknown\"; https://www.kaggle.com/api/v1/datasets/metadata/salmansajid05/oral-diseases returns \"licenses\":[{\"name\":\"unknown\"}] and \"userSpecifiedSources\":\"\" (no source declared). Kaggle description (verbatim): \"Image Sources: The dataset is a compilation of images sourced from multiple hospitals and reputable dental websites.\"",
+   "accessed_date": "2026-11-11",
+   "upstream_chain": [
+    {
+     "url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+     "licence_or_null": null,
+     "evidence": "Publisher licence field is 'Unknown' (API licenseName \"Unknown\"; metadata licenses [{\"name\":\"unknown\"}]). Versions: v1 2022-12-13 'Initial release', v2 2023-05-28 'Data Update 2023-05-28', v3 2024-04-03 'Update 2024-04-03'. Local copy matches the v3 file listing (API /datasets/list) path-for-path and byte-size-for-size for all 15,373 files (after normalising a trailing space in the remote directory name 'Tooth Discoloration ')."
+    },
+    {
+     "url": null,
+     "licence_or_null": null,
+     "evidence": "Upstream stated only as \"multiple hospitals and reputable dental websites\" (Kaggle description). No hospital, website, URL, collection date, or rights holder is named; no upstream licence found."
+    }
+   ],
+   "identifiers_risk": "Filenames: numeric indices and the class words 'Tooth_Discoloration' only; no name-like or date-like tokens. 1,834 of 2,017 files are augmented derivatives. Image content not assessed here.",
+   "consent_or_ethics_statement_found": {
+    "found": false,
+    "quote": null,
+    "note": "Kaggle description and metadata contain no consent, ethics-approval or de-identification statement."
+   },
+   "redistribution_decision": "unclear_build_kit_only",
+   "rationale": "Declared licence is 'Unknown' (no grant of redistribution rights); upstream sources are undocumented ('multiple hospitals and reputable dental websites'); no consent/ethics statement. Fails the re-host rule on licence and chain. Release only a build kit: Kaggle-API fetch of salmansajid05/oral-diseases v3 + sha256 manifest + our own annotations keyed by sha256."
+  },
+  {
+   "source_id": "ORAL-YOLO4",
+   "local_subset": "<download>/Dataset_04_11_Intraoral_Expert/Dataset_04_11_Intraoral_Expert/Caries_Gingivitus_ToothDiscoloration_Ulcer-yolo_annotated-Dataset/.../Data  (images/train 1,493, images/val 49; labels/train 1,466, labels/val 44; data.yaml)",
+   "n_files_local": 1542,
+   "modality": "intraoral colour photograph (JPEG/PNG)",
+   "tasks": [
+    "object detection, 4 classes (0 Caries, 1 Ulcer, 2 Tooth Discoloration, 3 Gingivitis), YOLO txt boxes"
+   ],
+   "publisher_url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+   "publisher": "Kaggle user 'salmansajid05' (display name 'Salman Sajid'); dataset 'Oral Diseases ' (id 2729190, version 3)",
+   "declared_licence_verbatim": "Unknown",
+   "licence_evidence_quote": "https://www.kaggle.com/api/v1/datasets/view/salmansajid05/oral-diseases returns \"licenseName\":\"Unknown\"; https://www.kaggle.com/api/v1/datasets/metadata/salmansajid05/oral-diseases returns \"licenses\":[{\"name\":\"unknown\"}] and \"userSpecifiedSources\":\"\" (no source declared). Kaggle description (verbatim): \"Image Sources: The dataset is a compilation of images sourced from multiple hospitals and reputable dental websites.\"",
+   "accessed_date": "2026-11-11",
+   "upstream_chain": [
+    {
+     "url": "https://www.kaggle.com/datasets/salmansajid05/oral-diseases",
+     "licence_or_null": null,
+     "evidence": "Publisher licence field is 'Unknown' (API licenseName \"Unknown\"; metadata licenses [{\"name\":\"unknown\"}]). Versions: v1 2022-12-13 'Initial release', v2 2023-05-28 'Data Update 2023-05-28', v3 2024-04-03 'Update 2024-04-03'. Local copy matches the v3 file listing (API /datasets/list) path-for-path and byte-size-for-size for all 15,373 files (after normalising a trailing space in the remote directory name 'Tooth Discoloration ')."
+    },
+    {
+     "url": null,
+     "licence_or_null": null,
+     "evidence": "Upstream stated only as \"multiple hospitals and reputable dental websites\" (Kaggle description). No hospital, website, URL, collection date, or rights holder is named; no upstream licence found."
+    },
+    {
+     "url": "https://arxiv.org/abs/2403.12044",
+     "licence_or_null": null,
+     "evidence": "Likely documented origin, direction unverified. arXiv:2403.12044v1 (27 Oct 2023), 'Mobile Application for Oral Disease Detection using Federated Learning', Shankara Narayanan V, Sneha Varsha M, Syed Ashfaq Ahmed, Guruprakash J (Amrita School of Computing, Coimbatore, Amrita Vishwa Vidyapeetham). Verbatim: \"The dataset comprises a total of 1058 images and four classes encompassing a wide range of dental conditions including Caries, Gingivitis, tooth discoloration, and ulcers. The images are sourced from multiple hospitals and dental websites.\" ... \"The dataset is curated using MakeSense AI\" ... \"the dataset is divided into 1465 training images and 43 testing images\". Same class order as local data.yaml; Gingivitis instance counts (653 train / 106 test) equal the local label counts; train/val label-file counts 1,466/44 vs paper 1,465/43; other class counts differ (e.g. Caries 2,051 paper vs 1,221 local train). The paper contains no licence, consent or ethics statement for the data (text search for consent/ethic/IRB/approval/licen/kaggle: 0 hits). The paper's authors do not include the Kaggle uploader."
+    }
+   ],
+   "identifiers_risk": "Filenames: numeric indices and the class word 'caries' only; no name-like or date-like tokens. Image content not assessed here. data.yaml declares 'nc: 1' while listing 4 names and is titled 'dental_calculus_detection' (internal inconsistency, not an identifier).",
+   "consent_or_ethics_statement_found": {
+    "found": false,
+    "quote": null,
+    "note": "Kaggle description and metadata contain no consent, ethics-approval or de-identification statement."
+   },
+   "redistribution_decision": "unclear_build_kit_only",
+   "rationale": "Declared licence is 'Unknown' (no grant of redistribution rights); upstream sources are undocumented ('multiple hospitals and reputable dental websites'); no consent/ethics statement. Fails the re-host rule on licence and chain. Release only a build kit: Kaggle-API fetch of salmansajid05/oral-diseases v3 + sha256 manifest + our own annotations keyed by sha256. The arXiv paper offers a partial description of this subset but no licence or consent, so the chain remains undocumented as to rights."
+  }
+ ],
+ "local_metadata_sha256": {
+  "PANO-DXPD31/COCO/annotations/train_coco.json": "d9a973f3dacc8561dd9f12706e8803775309a295c24525f7359f6645da79f976",
+  "PANO-DXPD31/COCO/annotations/valid_coco.json": "5663c78ca7a3cacc6e9e1dc95f7f1775eb5d2a046bcd200d9178a44089949c06",
+  "PANO-DXPD31/COCO/annotations/test_coco.json": "f870c917e04815271e53f28469ef10daa5fbc75ddd51b1a8438da852b15812e9",
+  "PANO-DXPD31/YOLO/data.yaml": "f4dc17445e14cc9916d7719d5dac49ab453914c4d74dfb2cf447fa74c137834c",
+  "ORAL-YOLO4/Data/data.yaml": "69cbdba1f4d87150afdd4773c94cfce28493e6bb76062654333062e79e515fc0",
+  "note": "Metadata files only; the image sha256 manifests belong to the build kit and must be keyed by content hash, not original filename."
+ }
+}

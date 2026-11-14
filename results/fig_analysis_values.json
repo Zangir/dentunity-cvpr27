@@ -1,0 +1,108 @@
+{
+ "provenance": "run (scripts/make_figures.py)",
+ "pxdet": {
+  "y11s": {
+   "pathology": 0.014892317923713644,
+   "periodontal / soft tissue": 0.08586763799749358,
+   "tooth status / development": 0.14897843292382743,
+   "anatomy": 0.20429741203155544,
+   "restoration / device": 0.16873166064734965
+  },
+  "shipped": {
+   "pathology": 0.02081856124602644,
+   "periodontal / soft tissue": 0.12688302286494405,
+   "tooth status / development": 0.1518485019504462,
+   "anatomy": 0.3994768801857164,
+   "restoration / device": 0.19670308419538843
+  }
+ },
+ "pxseg": {
+  "y11s": {
+   "pathology": 0.007847027324520285,
+   "periodontal / soft tissue": 0.02103433035481584,
+   "tooth status / development": 0.09167880948945678,
+   "restoration / device": 0.1285244323696009
+  },
+  "shipped": {
+   "pathology": 0.013876701409399807,
+   "periodontal / soft tissue": 0.041162492678841256,
+   "tooth status / development": 0.11340229303008134,
+   "restoration / device": 0.1509137855379482
+  }
+ },
+ "pxdet_per_class": {
+  "y11s": {
+   "Caries": 0.05282233053917605,
+   "Crown": 0.5374731066810329,
+   "Filling": 0.3263327292982445,
+   "Implant": 0.4980999586053375,
+   "Malaligned": 0.0,
+   "Mandibular Canal": 0.19185611229437513,
+   "Missing teeth": 0.07178657913452872,
+   "Periapical lesion": 0.02163925907939216,
+   "Retained root": 0.19142518234113232,
+   "Root Canal Treatment": 0.35707488185471215,
+   "Root Piece": 0.17962229674608926,
+   "impacted tooth": 0.5948313009770976,
+   "maxillary sinus": 0.21673871176873574,
+   "Bone Loss": 0.08586763799749358,
+   "Fracture teeth": 0.0,
+   "Permanent Teeth": 0.009428571428571429,
+   "Supra Eruption": 0.0011051988961860593,
+   "TAD": 0.0,
+   "abutment": 0.0,
+   "attrition": 0.0,
+   "gingival former": 0.0,
+   "metal band": 0.00624384860087681,
+   "orthodontic brackets": 0.13527918366294187,
+   "permanent retainer": 0.004306666666666666,
+   "post - core": 0.06186711375804982,
+   "wire": 0.09810243864033341,
+   "Cyst": 0.0,
+   "Primary teeth": 0.1436283338670141
+  },
+  "shipped": {
+   "Caries": 0.04721976225212114,
+   "Crown": 0.5994748731789694,
+   "Filling": 0.3570290633091051,
+   "Implant": 0.5572290251079083,
+   "Malaligned": 0.0,
+   "Mandibular Canal": 0.3731257972012214,
+   "Missing teeth": 0.0897857578316252,
+   "Periapical lesion": 0.05687304397801107,
+   "Retained root": 0.11039053176383581,
+   "Root Canal Treatment": 0.38304313842516197,
+   "Root Piece": 0.22337338702370202,
+   "impacted tooth": 0.6168281563194503,
+   "maxillary sinus": 0.42582796317021143,
+   "Bone Loss": 0.12688302286494405,
+   "Fracture teeth": 0.0,
+   "Permanent Teeth": 0.1207292490118577,
+   "Supra Eruption": 0.0,
+   "TAD": 0.0,
+   "abutment": 0.0,
+   "attrition": 0.0,
+   "gingival former": 0.0,
+   "metal band": 0.02043072071327846,
+   "orthodontic brackets": 0.21825439713706124,
+   "permanent retainer": 0.0,
+   "post - core": 0.03040737555081769,
+   "wire": 0.1945684169223587,
+   "Cyst": 0.0,
+   "Primary teeth": 0.05368093365309845
+  }
+ },
+ "cls": {
+  "vits14_last_cls": 0.6593564390371582,
+  "vits14_dinov2_lin": 0.7589355184625646,
+  "vits14_lattice": 0.8225387169424261,
+  "vitb14_last_cls": 0.6931903209093776,
+  "vitb14_dinov2_lin": 0.7889291479205043,
+  "vitb14_lattice": 0.8144860413084593,
+  "convnext_t_last_cls": 0.737493817790336,
+  "convnext_t_dinov2_lin": 0.7592748533713053,
+  "convnext_t_lattice": 0.7990569839760037,
+  "multi_lattice": 0.8313567668946433,
+  "C2_ensemble": 0.8297757075656224
+ }
+}

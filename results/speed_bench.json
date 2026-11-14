@@ -1,0 +1,33 @@
+{
+ "yolo11n.pt@640": {
+  "img_per_s": 5.465262062024883,
+  "n": 249,
+  "s": 45.56048798561096
+ },
+ "yolo11s.pt@640": {
+  "img_per_s": 4.2651239508847585,
+  "n": 249,
+  "s": 58.38048601150513
+ },
+ "yolo11m.pt@640": {
+  "error": "MPS backend out of memory (MPS allocated: 4.38 GiB, other allocations: 22.55 MiB, max allowed: 4.80 GiB). Tried to allocate 441.00 MiB on shared pool. Use PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 to disable upper limit for memory allocations (may cause system failure)."
+ },
+ "yolo11s.pt@1024": {
+  "img_per_s": 2.178986175448645,
+  "n": 249,
+  "s": 114.27333402633667
+ },
+ "yolo11s-seg.pt@640": {
+  "img_per_s": 2.6323525241056744,
+  "n": 222,
+  "s": 84.33520984649658
+ },
+ "yolo11m-seg.pt@640": {
+  "img_per_s": 1.9151646758152914,
+  "n": 222,
+  "s": 115.91692590713501
+ },
+ "rtdetr-l.pt@640": {
+  "error": "MPS backend out of memory (MPS allocated: 4.62 GiB, other allocations: 174.02 MiB, max allowed: 4.80 GiB). Tried to allocate 5.65 MiB on shared pool. Use PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 to disable upper limit for memory allocations (may cause system failure)."
+ }
+}

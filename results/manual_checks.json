@@ -1,0 +1,10 @@
+{
+ "provenance": "manual inspection by the agent of random image grids (no file names viewed or stored)",
+ "panoramic_random_test_images_viewed": 18,
+ "panoramic_with_burned_in_text": 2,
+ "panoramic_note": "one radiograph shows a burned-in text strip along the bottom edge; one shows a burned-in date of birth and age header",
+ "intraoral_detection_images_viewed": 8,
+ "intraoral_with_stock_photo_watermark": 1,
+ "intraoral_classification_images_viewed": 16,
+ "intraoral_classification_rotated_augmented_looking": 6
+}

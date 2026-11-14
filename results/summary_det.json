@@ -1,0 +1,1102 @@
+{
+ "provenance": "run (aggregated from results/yolo_*.json)",
+ "runs": {
+  "iodet_y11s_s0": {
+   "provenance": "run",
+   "run": "iodet_y11s_s0",
+   "data": "iodet",
+   "model": "yolo11s.pt",
+   "imgsz": 640,
+   "epochs_full_passes": 40,
+   "shards": 1,
+   "batch": 8,
+   "seed": 0,
+   "checkpoint_selection": "best validation fitness (Ultralytics best.pt)",
+   "val": {
+    "box": {
+     "map50_95": 0.13001863105733094,
+     "map50": 0.33344192744100487,
+     "map75": 0.05608923234338864,
+     "precision": 0.4279145371043583,
+     "recall": 0.35734525005145706,
+     "per_class_ap50_95": {
+      "Caries": 0.1456573467426642,
+      "Ulcer": 0.20184481917380434,
+      "Tooth Discoloration": 0.15139055174197663,
+      "Gingivitis": 0.021181806570878488
+     },
+     "per_class_ap50": {
+      "Caries": 0.46185798474406753,
+      "Ulcer": 0.4710285207576842,
+      "Tooth Discoloration": 0.3342186539930407,
+      "Gingivitis": 0.06666255026922707
+     },
+     "n_classes_evaluated": 4
+    },
+    "speed_ms": {
+     "preprocess": 0.2213479200272692,
+     "inference": 29.21570317516355,
+     "loss": 6.235038936410072e-05,
+     "postprocess": 7.59940207290062
+    }
+   },
+   "test": {
+    "box": {
+     "map50_95": 0.1532764159043462,
+     "map50": 0.3721761092595533,
+     "map75": 0.0864649168816369,
+     "precision": 0.5391047766194006,
+     "recall": 0.3737540670466737,
+     "per_class_ap50_95": {
+      "Caries": 0.1199277567862765,
+      "Ulcer": 0.17832984226901322,
+      "Tooth Discoloration": 0.15238265987284536,
+      "Gingivitis": 0.16246540468924986
+     },
+     "per_class_ap50": {
+      "Caries": 0.36468288989507924,
+      "Ulcer": 0.45620854158787916,
+      "Tooth Discoloration": 0.3217846834801372,
+      "Gingivitis": 0.3460283220751175
+     },
+     "n_classes_evaluated": 4
+    },
+    "speed_ms": {
+     "preprocess": 0.2514864324469242,
+     "inference": 10.945534179112517,
+     "loss": 6.228560861541238e-05,
+     "postprocess": 7.0743870471762795
+    }
+   },
+   "logged_epochs_completed": 40
+  },
+  "pxdet_y11s_s0": {
+   "provenance": "run",
+   "run": "pxdet_y11s_s0",
+   "data": "pxdet",
+   "model": "yolo11s.pt",
+   "imgsz": 640,
+   "epochs_full_passes": 20,
+   "shards": 2,
+   "batch": 8,
+   "seed": 0,
+   "checkpoint_selection": "best validation fitness (Ultralytics best.pt)",
+   "val": {
+    "box": {
+     "map50_95": 0.17248252243525589,
+     "map50": 0.31425158570515066,
+     "map75": 0.17272473880874717,
+     "precision": 0.46387264789017957,
+     "recall": 0.43483917813862444,
+     "per_class_ap50_95": {
+      "Caries": 0.03889335246493208,
+      "Crown": 0.5561935234572175,
+      "Filling": 0.3159013261620479,
+      "Implant": 0.5661300555581644,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.30646123338099907,
+      "Missing teeth": 0.05356235919222072,
+      "Periapical lesion": 0.01594624296689364,
+      "Retained root": 0.024881568627450983,
+      "Root Canal Treatment": 0.3697700194486311,
+      "Root Piece": 0.21563820443869805,
+      "impacted tooth": 0.6039441743757112,
+      "maxillary sinus": 0.3216265083818707,
+      "Bone Loss": 0.1039385645914243,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.02352697671662966,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.04770100132245021,
+      "orthodontic brackets": 0.15143572174854014,
+      "post - core": 0.03388824788749066,
+      "wire": 0.09680515467826771,
+      "Primary teeth": 0.12085378061124614
+     },
+     "per_class_ap50": {
+      "Caries": 0.12758636674145837,
+      "Crown": 0.806541421168902,
+      "Filling": 0.5990480500217271,
+      "Implant": 0.9146126493518991,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.5010036754302765,
+      "Missing teeth": 0.20248898586366482,
+      "Periapical lesion": 0.06216564991609634,
+      "Retained root": 0.09143529411764707,
+      "Root Canal Treatment": 0.7385272315460041,
+      "Root Piece": 0.5432570519426024,
+      "impacted tooth": 0.9396438415389861,
+      "maxillary sinus": 0.4589210084556127,
+      "Bone Loss": 0.23271925128822862,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.03660008225550261,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.08253636128364389,
+      "orthodontic brackets": 0.3127142857142858,
+      "post - core": 0.07519867352796458,
+      "wire": 0.2518243972802796,
+      "Primary teeth": 0.25096219377368334
+     },
+     "n_classes_evaluated": 23
+    },
+    "speed_ms": {
+     "preprocess": 0.20977571179845306,
+     "inference": 6.153796660955517,
+     "loss": 7.116681626019449e-05,
+     "postprocess": 6.848507514336338
+    }
+   },
+   "test": {
+    "box": {
+     "map50_95": 0.1351975515299281,
+     "map50": 0.25534426806012317,
+     "map75": 0.1308696314963865,
+     "precision": 0.497535912110372,
+     "recall": 0.33436107642995516,
+     "per_class_ap50_95": {
+      "Caries": 0.05282233053917605,
+      "Crown": 0.5374731066810329,
+      "Filling": 0.3263327292982445,
+      "Implant": 0.4980999586053375,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.19185611229437513,
+      "Missing teeth": 0.07178657913452872,
+      "Periapical lesion": 0.02163925907939216,
+      "Retained root": 0.19142518234113232,
+      "Root Canal Treatment": 0.35707488185471215,
+      "Root Piece": 0.17962229674608926,
+      "impacted tooth": 0.5948313009770976,
+      "maxillary sinus": 0.21673871176873574,
+      "Bone Loss": 0.08586763799749358,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.009428571428571429,
+      "Supra Eruption": 0.0011051988961860593,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.00624384860087681,
+      "orthodontic brackets": 0.13527918366294187,
+      "permanent retainer": 0.004306666666666666,
+      "post - core": 0.06186711375804982,
+      "wire": 0.09810243864033341,
+      "Cyst": 0.0,
+      "Primary teeth": 0.1436283338670141
+     },
+     "per_class_ap50": {
+      "Caries": 0.1567657592863045,
+      "Crown": 0.7904709943530839,
+      "Filling": 0.5955233354545635,
+      "Implant": 0.9200584637073032,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.3497840723013099,
+      "Missing teeth": 0.2285983561746433,
+      "Periapical lesion": 0.07473398136135005,
+      "Retained root": 0.3653555571440422,
+      "Root Canal Treatment": 0.6898168017873598,
+      "Root Piece": 0.43444607336356245,
+      "impacted tooth": 0.9407919684356459,
+      "maxillary sinus": 0.3522904432312328,
+      "Bone Loss": 0.18324660301500106,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.02357142857142857,
+      "Supra Eruption": 0.002420939334637965,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.013838135778214366,
+      "orthodontic brackets": 0.3016266316537254,
+      "permanent retainer": 0.010766666666666666,
+      "post - core": 0.15745005083309427,
+      "wire": 0.23922563955133877,
+      "Cyst": 0.0,
+      "Primary teeth": 0.31885760367894206
+     },
+     "n_classes_evaluated": 28
+    },
+    "speed_ms": {
+     "preprocess": 0.20338385410074453,
+     "inference": 5.019422710754317,
+     "loss": 7.311136194412136e-05,
+     "postprocess": 5.275983837112477
+    }
+   },
+   "logged_epochs_completed": 40
+  },
+  "pxleak_y11n_cleanctl_s0": {
+   "provenance": "run",
+   "run": "pxleak_y11n_cleanctl_s0",
+   "data": "pxdet_cleanctl",
+   "model": "yolo11n.pt",
+   "imgsz": 640,
+   "epochs_full_passes": 15,
+   "shards": 1,
+   "batch": 8,
+   "seed": 0,
+   "checkpoint_selection": "best validation fitness (Ultralytics best.pt)",
+   "val": {
+    "box": {
+     "map50_95": 0.1338664893845289,
+     "map50": 0.24477810739827258,
+     "map75": 0.1305623776142097,
+     "precision": 0.3154215544617986,
+     "recall": 0.33205784536677063,
+     "per_class_ap50_95": {
+      "Caries": 0.010267843815927791,
+      "Crown": 0.47038588665052394,
+      "Filling": 0.2444362464064717,
+      "Implant": 0.5128896657338045,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.21385490276619024,
+      "Missing teeth": 0.03763765651819023,
+      "Periapical lesion": 0.004625747035670762,
+      "Retained root": 0.0022333333333333337,
+      "Root Canal Treatment": 0.2934882102415337,
+      "Root Piece": 0.12246956386985546,
+      "impacted tooth": 0.5978077784687292,
+      "maxillary sinus": 0.26844049990374474,
+      "Bone Loss": 0.06123432139924305,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.0,
+      "orthodontic brackets": 0.08693529564604523,
+      "post - core": 0.0,
+      "wire": 0.06679657038327516,
+      "Primary teeth": 0.08542573367162573
+     },
+     "per_class_ap50": {
+      "Caries": 0.029292439075900963,
+      "Crown": 0.7172073907848763,
+      "Filling": 0.5023839701448932,
+      "Implant": 0.884946805828972,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.37856918238993703,
+      "Missing teeth": 0.1281100672978115,
+      "Periapical lesion": 0.022267907239722044,
+      "Retained root": 0.005583333333333334,
+      "Root Canal Treatment": 0.6238367715098911,
+      "Root Piece": 0.30038499774840294,
+      "impacted tooth": 0.9324355095759799,
+      "maxillary sinus": 0.40327078092160623,
+      "Bone Loss": 0.16515949567115784,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.0,
+      "orthodontic brackets": 0.1753313028952628,
+      "post - core": 0.0,
+      "wire": 0.16543915057895023,
+      "Primary teeth": 0.1956773651635721
+     },
+     "n_classes_evaluated": 23
+    },
+    "speed_ms": {
+     "preprocess": 0.2255881819473564,
+     "inference": 4.629472667754991,
+     "loss": 6.514325585612056e-05,
+     "postprocess": 6.628104757076258
+    }
+   },
+   "test": {
+    "box": {
+     "map50_95": 0.09870101053268973,
+     "map50": 0.1936978751763327,
+     "map75": 0.09076091927172891,
+     "precision": 0.25177716060940125,
+     "recall": 0.2561717807426068,
+     "per_class_ap50_95": {
+      "Caries": 0.011925612016516412,
+      "Crown": 0.45649167473530294,
+      "Filling": 0.262078815774971,
+      "Implant": 0.40637506582832905,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.1912423339086969,
+      "Missing teeth": 0.043714411571410886,
+      "Periapical lesion": 0.00814189157955163,
+      "Retained root": 0.022508460984771807,
+      "Root Canal Treatment": 0.2811038531093294,
+      "Root Piece": 0.08826193929102491,
+      "impacted tooth": 0.5799851310725306,
+      "maxillary sinus": 0.1418650167787646,
+      "Bone Loss": 0.057985382788651466,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.0,
+      "Supra Eruption": 0.0,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.0,
+      "orthodontic brackets": 0.08427638216354169,
+      "permanent retainer": 0.0,
+      "post - core": 0.0004999999999999999,
+      "wire": 0.06615221622597535,
+      "Cyst": 0.0,
+      "Primary teeth": 0.06102010708594387
+     },
+     "per_class_ap50": {
+      "Caries": 0.03516521958242295,
+      "Crown": 0.712281595739481,
+      "Filling": 0.5250876749714939,
+      "Implant": 0.876003687734263,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.3343676587685409,
+      "Missing teeth": 0.13099006345090333,
+      "Periapical lesion": 0.02458598235864887,
+      "Retained root": 0.0447005196032121,
+      "Root Canal Treatment": 0.6088948712861184,
+      "Root Piece": 0.25483081977681105,
+      "impacted tooth": 0.9286934424583532,
+      "maxillary sinus": 0.2843145299400537,
+      "Bone Loss": 0.14119665878844706,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.0,
+      "Supra Eruption": 0.0,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.0,
+      "orthodontic brackets": 0.1846389889961484,
+      "permanent retainer": 0.0,
+      "post - core": 0.0012499999999999998,
+      "wire": 0.1560572445580773,
+      "Cyst": 0.0,
+      "Primary teeth": 0.18048154692434026
+     },
+     "n_classes_evaluated": 28
+    },
+    "speed_ms": {
+     "preprocess": 0.20235965266340047,
+     "inference": 2.91104289370512,
+     "loss": 5.790565345863518e-05,
+     "postprocess": 5.203120783270764
+    }
+   },
+   "logged_epochs_completed": 15
+  },
+  "pxleak_y11n_leaky_s0": {
+   "provenance": "run",
+   "run": "pxleak_y11n_leaky_s0",
+   "data": "pxdet_leaky",
+   "model": "yolo11n.pt",
+   "imgsz": 640,
+   "epochs_full_passes": 15,
+   "shards": 1,
+   "batch": 8,
+   "seed": 0,
+   "checkpoint_selection": "best validation fitness (Ultralytics best.pt)",
+   "val": {
+    "box": {
+     "map50_95": 0.13361464735892065,
+     "map50": 0.2460455239057713,
+     "map75": 0.1364645475124772,
+     "precision": 0.355296462788597,
+     "recall": 0.30461789907285314,
+     "per_class_ap50_95": {
+      "Caries": 0.00438151881669449,
+      "Crown": 0.4905269495933271,
+      "Filling": 0.25318036912501585,
+      "Implant": 0.4710782845407695,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.21172176197445017,
+      "Missing teeth": 0.026223513254238245,
+      "Periapical lesion": 0.004166703085093503,
+      "Retained root": 0.0,
+      "Root Canal Treatment": 0.2925132002830057,
+      "Root Piece": 0.09054170433624079,
+      "impacted tooth": 0.5998828970891585,
+      "maxillary sinus": 0.2720932437046096,
+      "Bone Loss": 0.07002987420816832,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.0,
+      "orthodontic brackets": 0.13362203641909154,
+      "post - core": 0.0,
+      "wire": 0.06807283066080946,
+      "Primary teeth": 0.08510200216450217
+     },
+     "per_class_ap50": {
+      "Caries": 0.013470531786049244,
+      "Crown": 0.7419302700757913,
+      "Filling": 0.5187862547459948,
+      "Implant": 0.8665453667572982,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.38833703197872,
+      "Missing teeth": 0.0921249704305439,
+      "Periapical lesion": 0.013854894231501231,
+      "Retained root": 0.0,
+      "Root Canal Treatment": 0.6238908617487832,
+      "Root Piece": 0.24429834894960697,
+      "impacted tooth": 0.9317006355674445,
+      "maxillary sinus": 0.45939070919107217,
+      "Bone Loss": 0.17391012529914718,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.0,
+      "orthodontic brackets": 0.27118574360422193,
+      "post - core": 0.0,
+      "wire": 0.16713266910292826,
+      "Primary teeth": 0.15248863636363635
+     },
+     "n_classes_evaluated": 23
+    },
+    "speed_ms": {
+     "preprocess": 0.2454082968132021,
+     "inference": 4.680350605432968,
+     "loss": 6.373164646051083e-05,
+     "postprocess": 6.719111639098932
+    }
+   },
+   "test": {
+    "box": {
+     "map50_95": 0.10531522422159305,
+     "map50": 0.20167093024355004,
+     "map75": 0.10049566950033094,
+     "precision": 0.3003260044547193,
+     "recall": 0.24169396121283607,
+     "per_class_ap50_95": {
+      "Caries": 0.010043891508266567,
+      "Crown": 0.4774856033176736,
+      "Filling": 0.26696603227885946,
+      "Implant": 0.39570382720827574,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.2343038946040879,
+      "Missing teeth": 0.03296748036483079,
+      "Periapical lesion": 0.0023289030407644025,
+      "Retained root": 0.0,
+      "Root Canal Treatment": 0.28883075875398206,
+      "Root Piece": 0.08716139100554747,
+      "impacted tooth": 0.5832270118513718,
+      "maxillary sinus": 0.2327660641147901,
+      "Bone Loss": 0.05966620181870493,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.0,
+      "Supra Eruption": 0.0,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.0,
+      "orthodontic brackets": 0.09159463484938488,
+      "permanent retainer": 0.0,
+      "post - core": 0.0,
+      "wire": 0.06748856911765198,
+      "Cyst": 0.0,
+      "Primary teeth": 0.1182920143704135
+     },
+     "per_class_ap50": {
+      "Caries": 0.02486291882256161,
+      "Crown": 0.7351006597279695,
+      "Filling": 0.5277785337693661,
+      "Implant": 0.812896622726341,
+      "Malaligned": 0.0,
+      "Mandibular Canal": 0.3946580615223164,
+      "Missing teeth": 0.10430720443676197,
+      "Periapical lesion": 0.00882715229259444,
+      "Retained root": 0.0,
+      "Root Canal Treatment": 0.6167425216805487,
+      "Root Piece": 0.23818825005630723,
+      "impacted tooth": 0.9301520434448375,
+      "maxillary sinus": 0.40497955098327415,
+      "Bone Loss": 0.13807210798136768,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.0,
+      "Supra Eruption": 0.0,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.0,
+      "orthodontic brackets": 0.24232360765758093,
+      "permanent retainer": 0.0,
+      "post - core": 0.0,
+      "wire": 0.19780837486999156,
+      "Cyst": 0.0,
+      "Primary teeth": 0.2700884368475821
+     },
+     "n_classes_evaluated": 28
+    },
+    "speed_ms": {
+     "preprocess": 0.20770144506619104,
+     "inference": 3.213223932591867,
+     "loss": 5.546625676874266e-05,
+     "postprocess": 5.467713676247954
+    }
+   },
+   "logged_epochs_completed": 15
+  },
+  "pxseg_y11s_s0": {
+   "provenance": "run",
+   "run": "pxseg_y11s_s0",
+   "data": "pxseg",
+   "model": "yolo11s-seg.pt",
+   "imgsz": 640,
+   "epochs_full_passes": 20,
+   "shards": 2,
+   "batch": 8,
+   "seed": 0,
+   "checkpoint_selection": "best validation fitness (Ultralytics best.pt)",
+   "val": {
+    "box": {
+     "map50_95": 0.15597056930715303,
+     "map50": 0.2841338008112467,
+     "map75": 0.1527977349709733,
+     "precision": 0.41903418774613915,
+     "recall": 0.35084128678292925,
+     "per_class_ap50_95": {
+      "Caries": 0.03928637607955297,
+      "Crown": 0.5646502222131855,
+      "Filling": 0.28346688837043466,
+      "Implant": 0.5310225567236755,
+      "Missing teeth": 0.005883826171925935,
+      "Periapical lesion": 0.013484633815785046,
+      "Retained root": 0.0060338877338877335,
+      "Root Canal Treatment": 0.36245968539438134,
+      "Root Piece": 0.1083269102438243,
+      "impacted tooth": 0.6024110198025152,
+      "Bone Loss": 0.1021628420501273,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.014281092970321724,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.03413414649268297,
+      "orthodontic brackets": 0.102358590632932,
+      "post - core": 0.027912613531919282,
+      "wire": 0.14540169117076998,
+      "Primary teeth": 0.17613440274513892
+     },
+     "per_class_ap50": {
+      "Caries": 0.10810777656572729,
+      "Crown": 0.8006971294904929,
+      "Filling": 0.5647358766495965,
+      "Implant": 0.8884940563862304,
+      "Missing teeth": 0.025426680823745336,
+      "Periapical lesion": 0.042831643090662244,
+      "Retained root": 0.02323076923076923,
+      "Root Canal Treatment": 0.7119812906554189,
+      "Root Piece": 0.2860343589947625,
+      "impacted tooth": 0.9394571099405549,
+      "Bone Loss": 0.23980657060855648,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.02340536772394563,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.06487789162736879,
+      "orthodontic brackets": 0.19087437416384787,
+      "post - core": 0.06666888903277224,
+      "wire": 0.33895955722065785,
+      "Primary teeth": 0.367086674019824
+     },
+     "n_classes_evaluated": 20
+    },
+    "mask": {
+     "map50_95": 0.11684539352104234,
+     "map50": 0.2598488785191456,
+     "map75": 0.08738943190752287,
+     "precision": 0.39548610689689684,
+     "recall": 0.32513637946509094,
+     "per_class_ap50_95": {
+      "Caries": 0.026615015860947333,
+      "Crown": 0.3995576971301427,
+      "Filling": 0.17435227523059302,
+      "Implant": 0.35715212148283493,
+      "Missing teeth": 0.00349783728252497,
+      "Periapical lesion": 0.010540841010098353,
+      "Retained root": 0.03064160799454918,
+      "Root Canal Treatment": 0.27979083673025873,
+      "Root Piece": 0.04307456856805196,
+      "impacted tooth": 0.553918928074411,
+      "Bone Loss": 0.05044017948573346,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.015403362825751698,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.01628863981132076,
+      "orthodontic brackets": 0.08030995807697708,
+      "post - core": 0.006018894230183943,
+      "wire": 0.13256454108978616,
+      "Primary teeth": 0.1567405655366816
+     },
+     "per_class_ap50": {
+      "Caries": 0.08003962197662615,
+      "Crown": 0.7566760349653449,
+      "Filling": 0.48361698722394164,
+      "Implant": 0.8202514986256083,
+      "Missing teeth": 0.01839422651511319,
+      "Periapical lesion": 0.03878281136867512,
+      "Retained root": 0.05168657733363618,
+      "Root Canal Treatment": 0.6495108724738736,
+      "Root Piece": 0.15839890206608204,
+      "impacted tooth": 0.9401770279892886,
+      "Bone Loss": 0.16580800740410045,
+      "Fracture teeth": 0.0,
+      "Supra Eruption": 0.02340536772394563,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "metal band": 0.03978949547405756,
+      "orthodontic brackets": 0.2806301717150774,
+      "post - core": 0.017568591705673625,
+      "wire": 0.3116198419374883,
+      "Primary teeth": 0.3606215338843803
+     },
+     "n_classes_evaluated": 20
+    },
+    "speed_ms": {
+     "preprocess": 0.46987295299777204,
+     "inference": 6.221309366274478,
+     "loss": 6.22539139436768e-05,
+     "postprocess": 12.53235322563109
+    }
+   },
+   "test": {
+    "box": {
+     "map50_95": 0.12043914520746114,
+     "map50": 0.22782202218449793,
+     "map75": 0.11651397048821545,
+     "precision": 0.337208688163528,
+     "recall": 0.2793014543974468,
+     "per_class_ap50_95": {
+      "Caries": 0.03875404991644883,
+      "Crown": 0.5399115119827675,
+      "Filling": 0.3063999560985888,
+      "Implant": 0.5478946708264724,
+      "Malaligned": 0.0,
+      "Missing teeth": 0.00959683986122342,
+      "Periapical lesion": 0.02117868690637571,
+      "Retained root": 0.019477440882098178,
+      "Root Canal Treatment": 0.35061342730511125,
+      "Root Piece": 0.1353597050647473,
+      "impacted tooth": 0.5855340850237444,
+      "Bone Loss": 0.07562482616401979,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.005398200757575758,
+      "Supra Eruption": 0.0015625,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.010077727597381925,
+      "orthodontic brackets": 0.192098538826609,
+      "permanent retainer": 0.0023412162162162165,
+      "post - core": 0.046637428158678176,
+      "wire": 0.09259392584364946,
+      "Cyst": 0.0,
+      "Primary teeth": 0.1503630379622814
+     },
+     "per_class_ap50": {
+      "Caries": 0.11439111082151598,
+      "Crown": 0.7796518077486617,
+      "Filling": 0.5853132189117339,
+      "Implant": 0.9480903988884405,
+      "Malaligned": 0.0,
+      "Missing teeth": 0.03599962822390877,
+      "Periapical lesion": 0.05673115752324251,
+      "Retained root": 0.05204897793604034,
+      "Root Canal Treatment": 0.6927463380871075,
+      "Root Piece": 0.3519853086447853,
+      "impacted tooth": 0.9450875656963648,
+      "Bone Loss": 0.1849742667578486,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.015310132575757578,
+      "Supra Eruption": 0.002232142857142857,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.03398670468282132,
+      "orthodontic brackets": 0.38892079243346894,
+      "permanent retainer": 0.003344594594594595,
+      "post - core": 0.14542148932137966,
+      "wire": 0.25431688589223944,
+      "Cyst": 0.0,
+      "Primary teeth": 0.3328200551998919
+     },
+     "n_classes_evaluated": 26
+    },
+    "mask": {
+     "map50_95": 0.0898458896664724,
+     "map50": 0.20772301225540182,
+     "map75": 0.06870735176998423,
+     "precision": 0.32652924401419603,
+     "recall": 0.2634915972986557,
+     "per_class_ap50_95": {
+      "Caries": 0.02615129322243163,
+      "Crown": 0.3999087665160059,
+      "Filling": 0.18134025871704101,
+      "Implant": 0.4731375907301942,
+      "Malaligned": 0.0,
+      "Missing teeth": 0.0073463303431339135,
+      "Periapical lesion": 0.013083843400169794,
+      "Retained root": 0.032636691533860784,
+      "Root Canal Treatment": 0.2671851039390757,
+      "Root Piece": 0.05503566541982704,
+      "impacted tooth": 0.5391292606162722,
+      "Bone Loss": 0.02103433035481584,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.001546875,
+      "Supra Eruption": 0.0020089285714285712,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.011484175121029973,
+      "orthodontic brackets": 0.10045197677167277,
+      "permanent retainer": 0.0016722972972972976,
+      "post - core": 0.02663180991099807,
+      "wire": 0.08048120943189613,
+      "Cyst": 0.0,
+      "Primary teeth": 0.09572672443113175
+     },
+     "per_class_ap50": {
+      "Caries": 0.09503354991783117,
+      "Crown": 0.7504004543216025,
+      "Filling": 0.5052971251325509,
+      "Implant": 0.9214404751573329,
+      "Malaligned": 0.0,
+      "Missing teeth": 0.03475528908172573,
+      "Periapical lesion": 0.04440599285217431,
+      "Retained root": 0.06827879237416563,
+      "Root Canal Treatment": 0.6556911568908577,
+      "Root Piece": 0.19123574688119443,
+      "impacted tooth": 0.9443587610621953,
+      "Bone Loss": 0.0909156608451179,
+      "Fracture teeth": 0.0,
+      "Permanent Teeth": 0.007734375,
+      "Supra Eruption": 0.002232142857142857,
+      "TAD": 0.0,
+      "abutment": 0.0,
+      "attrition": 0.0,
+      "gingival former": 0.0,
+      "metal band": 0.04096582487759584,
+      "orthodontic brackets": 0.3847102963104503,
+      "permanent retainer": 0.003344594594594595,
+      "post - core": 0.1390439354890477,
+      "wire": 0.2416872316344474,
+      "Cyst": 0.0,
+      "Primary teeth": 0.27926691336041953
+     },
+     "n_classes_evaluated": 26
+    },
+    "speed_ms": {
+     "preprocess": 0.43236603485905867,
+     "inference": 5.082289614246815,
+     "loss": 6.694405149862665e-05,
+     "postprocess": 9.599000836945452
+    }
+   },
+   "logged_epochs_completed": 40
+  }
+ },
+ "groups": {
+  "iodet_y11s": {
+   "seeds": [
+    0
+   ],
+   "n_seeds": 1,
+   "val_box_map50_95_per_seed": [
+    0.13001863105733094
+   ],
+   "val_box_map50_95_mean": 0.13001863105733094,
+   "val_box_map50_95_min": 0.13001863105733094,
+   "val_box_map50_95_max": 0.13001863105733094,
+   "val_box_map50_per_seed": [
+    0.33344192744100487
+   ],
+   "val_box_map50_mean": 0.33344192744100487,
+   "val_box_map50_min": 0.33344192744100487,
+   "val_box_map50_max": 0.33344192744100487,
+   "test_box_map50_95_per_seed": [
+    0.1532764159043462
+   ],
+   "test_box_map50_95_mean": 0.1532764159043462,
+   "test_box_map50_95_min": 0.1532764159043462,
+   "test_box_map50_95_max": 0.1532764159043462,
+   "test_box_map50_per_seed": [
+    0.3721761092595533
+   ],
+   "test_box_map50_mean": 0.3721761092595533,
+   "test_box_map50_min": 0.3721761092595533,
+   "test_box_map50_max": 0.3721761092595533
+  },
+  "pxdet_y11s": {
+   "seeds": [
+    0
+   ],
+   "n_seeds": 1,
+   "val_box_map50_95_per_seed": [
+    0.17248252243525589
+   ],
+   "val_box_map50_95_mean": 0.17248252243525589,
+   "val_box_map50_95_min": 0.17248252243525589,
+   "val_box_map50_95_max": 0.17248252243525589,
+   "val_box_map50_per_seed": [
+    0.31425158570515066
+   ],
+   "val_box_map50_mean": 0.31425158570515066,
+   "val_box_map50_min": 0.31425158570515066,
+   "val_box_map50_max": 0.31425158570515066,
+   "test_box_map50_95_per_seed": [
+    0.1351975515299281
+   ],
+   "test_box_map50_95_mean": 0.1351975515299281,
+   "test_box_map50_95_min": 0.1351975515299281,
+   "test_box_map50_95_max": 0.1351975515299281,
+   "test_box_map50_per_seed": [
+    0.25534426806012317
+   ],
+   "test_box_map50_mean": 0.25534426806012317,
+   "test_box_map50_min": 0.25534426806012317,
+   "test_box_map50_max": 0.25534426806012317,
+   "test_box_head_map50_95_mean": 0.28945550949746934,
+   "test_box_head_n_classes": 7,
+   "test_box_medium_map50_95_mean": 0.17644427809491592,
+   "test_box_medium_n_classes": 8,
+   "test_box_tail_map50_95_mean": 0.026752973199721166,
+   "test_box_tail_n_classes": 13
+  },
+  "pxleak_y11n_cleanctl": {
+   "seeds": [
+    0
+   ],
+   "n_seeds": 1,
+   "val_box_map50_95_per_seed": [
+    0.1338664893845289
+   ],
+   "val_box_map50_95_mean": 0.1338664893845289,
+   "val_box_map50_95_min": 0.1338664893845289,
+   "val_box_map50_95_max": 0.1338664893845289,
+   "val_box_map50_per_seed": [
+    0.24477810739827258
+   ],
+   "val_box_map50_mean": 0.24477810739827258,
+   "val_box_map50_min": 0.24477810739827258,
+   "val_box_map50_max": 0.24477810739827258,
+   "test_box_map50_95_per_seed": [
+    0.09870101053268973
+   ],
+   "test_box_map50_95_mean": 0.09870101053268973,
+   "test_box_map50_95_min": 0.09870101053268973,
+   "test_box_map50_95_max": 0.09870101053268973,
+   "test_box_map50_per_seed": [
+    0.1936978751763327
+   ],
+   "test_box_map50_mean": 0.1936978751763327,
+   "test_box_map50_min": 0.1936978751763327,
+   "test_box_map50_max": 0.1936978751763327,
+   "test_box_head_map50_95_mean": 0.24189784015267324,
+   "test_box_head_n_classes": 7,
+   "test_box_medium_map50_95_mean": 0.12044482133728579,
+   "test_box_medium_n_classes": 8,
+   "test_box_tail_map50_95_mean": 0.008214218703716423,
+   "test_box_tail_n_classes": 13
+  },
+  "pxleak_y11n_leaky": {
+   "seeds": [
+    0
+   ],
+   "n_seeds": 1,
+   "val_box_map50_95_per_seed": [
+    0.13361464735892065
+   ],
+   "val_box_map50_95_mean": 0.13361464735892065,
+   "val_box_map50_95_min": 0.13361464735892065,
+   "val_box_map50_95_max": 0.13361464735892065,
+   "val_box_map50_per_seed": [
+    0.2460455239057713
+   ],
+   "val_box_map50_mean": 0.2460455239057713,
+   "val_box_map50_min": 0.2460455239057713,
+   "val_box_map50_max": 0.2460455239057713,
+   "test_box_map50_95_per_seed": [
+    0.10531522422159305
+   ],
+   "test_box_map50_95_mean": 0.10531522422159305,
+   "test_box_map50_95_min": 0.10531522422159305,
+   "test_box_map50_95_max": 0.10531522422159305,
+   "test_box_map50_per_seed": [
+    0.20167093024355004
+   ],
+   "test_box_map50_mean": 0.20167093024355004,
+   "test_box_map50_min": 0.20167093024355004,
+   "test_box_map50_max": 0.20167093024355004,
+   "test_box_head_map50_95_mean": 0.24559813998481275,
+   "test_box_head_n_classes": 7,
+   "test_box_medium_map50_95_mean": 0.14225558293269136,
+   "test_box_medium_n_classes": 8,
+   "test_box_tail_map50_95_mean": 0.007045741142260375,
+   "test_box_tail_n_classes": 13
+  },
+  "pxseg_y11s": {
+   "seeds": [
+    0
+   ],
+   "n_seeds": 1,
+   "val_box_map50_95_per_seed": [
+    0.15597056930715303
+   ],
+   "val_box_map50_95_mean": 0.15597056930715303,
+   "val_box_map50_95_min": 0.15597056930715303,
+   "val_box_map50_95_max": 0.15597056930715303,
+   "val_box_map50_per_seed": [
+    0.2841338008112467
+   ],
+   "val_box_map50_mean": 0.2841338008112467,
+   "val_box_map50_min": 0.2841338008112467,
+   "val_box_map50_max": 0.2841338008112467,
+   "test_box_map50_95_per_seed": [
+    0.12043914520746114
+   ],
+   "test_box_map50_95_mean": 0.12043914520746114,
+   "test_box_map50_95_min": 0.12043914520746114,
+   "test_box_map50_95_max": 0.12043914520746114,
+   "test_box_map50_per_seed": [
+    0.22782202218449793
+   ],
+   "test_box_map50_mean": 0.22782202218449793,
+   "test_box_map50_min": 0.22782202218449793,
+   "test_box_map50_max": 0.22782202218449793,
+   "val_mask_map50_95_per_seed": [
+    0.11684539352104234
+   ],
+   "val_mask_map50_95_mean": 0.11684539352104234,
+   "val_mask_map50_95_min": 0.11684539352104234,
+   "val_mask_map50_95_max": 0.11684539352104234,
+   "val_mask_map50_per_seed": [
+    0.2598488785191456
+   ],
+   "val_mask_map50_mean": 0.2598488785191456,
+   "val_mask_map50_min": 0.2598488785191456,
+   "val_mask_map50_max": 0.2598488785191456,
+   "test_mask_map50_95_per_seed": [
+    0.0898458896664724
+   ],
+   "test_mask_map50_95_mean": 0.0898458896664724,
+   "test_mask_map50_95_min": 0.0898458896664724,
+   "test_mask_map50_95_max": 0.0898458896664724,
+   "test_mask_map50_per_seed": [
+    0.20772301225540182
+   ],
+   "test_mask_map50_mean": 0.20772301225540182,
+   "test_mask_map50_min": 0.20772301225540182,
+   "test_mask_map50_max": 0.20772301225540182,
+   "test_mask_head_map50_95_mean": 0.2391248355609404,
+   "test_mask_head_n_classes": 6,
+   "test_mask_medium_map50_95_mean": 0.10734902480962154,
+   "test_mask_medium_n_classes": 7,
+   "test_mask_tail_map50_95_mean": 0.011523149561176107,
+   "test_mask_tail_n_classes": 13,
+   "test_box_head_map50_95_mean": 0.3161396427484468,
+   "test_box_head_n_classes": 6,
+   "test_box_medium_map50_95_mean": 0.14337489923191823,
+   "test_box_medium_n_classes": 7,
+   "test_box_tail_map50_95_mean": 0.017765817252298543,
+   "test_box_tail_n_classes": 13
+  }
+ },
+ "px_train_instances": {
+  "Caries": 2918,
+  "Filling": 14373,
+  "Root Canal Treatment": 4502,
+  "Root Piece": 609,
+  "Crown": 3021,
+  "Missing teeth": 1029,
+  "Bone Loss": 2119,
+  "Periapical lesion": 995,
+  "post - core": 170,
+  "impacted tooth": 8272,
+  "attrition": 33,
+  "Implant": 549,
+  "metal band": 40,
+  "wire": 159,
+  "plating": 8,
+  "Primary teeth": 158,
+  "Retained root": 56,
+  "Supra Eruption": 34,
+  "permanent retainer": 6,
+  "orthodontic brackets": 97,
+  "abutment": 25,
+  "Cyst": 4,
+  "TAD": 3,
+  "Root resorption": 3,
+  "Malaligned": 7,
+  "Permanent Teeth": 9,
+  "Mandibular Canal": 255,
+  "maxillary sinus": 188,
+  "gingival former": 8,
+  "Fracture teeth": 6,
+  "bone defect": 1
+ },
+ "px_bins": {
+  "head": [
+   "Caries",
+   "Crown",
+   "Filling",
+   "Missing teeth",
+   "Root Canal Treatment",
+   "impacted tooth",
+   "Bone Loss"
+  ],
+  "medium": [
+   "Implant",
+   "Mandibular Canal",
+   "Periapical lesion",
+   "Root Piece",
+   "maxillary sinus",
+   "post - core",
+   "wire",
+   "Primary teeth"
+  ],
+  "tail": [
+   "Malaligned",
+   "Retained root",
+   "Fracture teeth",
+   "Permanent Teeth",
+   "Supra Eruption",
+   "TAD",
+   "abutment",
+   "attrition",
+   "bone defect",
+   "gingival former",
+   "metal band",
+   "orthodontic brackets",
+   "permanent retainer",
+   "plating",
+   "Cyst",
+   "Root resorption"
+  ]
+ },
+ "L1_swap": {
+  "map50_95": [
+   0.006614213688903317
+  ],
+  "map50_95_leaky": [
+   0.10531522422159305
+  ],
+  "map50_95_clean": [
+   0.09870101053268973
+  ],
+  "map50": [
+   0.00797305506721735
+  ],
+  "map50_leaky": [
+   0.20167093024355004
+  ],
+  "map50_clean": [
+   0.1936978751763327
+  ],
+  "map50_95_diff_mean": 0.006614213688903317,
+  "map50_95_rel_gain_mean": 0.0670126238141472,
+  "map50_diff_mean": 0.00797305506721735,
+  "map50_rel_gain_mean": 0.041162325915857806
+ }
+}

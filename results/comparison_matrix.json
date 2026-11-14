@@ -1,0 +1,1013 @@
+{
+ "_meta": {
+  "description": "Dataset comparison facts for existing public dental image datasets (CVPR27 dental-unified). Every non-null field is backed by an evidence quote (paper abstract in litreview/papers.json via bibkey, open-access full text via Europe PMC / arXiv HTML, or the official page). Unknown -> null.",
+  "conventions": {
+   "tasks": "true only when the paper/page states the task or annotation type; null = not stated (never inferred, e.g. polygons implying boxes); false = not used",
+   "duplicate_or_leakage_audit_reported": "true = paper reports duplicate removal, a leak check, or a patient-level split (see note: none is a cross-split copy-lineage audit); false = we read the open-access full text and found no statement (negative_check entry, quote null); null = full text not checked",
+   "licence": "verbatim data licence/terms only; the article's own CC licence is NOT recorded as the data licence"
+  },
+  "built": "2026-11-11",
+  "quote_check": "All quotes were string-matched (whitespace-normalised) against the papers.json abstract (bibkey sources), the Europe PMC full-text XML (europepmc sources), the arXiv PDF text (AlphaDent) or the downloaded HTML page (other URLs). 'comment' entries are our annotations, not quotes."
+ },
+ "rows": [
+  {
+   "name": "DENTEX",
+   "bibkey": "hamamci2023dentex",
+   "modality": "panoramic radiograph",
+   "n_images": 1005,
+   "n_images_note": "fully annotated core set; plus 693 quadrant-only, 634 quadrant+enumeration and 1571 unlabeled images",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": true,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": 4,
+   "licence": "Creative Commons Attribution (CC-BY) license",
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "1005 X-rays fully annotated for abnormal tooth detection, including quadrant, enumeration, diagnoses.",
+     "source": "https://arxiv.org/html/2305.19112",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "n_classes",
+     "quote": "The diagnoses were limited to four classes: Caries, Deep caries, Periapical lesion, or Impacted.",
+     "source": "https://arxiv.org/html/2305.19112",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "tasks.detection",
+     "quote": "This challenge aims to promote the development of algorithms for multi-label detection of abnormal teeth",
+     "source": "hamamci2023dentex"
+    },
+    {
+     "field": "licence",
+     "quote": "The data is available under a Creative Commons Attribution (CC-BY) license",
+     "source": "https://arxiv.org/html/2305.19112",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "official_split",
+     "quote": "The core dataset of 1005 fully-annotated images was split into training (705), validation (50), and testing (250) subsets.",
+     "source": "https://arxiv.org/html/2305.19112",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "full-text read (WebFetch, first 100k of 103k chars): no mention of duplicates, near-duplicates or patient overlap; only a hidden test set",
+     "source": "https://arxiv.org/html/2305.19112"
+    }
+   ]
+  },
+  {
+   "name": "Tufts Dental Database",
+   "bibkey": "panetta2021tufts",
+   "modality": "panoramic radiograph",
+   "n_images": 1000,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "This dataset consists of 1000 panoramic dental radiography images with expert labeling of abnormalities and teeth.",
+     "source": "panetta2021tufts"
+    },
+    {
+     "field": "tasks.classification",
+     "quote": "The classification of radiography images was performed based on five different levels: anatomical location, peripheral characteristics, radiodensity, effects on the surrounding structure, and the abnormality category.",
+     "source": "panetta2021tufts"
+    },
+    {
+     "field": "tasks.semantic_segmentation",
+     "quote": "a benchmark performance analysis for various state-of-the-art systems for dental radiograph image enhancement and image segmentation using deep learning",
+     "source": "panetta2021tufts"
+    },
+    {
+     "field": "extra_modality",
+     "quote": "This first-of-its-kind multimodal dataset also includes the radiologist's expertise captured in the form of eye-tracking and think-aloud protocol.",
+     "source": "panetta2021tufts"
+    }
+   ]
+  },
+  {
+   "name": "UFBA-UESC Dental Images",
+   "bibkey": "silva2018automatic",
+   "modality": "panoramic radiograph",
+   "n_images": 1500,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "comprised of 1,500 images",
+     "source": "https://arxiv.org/abs/1802.03086",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "tasks.semantic_segmentation",
+     "quote": "a novel data set based on extra-oral X-ray images are proposed here",
+     "source": "https://arxiv.org/abs/1802.03086",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "lineage",
+     "quote": "Silva et al. (2023) later introduced a new dataset by adding 2,507 images to the UFBA-UESC dataset, resulting in 4,000 images",
+     "source": "https://europepmc.org/article/PMC/PMC12874774"
+    }
+   ]
+  },
+  {
+   "name": "OdontoAI (O2PR)",
+   "bibkey": "silva2022odontoai",
+   "modality": "panoramic radiograph",
+   "n_images": 4000,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": null,
+    "instance_segmentation": true,
+    "semantic_segmentation": true
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": true,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "we released 4,000 images, from which 2,000 have their labels publicly available for model fitting.",
+     "source": "silva2022odontoai"
+    },
+    {
+     "field": "tasks",
+     "quote": "The tasks are tooth instance segmentation, semantic segmentation, and numbering",
+     "source": "https://arxiv.org/html/2203.15856",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "official_split",
+     "quote": "The labels of the other 2,000 images are private and used for model evaluation considering instance and semantic segmentation and numbering.",
+     "source": "silva2022odontoai"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": "we discarded seven images from the original 1,500 due to duplicates",
+     "source": "https://arxiv.org/html/2203.15856",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "comment",
+     "quote": null,
+     "comment": "exact-duplicate removal within the UFBA-UESC source only; no cross-split near-duplicate audit is described",
+     "source": "https://arxiv.org/html/2203.15856"
+    }
+   ]
+  },
+  {
+   "name": "Children's dental panoramic radiographs",
+   "bibkey": "zhang2023children",
+   "modality": "panoramic radiograph",
+   "n_images": 193,
+   "n_images_note": "children's set; the release also bundles 2,692 adult images from previously published datasets",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": true,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "In addition, we collected 93 panoramic radiographs of children\u2019s teeth without cases as supplementary information, so there are 193 images in total in the segmented data set of children\u2019s dental caries.",
+     "source": "https://europepmc.org/article/PMC/PMC10267170"
+    },
+    {
+     "field": "tasks",
+     "quote": "We propose the world's first dataset of children's dental panoramic radiographs for caries segmentation and dental disease detection by segmenting and detecting annotations.",
+     "source": "zhang2023children"
+    },
+    {
+     "field": "lineage",
+     "quote": "In addition, another 93 dental panoramic radiographs of pediatric patients, together with our three internationally published adult dental datasets with a total of 2,692 images, were collected and made into a segmentation dataset suitable for deep learning.",
+     "source": "zhang2023children"
+    },
+    {
+     "field": "lineage",
+     "quote": "The images in the Dataset and code were acquired in part at the Diagnostic Imaging Center of the Southwest State University of Bahia (UESB) and in part by the Hangzhou Lishui Dental Hospital.",
+     "source": "https://europepmc.org/article/PMC/PMC10267170"
+    },
+    {
+     "field": "official_split",
+     "quote": "we divide the two types of dataset images into training and test sets in the ratio of 7:3",
+     "source": "https://europepmc.org/article/PMC/PMC10267170"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage",
+     "source": "https://europepmc.org/article/PMC/PMC10267170"
+    }
+   ]
+  },
+  {
+   "name": "STS-Tooth (STS-2D-Tooth / STS-3D-Tooth)",
+   "bibkey": "wang2025multi",
+   "modality": "panoramic radiograph + CBCT",
+   "n_images": 4000,
+   "n_images_note": "2D panoramic images; 3D part: 148,400 CBCT slices",
+   "n_annotations_or_null": 900,
+   "tasks": {
+    "classification": null,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": null,
+   "licence": "CC-BY",
+   "duplicate_or_leakage_audit_reported": true,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "STS-2D-Tooth includes 4,000 images and 900 masks, categorized by age into children and adults.",
+     "source": "wang2025multi"
+    },
+    {
+     "field": "tasks.semantic_segmentation",
+     "quote": "this paper presents a multimodal dataset for Semi-supervised Tooth Segmentation (STS-Tooth) in dental PXI and CBCT",
+     "source": "wang2025multi"
+    },
+    {
+     "field": "licence",
+     "quote": "The ethics committee has thoroughly reviewed the dataset, and the approval for its publication under the license of CC-BY has been acquired.",
+     "source": "https://europepmc.org/article/PMC/PMC11747459"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": "(2) Duplicate data, which might be due to system errors or entry mistakes causing the same information to be recorded multiple times",
+     "source": "https://europepmc.org/article/PMC/PMC11747459"
+    },
+    {
+     "field": "lineage",
+     "quote": "For STS-2D-Tooth dataset, a portion of the dataset was sourced from our previous work",
+     "source": "https://europepmc.org/article/PMC/PMC11747459"
+    },
+    {
+     "field": "comment",
+     "quote": null,
+     "comment": "duplicate filtering is record-level data cleaning, not a train/test copy-lineage audit",
+     "source": "https://europepmc.org/article/PMC/PMC11747459"
+    }
+   ]
+  },
+  {
+   "name": "Dual-labeled panoramic dataset",
+   "bibkey": "zhou2024dual",
+   "modality": "panoramic radiograph",
+   "n_images": 5000,
+   "n_images_note": "2,066 publicly released according to AKUDENTAL",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": null,
+    "instance_segmentation": true,
+    "semantic_segmentation": null
+   },
+   "n_classes": 7,
+   "n_classes_note": "7 tooth-state labels plus FDI numbering",
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "Our dataset comprises a total of 5,000 panoramic radiographs, divided into two sections.",
+     "source": "https://europepmc.org/article/PMC/PMC11465503"
+    },
+    {
+     "field": "n_images_note",
+     "quote": "Zhou et al. (2024) introduced a dual-labeled dataset comprising 5,000 panoramic radiographs for segmentation, numbering, and state assessment; of these, 2,066 samples were made publicly available",
+     "source": "https://europepmc.org/article/PMC/PMC12874774"
+    },
+    {
+     "field": "n_classes",
+     "quote": "There are seven status labels: \u2018Tooth without anomalies\u2019, \u2018Tooth with fillings\u2019, \u2018Tooth with RCT\u2019, \u2018Tooth with crown\u2019, \u2018Tooth with caries\u2019, \u2018Residual root\u2019, and \u2018Tooth with RCT and crown\u2019",
+     "source": "https://europepmc.org/article/PMC/PMC11465503"
+    },
+    {
+     "field": "tasks",
+     "quote": "The instance segmentation model is used for tooth segmentation and numbering, whereas the classification model is used for state evaluation.",
+     "source": "https://europepmc.org/article/PMC/PMC11465503"
+    },
+    {
+     "field": "lineage",
+     "quote": "The remaining data were obtained from publicly available datasets created by Danning Wang\u2019s team [ 22 ] and Silva, Bernardo Peters Menezes\u2019s team [ 23 ].",
+     "source": "https://europepmc.org/article/PMC/PMC11465503"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage",
+     "source": "https://europepmc.org/article/PMC/PMC11465503"
+    }
+   ]
+  },
+  {
+   "name": "Multi-center panoramic dataset (impacted teeth, periodontitis, caries)",
+   "bibkey": "li2024multi",
+   "modality": "panoramic radiograph",
+   "n_images": 6580,
+   "n_images_note": "Table 2 total; abstract and table per-class counts are inconsistent",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": 3,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "Our Teeth, Abnormalities Classification, Segmentation 6580 3",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11031544/",
+     "comment": "row 'Ours' of the paper's dataset-comparison table (columns: dataset, objects, tasks, images, centers/classes); text-extracted from the PMC HTML",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "n_classes",
+     "quote": "encompasses three types of dental diseases: impacted teeth, periodontitis, and dental caries",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11031544/",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "tasks",
+     "quote": "benchmark tests for segmentation and classification tasks on our dataset",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11031544/",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "official_split",
+     "quote": "The datasets of the three centers are divided according to Table 3 , test2 and the training set are from the same center",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11031544/",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "WebFetch read of full text: duplicates, data leakage and patient overlap not mentioned; only 'test2 and the training set are from the same center'",
+     "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11031544/"
+    }
+   ]
+  },
+  {
+   "name": "OralXrays-9",
+   "bibkey": "chen2025oralxrays",
+   "modality": "panoramic radiograph",
+   "n_images": 12688,
+   "n_annotations_or_null": 84113,
+   "tasks": {
+    "classification": null,
+    "detection": true,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": 9,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "consists of 12,688 panoramic X-ray images with 84,113 meticulously annotated instances",
+     "source": "https://mlanthology.org/cvpr/2025/chen2025cvpr-oralxrays9",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "n_classes",
+     "quote": "Multi-object anomaly detection over 9 categories (84,113 instances)",
+     "source": "https://arxiv.org/html/2603.28297",
+     "verified_against": "downloaded page text (HTML tags stripped, whitespace normalised), 2026-11-11"
+    },
+    {
+     "field": "comment",
+     "quote": null,
+     "comment": "CVF open-access page and supplement returned HTTP 403 to our fetcher; split and licence not verified",
+     "source": "https://openaccess.thecvf.com/content/CVPR2025/"
+    }
+   ]
+  },
+  {
+   "name": "CariesXrays",
+   "bibkey": "chen2024cariesxrays",
+   "modality": "panoramic radiograph",
+   "n_images": 6000,
+   "n_annotations_or_null": 13783,
+   "tasks": {
+    "classification": null,
+    "detection": true,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": 1,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "It comprises 6,000 panoramic dental X-ray images, with a total of 13,783 instances of dental caries, all meticulously annotated by dental professionals.",
+     "source": "chen2024cariesxrays"
+    },
+    {
+     "field": "tasks.detection",
+     "quote": "we release a hospital-scale panoramic dental X-ray benchmark, namely \u201cCariesXrays\u201d, to facilitate the advancements in high-precision computer-aided diagnosis for dental caries",
+     "source": "chen2024cariesxrays"
+    }
+   ]
+  },
+  {
+   "name": "Apical periodontitis lesions in panoramic radiographs",
+   "bibkey": "do2024dataset",
+   "modality": "panoramic radiograph",
+   "n_images": 3926,
+   "n_images_note": "original images; 17,004 after augmentation",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": true,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "The dataset described in this article includes 3926 panoramic radiographs with different periapical lesions, and the data were enhanced by scaling, mirroring, and noise, which expanded the dataset to 17,004 images.",
+     "source": "https://europepmc.org/article/PMC/PMC11103410"
+    },
+    {
+     "field": "tasks",
+     "quote": "A Dataset of apical periodontitis lesions in panoramic radiographs for deep-learning-based classification and detection",
+     "source": "do2024dataset"
+    },
+    {
+     "field": "lineage",
+     "quote": "This folder contains all 13,078 images in JPG format.",
+     "source": "https://europepmc.org/article/PMC/PMC11103410",
+     "comment": "augmented (scaled/mirrored/noised) copies of the 3,926 originals ship alongside them"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage",
+     "source": "https://europepmc.org/article/PMC/PMC11103410"
+    }
+   ]
+  },
+  {
+   "name": "AKUDENTAL",
+   "bibkey": "oz2026akudental",
+   "modality": "panoramic radiograph",
+   "n_images": 333,
+   "n_annotations_or_null": 9956,
+   "tasks": {
+    "classification": null,
+    "detection": true,
+    "instance_segmentation": true,
+    "semantic_segmentation": true
+   },
+   "n_classes": 35,
+   "licence": "publicly available for non-commercial academic research",
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": false,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "We annotated 333 panoramic images, labeling 9,956 structures across 32 individual teeth and three restorative categories: implants, bridges, and crown\u2013filling.",
+     "source": "oz2026akudental"
+    },
+    {
+     "field": "tasks",
+     "quote": "We established semantic segmentation, object detection, and instance-segmentation baselines using UNet, DeepLabV3 + , YOLOv11, and Mask R-CNN models.",
+     "source": "oz2026akudental"
+    },
+    {
+     "field": "official_split",
+     "quote": "Generalizability was assessed via 5-fold cross-validation and a cross-dataset evaluation on the Tufts, DENTEX, and Dual-labeled datasets.",
+     "source": "oz2026akudental"
+    },
+    {
+     "field": "licence",
+     "quote": "The first release of the AKUDENTAL dataset is publicly available for non-commercial academic research via our GitHub repository: www.github.com/melihoz/akudental .",
+     "source": "https://europepmc.org/article/PMC/PMC12874774"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage",
+     "source": "https://europepmc.org/article/PMC/PMC12874774"
+    }
+   ]
+  },
+  {
+   "name": "MD-OPG (Mixed Dentition Orthopantomogram Dataset)",
+   "bibkey": "rahimi2026detection",
+   "modality": "panoramic radiograph (pediatric)",
+   "n_images": 170,
+   "n_images_note": "20 held-out test + 150 cross-validation images",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": true,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "Twenty images were set aside as an independent final test set, while the remaining 150 images were used within the cross-validation framework.",
+     "source": "https://europepmc.org/article/PMC/PMC13119711"
+    },
+    {
+     "field": "tasks",
+     "quote": "we benchmarked it using both classification and segmentation models",
+     "source": "rahimi2026detection"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": "For the 5-fold cross-validation experiments, the dataset was partitioned at the patient level (i.e., OPG image level) to prevent potential data leakage.",
+     "source": "https://europepmc.org/article/PMC/PMC13119711"
+    },
+    {
+     "field": "comment",
+     "quote": null,
+     "comment": "patient-level partitioning (leak prevention), not a duplicate audit",
+     "source": "https://europepmc.org/article/PMC/PMC13119711"
+    }
+   ]
+  },
+  {
+   "name": "ISBI 2015 bitewing caries + cephalometric challenge",
+   "bibkey": "wang2016benchmark",
+   "modality": "bitewing radiograph + cephalometric radiograph",
+   "n_images": null,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "tasks.classification",
+     "quote": "the creation of the dental anatomy data repository of bitewing radiographs, the creation of the anatomical abnormality classification data repository of cephalometric radiographs",
+     "source": "wang2016benchmark"
+    },
+    {
+     "field": "comment",
+     "quote": null,
+     "comment": "abstract does not state the bitewing annotation type or image counts; left null",
+     "source": "wang2016benchmark"
+    }
+   ]
+  },
+  {
+   "name": "PRAD-10K",
+   "bibkey": "zhou2025prad",
+   "modality": "periapical radiograph",
+   "n_images": 10000,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": 9,
+   "n_classes_note": "9 pixel-level structure classes",
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "PRAD-10K comprises 10,000 clinical periapical radiograph images, with pixel-level annotations provided by professional dentists for nine distinct anatomical structures, lesions, and artificial restorations or medical devices",
+     "source": "zhou2025prad"
+    },
+    {
+     "field": "tasks.classification",
+     "quote": "We also include classification labels for images with typical conditions or lesions.",
+     "source": "zhou2025prad"
+    }
+   ]
+  },
+  {
+   "name": "ToothFairy2",
+   "bibkey": "bolelli2026multi",
+   "modality": "CBCT",
+   "n_images": 530,
+   "n_images_note": "CBCT volumes",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": 42,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "The accompanying dataset comprises 530 CBCT volumes (480 public training, 50 hidden test) with expert 3D annotations of 42 classes",
+     "source": "bolelli2026multi"
+    },
+    {
+     "field": "official_split",
+     "quote": "530 CBCT volumes (480 public training, 50 hidden test)",
+     "source": "bolelli2026multi"
+    }
+   ]
+  },
+  {
+   "name": "CTooth",
+   "bibkey": "cui2022ctooth",
+   "modality": "CBCT",
+   "n_images": 22,
+   "n_images_note": "volumes (7363 slices)",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "This dataset contains 22 volumes (7363 slices) with fine tooth labels annotated by experienced radiographic interpreters.",
+     "source": "cui2022ctooth"
+    }
+   ]
+  },
+  {
+   "name": "Teeth3DS+ / 3DTeethSeg'22",
+   "bibkey": "benhamadou2023dteethseg",
+   "modality": "intraoral 3D scan",
+   "n_images": 1800,
+   "n_images_note": "scans from 900 patients",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": true,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": null,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "A dataset comprising a total of 1800 scans from 900 patients was prepared, and each tooth was individually annotated by a human-machine hybrid algorithm.",
+     "source": "benhamadou2023dteethseg"
+    },
+    {
+     "field": "tasks",
+     "quote": "Teeth3DS+ supports multiple fundamental tasks, including tooth detection, segmentation, labeling, 3D modeling, and dental landmark identification.",
+     "source": "benhamadou2022teeth"
+    },
+    {
+     "field": "official_split",
+     "quote": "Teeth3DS+ provides standardized data splits and evaluation protocols",
+     "source": "benhamadou2022teeth"
+    }
+   ]
+  },
+  {
+   "name": "AlphaDent",
+   "bibkey": "sosnin2025alphadent",
+   "modality": "intraoral photograph (DSLR)",
+   "n_images": 1200,
+   "n_images_note": "'over 1200 images'",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": null,
+    "instance_segmentation": true,
+    "semantic_segmentation": null
+   },
+   "n_classes": 9,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "This dataset is based on the DSLR camera photographs of the teeth of 295 patients and contains over 1200 images.",
+     "source": "sosnin2025alphadent"
+    },
+    {
+     "field": "tasks",
+     "quote": "The dataset is labeled for solving the instance segmentation problem and is divided into 9 classes.",
+     "source": "sosnin2025alphadent"
+    },
+    {
+     "field": "official_split",
+     "quote": "Leaderboard with hidden test data labels for fair comparison with solutions of other researchers",
+     "source": "https://arxiv.org/pdf/2507.22512"
+    },
+    {
+     "field": "licence_note",
+     "quote": "The dataset is published under an open license; and the training/inference code and model weights are also available under open licenses.",
+     "source": "sosnin2025alphadent",
+     "comment": "licence name not stated; licence field left null"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage",
+     "source": "https://arxiv.org/pdf/2507.22512"
+    }
+   ]
+  },
+  {
+   "name": "Annotated intraoral image dataset for dental caries detection",
+   "bibkey": "ahmed2025annotated",
+   "modality": "intraoral photograph",
+   "n_images": 6313,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": true,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": 2,
+   "n_classes_note": "'d' primary and 'D' permanent tooth decay",
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "It comprises 6,313 images collected from individuals aged 10 to 24 years in Mithi, Sindh, Pakistan, with annotations created using LabelMe software.",
+     "source": "https://europepmc.org/article/PMC/PMC12297690"
+    },
+    {
+     "field": "n_classes",
+     "quote": "This data includes the coordinates of bounding boxes marking regions of interest and the location of decay, with \u2018d\u2019 and \u2018D\u2019 denoting primary and permanent tooth decay, respectively.",
+     "source": "https://europepmc.org/article/PMC/PMC12297690"
+    },
+    {
+     "field": "official_split",
+     "quote": "The dataset comprised of 6,313 images which was split into 5,050 for training, 631 for validation, and 631 for testing.",
+     "source": "https://europepmc.org/article/PMC/PMC12297690"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage",
+     "source": "https://europepmc.org/article/PMC/PMC12297690"
+    }
+   ]
+  },
+  {
+   "name": "FDTooth",
+   "bibkey": "liu2025fdtooth",
+   "modality": "intraoral photograph + CBCT",
+   "n_images": 241,
+   "n_images_note": "patients / photographs (201 train+val, 40 test)",
+   "n_annotations_or_null": 1800,
+   "tasks": {
+    "classification": null,
+    "detection": true,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_annotations_or_null",
+     "quote": "FDTooth contains 1,800 precise bounding boxes annotated on intraoral photographs, with gold-standard ground truth extracted from CBCT.",
+     "source": "liu2025fdtooth"
+    },
+    {
+     "field": "official_split",
+     "quote": "A total of 201 photographs (2,412 teeth, of which 1,344 had FD and 1,068 did not have FD) were allocated to the training set for training and validating the deep learning model with five-fold cross-validation, while 40 photographs (480 teeth, of which 232 had FD and 248 did not have FD) were allocated to the testing set",
+     "source": "https://europepmc.org/article/PMC/PMC12167359"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage",
+     "source": "https://europepmc.org/article/PMC/PMC12167359"
+    }
+   ]
+  },
+  {
+   "name": "Oral screening intraoral images (calculus, gingivitis, caries)",
+   "bibkey": "liu2024oral",
+   "modality": "intraoral photograph (oral endoscope / web-sourced)",
+   "n_images": 3365,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": true
+   },
+   "n_classes": 3,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "This cross-sectional study collected 3,365 oral endoscopic images, randomly distributed in training datasets (2,019 images), validation dataset (673 images), and test dataset (673 images).",
+     "source": "https://europepmc.org/article/PMC/PMC11515110"
+    },
+    {
+     "field": "tasks",
+     "quote": "Oral screening of dental calculus, gingivitis and dental caries through segmentation on intraoral photographic images using deep learning",
+     "source": "liu2024oral"
+    },
+    {
+     "field": "lineage",
+     "quote": "All intraoral camera image data collected were from publicly available images on the Internet.",
+     "source": "https://europepmc.org/article/PMC/PMC11515110"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage; split is random at image level",
+     "source": "https://europepmc.org/article/PMC/PMC11515110"
+    }
+   ]
+  },
+  {
+   "name": "Gingivitis intraoral image captioning dataset",
+   "bibkey": "duy2024dental",
+   "modality": "intraoral photograph",
+   "n_images": 1096,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": null,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": null,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "To the best of our knowledge, this dataset is the first publicly available resource specifically focused on defining gingivitis with a substantial collection of 1,096 intraoral images with captions.",
+     "source": "https://europepmc.org/article/PMC/PMC11462013"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": null,
+     "negative_check": "case-insensitive search of the full text for duplicat*|leak*|near-dup*|patient-level|same patient returned no statement about duplicates or train/test leakage",
+     "source": "https://europepmc.org/article/PMC/PMC11462013"
+    }
+   ]
+  },
+  {
+   "name": "COde (multimodal oro-dental dataset)",
+   "bibkey": "lv2026benchmark",
+   "modality": "intraoral photograph + radiographs + text",
+   "n_images": 58056,
+   "n_images_note": "50,000 intraoral photographs + 8,056 radiographs",
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": null,
+    "instance_segmentation": null,
+    "semantic_segmentation": null
+   },
+   "n_classes": 6,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": true,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "n_images",
+     "quote": "The dataset includes 50000 intraoral photographs, 8056 radiographs, and detailed textual records, including diagnoses, treatment plans, and follow-up notes.",
+     "source": "https://europepmc.org/article/PMC/PMC13338166"
+    },
+    {
+     "field": "n_classes",
+     "quote": "Given these records, the model was asked to identify the anomaly, choosing from six categories: Caries, Gingivitis, Malocclusion, Pulpitis, Tooth Loss , or Tooth Structure Loss .",
+     "source": "https://europepmc.org/article/PMC/PMC13338166"
+    },
+    {
+     "field": "official_split",
+     "quote": "Furthermore, training and test splits are provided as individual files for each benchmark, making it straightforward to train or evaluate models on specific tasks.",
+     "source": "https://europepmc.org/article/PMC/PMC13338166"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "quote": "Duplicate or irrelevant images were removed, and incomplete records lacking either text notes or images were excluded.",
+     "source": "https://europepmc.org/article/PMC/PMC13338166"
+    },
+    {
+     "field": "comment",
+     "quote": null,
+     "comment": "record cleaning, not a cross-split copy audit; tasks are LVLM classification/report generation, no boxes or masks described",
+     "source": "https://europepmc.org/article/PMC/PMC13338166"
+    }
+   ]
+  },
+  {
+   "name": "DinoDental (benchmark)",
+   "bibkey": "tang2026dinodental",
+   "modality": "panoramic radiograph + intraoral photograph",
+   "n_images": null,
+   "n_annotations_or_null": null,
+   "tasks": {
+    "classification": true,
+    "detection": true,
+    "instance_segmentation": true,
+    "semantic_segmentation": null
+   },
+   "n_classes": null,
+   "licence": null,
+   "duplicate_or_leakage_audit_reported": false,
+   "official_split": true,
+   "evidence": [
+    {
+     "field": "tasks",
+     "quote": "Constructed from multiple public datasets, DinoDental covers a wide range of tasks, including classification, detection, and instance segmentation on both panoramic radiographs and intraoral photographs.",
+     "source": "https://arxiv.org/abs/2603.28297"
+    },
+    {
+     "field": "official_split",
+     "quote": "When an official data split is available, we follow the original protocol",
+     "source": "arXiv 2603.28297 full text (litreview/novelty_check.md)"
+    },
+    {
+     "field": "duplicate_or_leakage_audit_reported",
+     "negative_check": "full text never uses leak* or near-dup*; only 'duplicate' mention concerns predicted boxes (litreview/novelty_check.md)"
+    }
+   ]
+  }
+ ]
+}

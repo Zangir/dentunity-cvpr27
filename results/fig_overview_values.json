@@ -1,0 +1,59 @@
+{
+ "provenance": "run (scripts/make_figures.py)",
+ "resolution_bins": [
+  "<256",
+  "256+",
+  "512+",
+  "1024+",
+  "2048+"
+ ],
+ "resolution_intraoral": [
+  600,
+  1428,
+  2499,
+  0,
+  0
+ ],
+ "resolution_panoramic": [
+  0,
+  0,
+  579,
+  5350,
+  0
+ ],
+ "panoramic_long_side_1615": 5350,
+ "box_area_bins": [
+  "<.5",
+  ".5-1",
+  "1-2",
+  "2-5",
+  "5-10",
+  "10+"
+ ],
+ "box_area_iodet": [
+  237,
+  541,
+  860,
+  947,
+  331,
+  213
+ ],
+ "box_area_px": [
+  37836,
+  13128,
+  3074,
+  1640,
+  937,
+  175
+ ],
+ "px_box_share_below_2pct": 0.9515407642190526,
+ "iodet_box_share_below_2pct": 0.5234899328859061,
+ "copy_rows": {
+  "PX files": 13932,
+  "PX distinct": 5929,
+  "PX lineages": 5255,
+  "IO files": 7071,
+  "IO distinct": 4527,
+  "IO lineages": 544
+ }
+}

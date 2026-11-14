@@ -1,0 +1,13 @@
+{
+ "provenance": "run",
+ "K_swapped": 1602,
+ "train_size_each_arm": 4150,
+ "reexports_of_test_available": 1602,
+ "reexports_of_train_available": 5611,
+ "test_lineages_with_copy_in_leaky_train": 1003,
+ "test_images": 1186,
+ "test_images_with_copy_in_leaky_train": 1127,
+ "test_lineages": 1062,
+ "test_lineages_with_copy_in_leaky_train_verified": 1003,
+ "reexports_added_verified": 1602
+}
