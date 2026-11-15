@@ -817,6 +817,8 @@ def numbers():
         a, b = round(float(a), 6), round(float(b), 6)    # verify_numbers compares at 6 dp
         v = (a - b) if op == "-" else (a - b) / b
         s = f"{scale * v:+.{nd}f}" if signed else f"{scale * v:.{nd}f}"
+        if round(scale * v, nd) == 0:          # avoid printing "-0.0" / "+0.0"
+            s = f"{0:.{nd}f}"
         mac[k] = s
         form = f"({a}-{b})*{scale}" if op == "-" else f"({a}-{b})/{b}*{scale}"
         derived.append({"value": abs(round(scale * v, nd)), "formula": form if v >= 0 else form.replace(f"({a}-{b})", f"({b}-{a})"),

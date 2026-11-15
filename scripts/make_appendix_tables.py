@@ -638,7 +638,8 @@ def families():
     lines = []
     for task, lab in (("pxdet", "PX-DET box"), ("pxseg", "PX-SEG mask")):
         for m, v in F.get(task, {}).items():
-            lines.append(f"{lab} & {MODEL.get('yolo' + m.replace('y', '') + '.pt', m)} & "
+            pretty = {"reexp_y11s": "YOLO11s + D1", "rtdetrl": "RT-DETR-l"}.get(m)
+            lines.append(f"{lab} & {pretty or MODEL.get('yolo' + m.replace('y', '') + '.pt', m.replace('_', ' '))} & "
                          + " & ".join(f1(v.get(f)) for f in fams) + " \\\\")
     write("tab_app_families.tex", r"""\begin{table}[t]
 \centering\scriptsize
