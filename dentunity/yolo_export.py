@@ -1,6 +1,6 @@
 """Materialise YOLO training trees (symlinks under hashed names, never filenames).
 
-  python -m unidental.yolo_export   -> data/yolo/{pxdet,pxseg,iodet,pxdet_leaky_s<k>,pxdet_cleanctl_s<k>}/
+  python -m dentunity.yolo_export   -> data/yolo/{pxdet,pxseg,iodet,pxdet_leaky_s<k>,pxdet_cleanctl_s<k>}/
 """
 from __future__ import annotations
 
@@ -93,7 +93,7 @@ def main():
     rexp_test = [r for r in px if r["role"] == "re-export" and r["split"] == "test"]
     rexp_train = [r for r in px if r["role"] == "re-export" and r["split"] == "train"]
     train = [r for r in can if r["split"] == "train"]
-    rng = np.random.default_rng(stable_seed("unidental-leak"))
+    rng = np.random.default_rng(stable_seed("dentunity-leak"))
     K = min(len(rexp_test), len(rexp_train), len(train) // 2)
     drop = set(rng.choice(len(train), K, replace=False).tolist())
     keep = [r for i, r in enumerate(train) if i not in drop]

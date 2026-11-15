@@ -4,8 +4,8 @@
   "<256",
   "256+",
   "512+",
-  "1024+",
-  "2048+"
+  "1k+",
+  "2k+"
  ],
  "resolution_intraoral": [
   600,
@@ -49,11 +49,11 @@
  "px_box_share_below_2pct": 0.9515407642190526,
  "iodet_box_share_below_2pct": 0.5234899328859061,
  "copy_rows": {
-  "PX files": 13932,
+  "PX raw": 13932,
   "PX distinct": 5929,
-  "PX lineages": 5255,
-  "IO files": 7071,
+  "PX lin.": 5255,
+  "IO raw": 7071,
   "IO distinct": 4527,
-  "IO lineages": 544
+  "IO lin.": 544
  }
 }

@@ -15,14 +15,17 @@ RESULTS = REPO / "results"
 DATA = REPO / "data"            # gitignored work area (symlink trees, caches)
 RELEASE = REPO / "release"
 
-# Upstream data roots (set these to your own downloads; see README.md and release/).
-ORAL_ROOT = Path(os.environ.get("UNIDENTAL_ORAL_ROOT", REPO / "data/upstream/oral"))
-# Panoramic inventory: produced from the upstream download by an earlier audit; it lists
-# original file paths and is therefore not released (see README, "What is not released").
-PANO_INVENTORY = Path(os.environ.get("UNIDENTAL_PANO_INVENTORY", REPO / "data/upstream/pano_inventory.json"))
+_MR = Path(os.environ.get('DENTUNITY_ROOT', '.'))  # set the data roots below via env vars
+ORAL_ROOT = Path(os.environ.get(
+    "UNIDENTAL_ORAL_ROOT",
+    _MR / "ideas/DentalMethod/Dataset_04_11_Intraoral_Expert"))
+PANO_INVENTORY = Path(os.environ.get(
+    "UNIDENTAL_PANO_INVENTORY",
+    _MR / "projects/dental-datasets-detection/experiments/repo/private/complete_inventory.json"))
 PANO_PAIRS = PANO_INVENTORY.parent / "geometry_audit" / "accepted_pairs.json"
-# cached frozen features / lineage graph of an earlier intraoral composite (not released)
-FEAT_ROOT = Path(os.environ.get("UNIDENTAL_FEAT_ROOT", REPO / "data/upstream/intraoral_features"))
+# cached frozen features of the intraoral composite (read only)
+FEAT_ROOT = Path(os.environ.get(
+    "UNIDENTAL_FEAT_ROOT", _MR / "projects/dental-method/experiments/repo"))
 
 IODET_DIR = ORAL_ROOT / ("Caries_Gingivitus_ToothDiscoloration_Ulcer-yolo_annotated-Dataset/"
                          "Caries_Gingivitus_ToothDiscoloration_Ulcer-yolo_annotated-Dataset/Data")

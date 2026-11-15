@@ -1,6 +1,9 @@
 {
  "provenance": "run (scripts/make_figures.py)",
  "panels_filled": [
-  "L1"
+  "L1",
+  "L2_L3",
+  "L4b",
+  "dentex"
  ]
 }

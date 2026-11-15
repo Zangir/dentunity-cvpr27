@@ -80,7 +80,7 @@
   "L4_shipped_checkpoint": "The YOLOv8x-seg checkpoint shipped with the panoramic release, evaluated on our PX-DET test; we report what fraction of our test lineages occur in its training split (contaminated by construction, reported as such).",
   "L5_cross_task": "Share of test images of one intraoral task whose copy lineage appears in the other task's training split when each task keeps its own (shipped or earlier) split."
  },
- "compute_policy": "Every job over ~2 CPU-minutes or using MPS goes through a local resource guard [path redacted for anonymity] (<=600 s, <=5 GB), chunked and resumable. YOLO11m does not fit (MPS out of memory at batch 8 under the 0.45 watermark, results/speed_bench.json); YOLO11s is the largest feasible size. Panoramic images are stored once at 640 px on the long side because all models run at imgsz 640.",
+ "compute_policy": "Every job over ~2 CPU-minutes or using MPS goes through .cache/cvpr27/run_heavy.sh (<=600 s, <=5 GB), chunked and resumable. YOLO11m does not fit (MPS out of memory at batch 8 under the 0.45 watermark, results/speed_bench.json); YOLO11s is the largest feasible size. Panoramic images are stored once at 640 px on the long side because all models run at imgsz 640.",
  "priority_order": [
   "pxdet_y11s_s0",
   "pxseg_y11s_s0",
@@ -173,6 +173,23 @@
    "at": "2026-11-14T18:05+04:00",
    "type": "post-hoc descriptive analysis (requested by user via coordinator)",
    "change": "L4b: score the shipped checkpoint and our PX models (YOLO11s, later YOLO11m) on the PX-DET / PX-SEG test images with NO copy lineage in the shipped training split, with image-bootstrap 95% CIs and paired (ours minus shipped) bootstrap differences. Uses the same predictions as the standard test evaluation (no new model selection). Reported whatever the result, in the leak section. It does NOT change the state-of-the-art rule, which stays on the full copy-free test split."
+  },
+  {
+   "at": "2026-11-14T21:10+04:00",
+   "before_any_test_evaluation_of_affected_runs": true,
+   "requested_by": "coordinator (audit)",
+   "change": "RT-DETR-l dropped: it exceeds the 0.45 MPS memory cap at batch 4 and would not finish at batch 2 before the stop; the paper states it was planned and not run (it was never in the verdict's REQUIRED list). Queue order: cls_frozen_hash (L2), cls_ft seeds 1-2 and iodet_shipped (L3) moved directly after M1 seed 0; iodet_y11n moved after iodet seed 1. IO-CLS verdict: every candidate is ours and there is no external comparator; the verdict reports the selected model and the models statistically tied with it ('met, tied (ours)') instead of 'not met' when the strongest other is one of our own models within the paired interval. Selection and noise rules otherwise unchanged. If D1 or a YOLO11n baseline cannot finish by 2026-11-16 20:00, it is dropped by a further amendment and removed from REQUIRED."
+  },
+  {
+   "at": "2026-11-15T14:50+04:00",
+   "change": "IO-DET: YOLO11n seed 0 has the best validation mean (12.26 vs YOLO11s 12.06 over two seeds), so it is the validation-selected IO-DET family and receives a second seed (iodet_y11n_s1, queued after DENTEX seed 1) so that the claim rule can be applied. IO-DET has no external comparator (no public model for this subset); as for IO-CLS, when the selected family and the strongest other model are both our models and their seeds overlap, the verdict reads 'tied (ours)' instead of 'not met'. The rule for PX-DET and PX-SEG, where the shipped checkpoint is an external comparator, is unchanged.",
+   "before_any_test_evaluation_of_new_runs": false,
+   "disclosure": "Made after the seed-0 test scores of IO-DET YOLO11n (14.4) and YOLO11s (15.3) and the seed-1 test score of YOLO11s (14.5) were known. It mirrors the IO-CLS tie rule exactly and implies no state-of-the-art claim; verdict text: 'no external comparator; selected YOLO11n, statistically tied with YOLO11s (ours)'. Accepted by the coordinator with these conditions (2026-11-15)."
+  },
+  {
+   "at": "2026-11-15T15:05+04:00",
+   "type": "wording of verdict labels",
+   "change": "Verdict labels for tasks without an external comparator (IO-CLS, IO-DET) renamed from 'met' / 'met, tied (ours)' to 'best (ours)' / 'tied (ours)' so that no label implies a state-of-the-art claim. Labels for PX-DET and PX-SEG unchanged."
   }
  ]
 }

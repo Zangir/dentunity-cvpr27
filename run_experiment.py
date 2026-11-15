@@ -26,10 +26,10 @@ def smoke():
     copies; lineages from exact hash + a pixel-thumbnail embedding; stratified lineage
     split; the audit must report 0 contamination while a random file-level split leaks."""
     from PIL import Image
-    from unidental.common import write_json
-    from unidental.lineage import components, key_edges, mutual_knn_edges, null_quantile
-    from unidental.metrics import macro_ap
-    from unidental.splits import contamination, stratified_group_split
+    from dentunity.common import write_json
+    from dentunity.lineage import components, key_edges, mutual_knn_edges, null_quantile
+    from dentunity.metrics import macro_ap
+    from dentunity.splits import contamination, stratified_group_split
     rng = np.random.default_rng(0)
     out_dir = R / "sample_data" / "synthetic"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -87,7 +87,7 @@ def main():
         return smoke()
     py = sys.executable
     if a.cmd == "build":
-        for m in ("unidental.inventory", "unidental.build", "unidental.identifier_audit"):
+        for m in ("dentunity.inventory", "dentunity.build", "dentunity.identifier_audit"):
             subprocess.check_call([py, "-m", m], cwd=R)
     elif a.cmd == "queue":
         subprocess.check_call([py, "scripts/run_queue.py", "580"], cwd=R)

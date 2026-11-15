@@ -99,7 +99,7 @@ Split & Comparison & Leaked \\
 
 def tab_taxonomy():
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from unidental.taxonomy import UNIFIED
+    from dentunity.taxonomy import UNIFIED
     S = J("fig_stats_values.json")["annotations_per_concept"]
     lines = []
     for c in UNIFIED:
@@ -337,7 +337,7 @@ Initialisation & mAP$_{50:95}$ & mAP$_{50}$ & per seed \\
 
 
 def supp_results():
-    from unidental.taxonomy import IO_CLS_CLASSES, IO_DET_CLASSES, PX_CLASSES
+    from dentunity.taxonomy import IO_CLS_CLASSES, IO_DET_CLASSES, PX_CLASSES
     S = J("summary_cls.json") if (R / "summary_cls.json").exists() else {"models": {}}
     D = J("summary_det.json") if (R / "summary_det.json").exists() else {"runs": {}, "px_train_instances": {}}
     names = {"vits14": "ViT-S/14", "vitb14": "ViT-B/14", "convnext_t": "ConvNeXt-T"}
@@ -476,7 +476,9 @@ def verdict_dense(task):
     cands = {f: e for f, e in F.items() if key in e and f"test_{kind}_map50_95_per_seed" in e}
     if not cands:
         return None
-    sel = max(cands, key=lambda f: cands[f][key])
+    # a YOLO11m family rejected by the pre-registered seed-0 validation rule cannot be selected
+    eligible = {f: e for f, e in cands.items() if not (f == "y11m" and not_selected(task, f))}
+    sel = max(eligible, key=lambda f: eligible[f][key])
     s = cands[sel]
     others = {f: max(e[f"test_{kind}_map50_95_per_seed"]) for f, e in cands.items() if f != sel}
     sh = _get(SH, f"{task}_test", kind, "map50_95")
@@ -487,13 +489,22 @@ def verdict_dense(task):
     missing = [f for f in REQUIRED[task] if f not in cands]
     if missing or s["n_seeds"] < SEEDS_FOR_CLAIM:
         rule = "pending"
+    elif sh is None and (best_o is None or lo > others[best_o]):
+        rule = "best (ours)"           # separated, but no external comparator
+    elif best_o is None or lo > others[best_o]:
+        rule = "met"
+    elif sh is None:
+        rule = "tied (ours)"           # no external comparator: the best entries are all our models
     else:
-        rule = "met" if best_o is None or lo > others[best_o] else "not met"
+        rule = "not met"
     return {"selected": sel, "sel": s, "best_other": best_o, "best_other_val": others.get(best_o),
             "min_seed": lo, "rule": rule, "missing": missing}
 
 
 def verdict_cls():
+    """IO-CLS: every candidate is a DentUnity-trained model of ours and there is no external
+    comparator. Report the validation-selected model, the strongest other model, and every
+    model statistically tied with the selected one (paired lineage-bootstrap CI includes 0)."""
     S = J("summary_cls.json") if (R / "summary_cls.json").exists() else None
     if not S or not S.get("best_by_val"):
         return None
@@ -502,12 +513,21 @@ def verdict_cls():
     keys = [k for k in M if k != sel and not (k.startswith("ft_") and k[-1].isdigit())]
     other = max(keys, key=lambda k: M[k]["test_macro_ap"])
     ci = S.get("paired_ci", {}).get(f"{sel}-minus-{other}")
+    ties = []
+    for k in keys:
+        c = S.get("paired_ci", {}).get(f"{sel}-minus-{k}")
+        if c and c[0] <= 0 <= c[1]:
+            ties.append(k)
+    ties.sort(key=lambda k: -M[k]["test_macro_ap"])
     nft = min(len(S.get(f"ft_{m}_test_macro_ap_per_seed") or []) for m in ("convnext_t", "vits14"))
     if ci is None or nft < 3:
         rule = "pending"
+    elif ci[0] > 0:
+        rule = "best (ours)"           # IO-CLS has no external comparator
     else:
-        rule = "met" if ci[0] > 0 else "not met"
-    return {"selected": sel, "m": M[sel], "best_other": other, "o": M[other], "ci": ci, "rule": rule, "n_ft_seeds": nft}
+        rule = "tied (ours)"           # best entries are all ours and statistically tied
+    return {"selected": sel, "m": M[sel], "best_other": other, "o": M[other], "ci": ci, "rule": rule,
+            "n_ft_seeds": nft, "ties": ties, "external_comparator": False}
 
 
 def cellv(e, kind, m="map50_95", planned=1, bold=False):
@@ -538,7 +558,9 @@ def tab_det2():
     SH = _opt("shipped_checkpoint.json") or {}
     planned = {"y11s": 2, "y11m": 2, "y11n": 1, "reexp_y11s": 1, "rtdetrl": 1}
     rows_spec = [("y11n", ("iodet", "pxdet", "pxseg")), ("y11s", ("iodet", "pxdet", "pxseg")),
-                 ("y11m", ("pxdet", "pxseg")), ("reexp_y11s", ("pxdet",)), ("rtdetrl", ("pxdet",))]
+                 ("y11m", ("pxdet", "pxseg")), ("reexp_y11s", ("pxdet",))]
+    if "rtdetrl" in families("pxdet"):          # RT-DETR-l dropped from the plan (amendment 2026-11-14 21:10)
+        rows_spec.append(("rtdetrl", ("pxdet",)))
     # best test mean per column (bold), shipped included
     best = {}
     for task, (kind, _) in TASKS.items():
@@ -624,7 +646,7 @@ def tab_cls2():
     tex = r"""\begin{table}[t]
 \centering\small
 \setlength{\tabcolsep}{2.6pt}
-\caption{\textbf{IO-CLS read-outs and models} (test macro-AP and macro-AUROC in \%, with 95\% intervals from a bootstrap over test lineages). Dim.: read-out feature size. Bold: best test macro-AP. All nine read-outs: supplementary Tab.~S3.}
+\caption{\textbf{IO-CLS read-outs and models} (test macro-AP and macro-AUROC in \%, with 95\% intervals from a bootstrap over test lineages). Dim.: feature size before the 1{,}024-d PCA (C1 concatenates the three PCA outputs).}
 \label{tab:cls}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lrccc}
@@ -639,33 +661,37 @@ Model & Dim. & macro-AP & 95\% CI & AUROC \\
     (OUT / "tab_cls.tex").write_text(tex)
 
 
+SHORT = {"multi_lattice": "C1", "C2_ensemble": "C2", "vits14_lattice": "ViT-S lattice", "vitb14_lattice": "ViT-B lattice",
+         "convnext_t_lattice": "ConvNeXt lattice", "ft_convnext_t_seedavg": "FT ConvNeXt-T", "ft_vits14_seedavg": "FT ViT-S"}
+SHORTD = {"y11n": "YOLO11n", "y11s": "YOLO11s", "y11m": "YOLO11m", "reexp_y11s": "D1", "shipped": "Shipped$^\\dagger$"}
+
+
 def tab_sota():
     rows = []
     vc = verdict_cls()
     if vc:
-        rows.append(f"IO-CLS & {CLSNAME.get(vc['selected'], vc['selected'])} & {f1(vc['m']['test_macro_ap'])} & "
-                    f"{CLSNAME.get(vc['best_other'], vc['best_other'])} & {f1(vc['o']['test_macro_ap'])} & {vc['rule']} \\\\")
+        rows.append(f"IO-CLS & {SHORT.get(vc['selected'], vc['selected'])} & {f1(vc['m']['test_macro_ap'])} & "
+                    f"{SHORT.get(vc['best_other'], vc['best_other'])} & {f1(vc['o']['test_macro_ap'])} & {vc['rule']} \\\\")
     else:
         rows.append("IO-CLS & XX & XX & XX & XX & pending \\\\")
     for task, (kind, lab) in TASKS.items():
         v = verdict_dense(task)
         if not v:
             rows.append(f"{lab} & XX & XX & XX & XX & pending \\\\"); continue
-        rows.append(f"{lab} & {NAME[v['selected']]} ({v['sel']['n_seeds']}) & {f1(v['min_seed'])} & "
-                    f"{NAME.get(v['best_other'], '--') if v['best_other'] else '--'} & {f1(v['best_other_val'])} & {v['rule']} \\\\")
+        rows.append(f"{lab} & {SHORTD[v['selected']]} ({v['sel']['n_seeds']}) & {f1(v['min_seed'])} & "
+                    f"{SHORTD.get(v['best_other'], '--') if v['best_other'] else '--'} & {f1(v['best_other_val']) if v['best_other'] else '--'} & {v['rule']} \\\\")
     tex = r"""\begin{table}[t]
-\centering\small
-\setlength{\tabcolsep}{2.4pt}
-\caption{\textbf{State-of-the-art check per task} under the frozen rule (\cref{sec:protocol}). Selected: chosen on validation (seeds). Its score: test macro-AP for IO-CLS, the lowest seed's test mAP$_{50:95}$ otherwise. Strongest other: the best other evaluated model on test (its best seed). Rule: met, not met, or pending runs.}
+\centering\footnotesize
+\setlength{\tabcolsep}{1.5pt}
+\caption{\textbf{State-of-the-art check per task} under the frozen rule (\cref{sec:protocol}). Score: the lowest seed for dense tasks, test macro-AP for IO-CLS.}
 \label{tab:sota}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{llclcc}
+\begin{tabular}{llclcl}
 \toprule
-Task & Selected (val) & Score & Strongest other & Score & Rule \\
+Task & Selected (seeds) & Score & Strongest other & Score & Rule \\
 \midrule
 """ + "\n".join(rows) + r"""
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 """
     (OUT / "tab_sota.tex").write_text(tex)
@@ -684,14 +710,23 @@ def supp_attempts():
             fam = n[len(task) + 1:].rsplit("_s", 1)[0]
             v = _get(r, "val", kind, "map50_95"); te = _get(r, "test", kind, "map50_95")
             mark = "\\checkmark" if fam == sel else ""
+            argsf = R.parent / "data" / "runs" / n / "args.yaml"
+            batch = r.get("batch", "XX")
+            if argsf.exists():          # effective batch after Ultralytics' out-of-memory fallback
+                for line in argsf.read_text().splitlines():
+                    if line.startswith("batch:"):
+                        batch = line.split(":", 1)[1].strip()
             lines.append(f"{lab} & {NAME.get(fam, fam)} & {r.get('seed', 'XX')} & {r.get('epochs_full_passes', 'XX')} & "
-                         f"{r.get('batch', 'XX')} & {f1(v)} & {f1(te)} & {mark} \\\\")
+                         f"{batch} & {f1(v)} & {f1(te)} & {mark} \\\\")
         for fam in ("y11m",):
             if not_selected(task, fam):
                 lines.append(f"{lab} & {NAME[fam]} & 1 & -- & -- & \\multicolumn{{2}}{{c}}{{not trained: seed 0 below YOLO11s on val}} & \\\\")
         lines.append("\\midrule")
     if lines and lines[-1] == "\\midrule":
         lines.pop()
+    if "iodet_y11n_s1" in runs or (R / "../../plan.json").exists():
+        lines.append("\\midrule\\multicolumn{8}{p{0.95\\textwidth}}{\\footnotesize IO-DET YOLO11n seed 1 was added by the amendment of 2026-11-15 14:50, made after the "
+                     "seed-0 test scores of YOLO11n and YOLO11s were known.} \\\\")
     tex = r"""\begin{table*}[t]
 \centering\small
 \caption{\textbf{Every detection and segmentation training attempt} (mAP$_{50:95}$ in \%, boxes for IO-DET and PX-DET, masks for PX-SEG). Selection uses the validation column only, and each run is tested once. \checkmark: the family selected on validation for that task. Passes: full passes over the training set.}
@@ -740,7 +775,12 @@ def supp_leak():
             rows.append(f"{lab} & shipped / ours & XX & XX & XX & XX & XX \\\\"); continue
         for k in keys:
             e = SE["models"][k]
-            name = "Shipped YOLOv8x-seg$^\\dagger$" if k.startswith("shipped") else k.split("|")[0].replace("_", "\\_")
+            if k.startswith("shipped"):
+                name = "Shipped YOLOv8x-seg$^\\dagger$"
+            else:
+                run = k.split("|")[0]
+                fam, seed = run.split("_", 1)[1].rsplit("_s", 1)
+                name = f"{NAME.get(fam, fam)} (seed {seed})"
             pr = SE.get("paired_no_copy_subset", {}).get(f"{k}-minus-shipped")
             prs = "--" if not pr else f"{100*pr['diff']:+.1f} [{100*pr['ci95'][0]:+.1f}, {100*pr['ci95'][1]:+.1f}]"
             rows.append(f"{lab} & {name} & {f1(e['full_test'])} & {f1(e['with_copy_subset'])} & {f1(e['no_copy_subset'])} "
@@ -803,6 +843,7 @@ def numbers():
     def dput(k, a, b, op="-", nd=1, scale=100, signed=False):
         if a is None or b is None:
             mac[k] = "XX"; return
+        a, b = round(float(a), 6), round(float(b), 6)    # verify_numbers compares at 6 dp
         v = (a - b) if op == "-" else (a - b) / b
         s = f"{scale * v:+.{nd}f}" if signed else f"{scale * v:.{nd}f}"
         mac[k] = s
@@ -812,7 +853,11 @@ def numbers():
     vc = verdict_cls()
     mac["clsSel"] = CLSNAME.get(vc["selected"], "XX") if vc else "XX"
     put("clsSelAP", vc and vc["m"]["test_macro_ap"]); put("clsSelAUROC", vc and vc["m"]["test_macro_auroc"])
-    mac["clsVerdict"] = vc["rule"] if vc else "pending"
+    if vc and vc["rule"] == "tied (ours)":
+        mac["clsVerdict"] = ("no external comparator; selected " + SHORT.get(vc["selected"], vc["selected"])
+                             + ", statistically tied with " + ", ".join(SHORT.get(k, CLSNAME.get(k, k)) for k in vc["ties"]) + " (ours)")
+    else:
+        mac["clsVerdict"] = vc["rule"] if vc else "pending"
     mac["clsOther"] = CLSNAME.get(vc["best_other"], "XX") if vc else "XX"
     put("clsOtherAP", vc and vc["o"]["test_macro_ap"])
     ci = vc and vc.get("ci")
@@ -820,6 +865,8 @@ def numbers():
     w = _get(SC["models"].get("C2_ensemble", {}), "weight_ft_convnext")
     mac["clsCTwoW"] = "XX" if w is None else f"{w:.1f}"
     mac["clsFtSeeds"] = str(vc["n_ft_seeds"]) if vc else "XX"
+    mac["clsTies"] = (", ".join(SHORT.get(k, CLSNAME.get(k, k)) for k in vc["ties"]) or "none") if vc else "XX"
+    mac["clsTiesN"] = str(len(vc["ties"])) if vc else "XX"
     put("lthreeOurs", _get(G.get("iodet_y11s", {}), "test_box_map50_95_mean"))
     for task, (kind, lab) in TASKS.items():
         v = verdict_dense(task)
@@ -827,7 +874,11 @@ def numbers():
         mac[T + "Sel"] = NAME[v["selected"]] if v else "XX"
         put(T + "Map", v and v["sel"][f"test_{kind}_map50_95_mean"])
         put(T + "MapFifty", v and v["sel"][f"test_{kind}_map50_mean"])
-        mac[T + "Verdict"] = v["rule"] if v else "pending"
+        if v and v["rule"] == "tied (ours)":
+            mac[T + "Verdict"] = (f"no external comparator; selected {SHORTD[v['selected']]}, statistically tied with "
+                                  f"{SHORTD.get(v['best_other'], v['best_other'])} (ours)")
+        else:
+            mac[T + "Verdict"] = v["rule"] if v else "pending"
         put(T + "Head", v and v["sel"].get(f"test_{kind}_head_map50_95_mean"))
         put(T + "Med", v and v["sel"].get(f"test_{kind}_medium_map50_95_mean"))
         put(T + "Tail", v and v["sel"].get(f"test_{kind}_tail_map50_95_mean"))
@@ -840,9 +891,9 @@ def numbers():
     put("shipDetShare", _get(SH, "pxdet_test_share_lineage_in_shipped_train"))
     put("shipSegShare", _get(SH, "pxseg_test_share_lineage_in_shipped_train"))
     L1 = D.get("L1_swap", {})
-    put("leakAbs", L1.get("map50_95_diff_mean")); put("leakRel", L1.get("map50_95_rel_gain_mean"))
-    put("leakClean", np.mean(L1["map50_95_clean"]) if L1.get("map50_95_clean") else None)
-    put("leakLeaky", np.mean(L1["map50_95_leaky"]) if L1.get("map50_95_leaky") else None)
+    put("leakAbs", L1.get("map50_95_diff_mean"), nd=2); put("leakRel", L1.get("map50_95_rel_gain_mean"))
+    put("leakClean", np.mean(L1["map50_95_clean"]) if L1.get("map50_95_clean") else None, nd=2)
+    put("leakLeaky", np.mean(L1["map50_95_leaky"]) if L1.get("map50_95_leaky") else None, nd=2)
     mac["leakSeeds"] = str(len(L1.get("map50_95", []))) if L1 else "XX"
     m = LC["models"].get("vitb14_lattice", {})
     put("ltwoLin", m.get("common_test_trained_on_lineage_split")); put("ltwoHash", m.get("common_test_trained_on_hash_split"))
@@ -857,6 +908,7 @@ def numbers():
         sel = (verdict_dense(task) or {}).get("selected")
         ours = [k for k in SE["models"] if k.startswith(f"{task}_{sel}_s") and k.endswith("|" + task)] if sel else []
         put(f"lfourOursNo{T}", np.mean([SE["models"][k]["no_copy_subset"] for k in ours]) if ours else None)
+        put(f"lfourOursWith{T}", np.mean([SE["models"][k]["with_copy_subset"] for k in ours]) if ours else None)   # presentation: same JSON field as Fig. 6b
         prs = [SE.get("paired_no_copy_subset", {}).get(f"{k}-minus-shipped") for k in ours]
         prs = [p for p in prs if p]
         if prs:

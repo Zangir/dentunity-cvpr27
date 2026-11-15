@@ -2,7 +2,7 @@
 import json, sys, time
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from unidental.common import DATA, RESULTS, write_json
+from dentunity.common import DATA, RESULTS, write_json
 from ultralytics import YOLO, RTDETR
 out = RESULTS / "speed_bench.json"
 res = json.loads(out.read_text()) if out.exists() else {}

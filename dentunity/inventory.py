@@ -1,7 +1,7 @@
 """Per-source inventories (sha256, size, labels, shipped split) for all four tasks.
 
 Writes data/inv_{io_cls,io_aug,io_det,px}.json (local paths; gitignored) and the
-path lists used by unidental.embed. Nothing is copied; images are read in place.
+path lists used by dentunity.embed. Nothing is copied; images are read in place.
 """
 from __future__ import annotations
 
@@ -44,7 +44,8 @@ def io_cls():
             rows.append({"path": r["path"], "labels": sorted(lab[sha]), "labels_propagated_earlier": sorted(r["label"]),
                          "split": split,
                          "lineage_src": int(r["lineage"]), "sha256": sha,
-                         "width": w, "height": h, "folder": Path(r["path"]).relative_to(ORAL_ROOT).parts[0]})
+                         "width": w, "height": h, "folder": r["path"].split(
+                             "Dataset_04_11_Intraoral_Expert/")[1].split("/")[0]})
     return rows
 
 
@@ -55,7 +56,7 @@ def io_aug():
     for p, k in zip(d["paths"], kind):
         if k == "aug":
             rows.append({"path": str(p), "sha256": sha256_file(str(p)),
-                         "folder": Path(str(p)).relative_to(ORAL_ROOT).parts[0]})
+                         "folder": str(p).split("Dataset_04_11_Intraoral_Expert/")[1].split("/")[0]})
     return rows
 
 

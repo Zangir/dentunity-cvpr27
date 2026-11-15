@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 import numpy as np
 from paper_style import style
-from unidental.common import DATA, RESULTS, REPO, write_json
-from unidental.taxonomy import UNIFIED, IO_CLS_CLASSES, IO_DET_CLASSES, PX_CLASSES, to_unified
+from dentunity.common import DATA, RESULTS, REPO, write_json
+from dentunity.taxonomy import UNIFIED, IO_CLS_CLASSES, IO_DET_CLASSES, PX_CLASSES, to_unified
 
 FIG = REPO / "figures"
 FIG.mkdir(exist_ok=True)

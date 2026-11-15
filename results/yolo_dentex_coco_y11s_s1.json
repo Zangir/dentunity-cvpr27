@@ -1,0 +1,41 @@
+{
+ "provenance": "run",
+ "run": "dentex_coco_y11s_s1",
+ "data": "dentex",
+ "model": "yolo11s.pt",
+ "imgsz": 640,
+ "epochs_full_passes": 40,
+ "shards": 1,
+ "batch": 8,
+ "seed": 1,
+ "checkpoint_selection": "last epoch (fixed schedule)",
+ "test": {
+  "box": {
+   "map50_95": 0.36688473257740845,
+   "map50": 0.5360150751283046,
+   "map75": 0.468247674391019,
+   "precision": 0.4983558080149702,
+   "recall": 0.5351522331440777,
+   "per_class_ap50_95": {
+    "Impacted": 0.6181407650912141,
+    "Caries": 0.26556942162604924,
+    "Periapical Lesion": 0.1737672888326479,
+    "Deep Caries": 0.41006145475972255
+   },
+   "per_class_ap50": {
+    "Impacted": 0.8960914117441603,
+    "Caries": 0.38269782817934744,
+    "Periapical Lesion": 0.29952056311293895,
+    "Deep Caries": 0.565750497476772
+   },
+   "n_classes_evaluated": 4
+  },
+  "speed_ms": {
+   "preprocess": 0.2795275009702891,
+   "inference": 18.82999419933185,
+   "loss": 6.914022378623486e-05,
+   "postprocess": 7.250819141045213
+  }
+ },
+ "logged_epochs_completed": 40
+}

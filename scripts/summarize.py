@@ -6,9 +6,9 @@ import json, sys
 from pathlib import Path
 import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from unidental.cls_data import Y, rows
-from unidental.common import DATA, RESULTS, read_json, write_json
-from unidental.metrics import cluster_boot, macro_ap, macro_auroc, paired_ci, per_class_ap
+from dentunity.cls_data import Y, rows
+from dentunity.common import DATA, RESULTS, read_json, write_json
+from dentunity.metrics import cluster_boot, macro_ap, macro_auroc, paired_ci, per_class_ap
 
 J = lambda n: read_json(RESULTS / n) if (RESULTS / n).exists() else None
 
@@ -41,7 +41,7 @@ def det():
         groups[g] = e
     # long-tail split (PX tasks): class frequency bins from canonical TRAINING instances
     from collections import Counter
-    from unidental.taxonomy import PX_CLASSES
+    from dentunity.taxonomy import PX_CLASSES
     b = read_json(DATA / "bench.json")["px"]
     tr = Counter(PX_CLASSES[x["c"]] for r in b if r["role"] == "canonical" and r["split"] == "train" for x in r["instances"])
     trs = Counter(PX_CLASSES[x["c"]] for r in b if r["role"] == "canonical" and r["split"] == "train" and r["in_seg"]

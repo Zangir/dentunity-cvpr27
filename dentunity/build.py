@@ -1,6 +1,6 @@
 """Build the benchmark: lineages, cross-task-consistent splits, manifests, audits.
 
-  python -m unidental.build      -> data/bench.json (local paths, private)
+  python -m dentunity.build      -> data/bench.json (local paths, private)
                                     release/manifests/*.csv (sha256-keyed, public)
                                     results/build_audit.json, results/dataset_stats.json
 """
@@ -18,7 +18,7 @@ from .lineage import components, key_edges, mutual_knn_edges, null_quantile, siz
 from .splits import contamination, stratified_group_split
 from .taxonomy import IO_CLS_CLASSES, IO_DET_CLASSES, PX_CLASSES, to_unified
 
-SEED = "unidental-v1"
+SEED = "dentunity-v1"
 
 
 def _emb(group):

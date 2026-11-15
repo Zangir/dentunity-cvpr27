@@ -1,0 +1,69 @@
+{
+ "provenance": "run",
+ "run": "iodet_y11s_s1",
+ "data": "iodet",
+ "model": "yolo11s.pt",
+ "imgsz": 640,
+ "epochs_full_passes": 40,
+ "shards": 1,
+ "batch": 8,
+ "seed": 1,
+ "checkpoint_selection": "best validation fitness (Ultralytics best.pt)",
+ "val": {
+  "box": {
+   "map50_95": 0.11112730024718584,
+   "map50": 0.3098946880033999,
+   "map75": 0.042202939814803796,
+   "precision": 0.37804709540322345,
+   "recall": 0.3105612094083865,
+   "per_class_ap50_95": {
+    "Caries": 0.13093315715084225,
+    "Ulcer": 0.19186096519842794,
+    "Tooth Discoloration": 0.1100397592363012,
+    "Gingivitis": 0.01167531940317199
+   },
+   "per_class_ap50": {
+    "Caries": 0.4472940045150478,
+    "Ulcer": 0.48526783820280295,
+    "Tooth Discoloration": 0.2717429229963392,
+    "Gingivitis": 0.03527398629940979
+   },
+   "n_classes_evaluated": 4
+  },
+  "speed_ms": {
+   "preprocess": 0.25501580956480363,
+   "inference": 28.91388351062014,
+   "loss": 7.42194412724815e-05,
+   "postprocess": 7.485417007166131
+  }
+ },
+ "test": {
+  "box": {
+   "map50_95": 0.14491581920294866,
+   "map50": 0.36329253859010546,
+   "map75": 0.07962143652582605,
+   "precision": 0.44642238492666503,
+   "recall": 0.4136331212373372,
+   "per_class_ap50_95": {
+    "Caries": 0.11799993785798417,
+    "Ulcer": 0.18614633230800992,
+    "Tooth Discoloration": 0.12994784053856598,
+    "Gingivitis": 0.14556916610723453
+   },
+   "per_class_ap50": {
+    "Caries": 0.36166240804076266,
+    "Ulcer": 0.44236434400151836,
+    "Tooth Discoloration": 0.28487930639628856,
+    "Gingivitis": 0.36426409592185227
+   },
+   "n_classes_evaluated": 4
+  },
+  "speed_ms": {
+   "preprocess": 0.2306236377183771,
+   "inference": 10.945379418054861,
+   "loss": 7.311031461144105e-05,
+   "postprocess": 7.166309220564548
+  }
+ },
+ "logged_epochs_completed": 40
+}

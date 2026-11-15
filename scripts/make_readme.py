@@ -15,7 +15,7 @@ rows = [
     ("PX-DET", "box mAP50-95", "YOLO11s", f(g("pxdet_y11s", "test_box_map50_95_mean"))),
     ("PX-SEG", "mask mAP50-95", "YOLO11s-seg", f(g("pxseg_y11s", "test_mask_map50_95_mean"))),
 ]
-table = "| Task | Metric (test, %) | Best model | Score |\n|---|---|---|---|\n" + "\n".join(
+table = "| Task | Metric (test, %) | Best model | Score |\n|:-|:-|:-|:-|\n" + "\n".join(
     f"| {a} | {b} | {c} | {d} |" for a, b, c, d in rows)
 T = S.get("total", {})
 readme = f"""# DentUnity: one copy-free dataset to train and evaluate dental classification, detection and segmentation
@@ -53,7 +53,7 @@ python run_experiment.py --smoke
 See `release/BUILD.md`. In short:
 
 ```bash
-python -m unidental.rebuild --pano-root upstream/pano --oral-root upstream/oral --out dentunity_v1
+python -m dentunity.rebuild --pano-root upstream/pano --oral-root upstream/oral --out dentunity_v1
 ```
 
 ## Results (copy-free test splits)
@@ -77,7 +77,8 @@ The frozen plan with timestamped amendments is `../plan.json`.
 
 DentUnity is released as a build kit: we re-host no images and no upstream annotation
 files. Download the two public upstream releases yourself (Kaggle), accept their terms,
-and the kit rebuilds the benchmark by sha256. Licence evidence per source:
+and the kit rebuilds the benchmark by sha256. In the anonymous release repository the build kit
+(manifests, labels, splits) is in the `dataset/` folder. Licence evidence per source:
 `release/licence_table.md`; open questions for rights holders: `release/open_questions.md`.
 
 ## Citation
@@ -95,7 +96,7 @@ If you use DentUnity, please cite:
 
 ## License
 
-Code: MIT (`LICENSE`). Manifests and harmonised labels: CC BY 4.0 (pending author confirmation).
+Code: MIT (`LICENSE`). Build kit (manifests, harmonised labels, splits, lineage ids): CC BY-NC 4.0. Released model weights: AGPL-3.0.
 Images: not distributed; upstream terms apply.
 """
 (R / "README.md").write_text(readme)

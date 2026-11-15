@@ -4,7 +4,7 @@ For each encoder and descriptor: standardise, PCA to 1024 dims if larger, one
 logistic regression per label, C chosen on validation macro-AP only. Writes
 results/cls_frozen.json and data/preds/cls_<name>.npz (val/test probabilities).
 
-  python -m unidental.cls_frozen [--split split|split_src_hash]
+  python -m dentunity.cls_frozen [--split split|split_src_hash]
 """
 from __future__ import annotations
 

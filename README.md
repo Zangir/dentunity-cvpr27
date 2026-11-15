@@ -1,75 +1,83 @@
-# DentUnity: code (anonymous review snapshot)
+# DentUnity: one copy-free dataset to train and evaluate dental classification, detection and segmentation
 
-This is the code and the result files behind the anonymous CVPR 2027 submission *DentUnity: One
-Copy-Free Dataset to Train and Evaluate Dental Classification, Detection and Segmentation*.
+![Python](https://img.shields.io/badge/python-3.11+-blue) ![License: MIT](https://img.shields.io/badge/code-MIT-green) ![Release](https://img.shields.io/badge/data-build%20kit-orange)
 
-- **Build kit:** `release/build_dentunity.py` plus `release/manifests/`. The full build kit with its dataset card (CC BY-NC 4.0) is in [`dataset/`](dataset/).
-- **Not included:** images, original file names and upstream annotation files.
+DentUnity unifies intraoral photographs and panoramic radiographs into four tasks under one
+36-concept taxonomy: 10,456 distinct images, 64,226 annotations.
+Its splits are drawn over **copy lineages jointly for every task**, so no test image of any
+task has a copy in any training set. In the shipped panoramic split, **96.1%** of test
+images are copies of training images.
+
+## News
+- **2026-11** Build kit, splits, baselines and paper (under review).
 
 ## Install
+
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+export SSL_CERT_FILE="$(python -m certifi)"
+export PYTORCH_ENABLE_MPS_FALLBACK=1
 ```
 
-## 1. Reproduce the paper's tables from the released result files
-Every number in the paper's tables comes from `results/*.json`. To regenerate the LaTeX tables:
+## Quickstart (smoke test, under 1 minute, no data needed)
+
 ```bash
-mkdir -p out/sec out/supp
-python scripts/make_tables.py out
+python run_experiment.py --smoke
 ```
-This writes:
-- `out/sec/`:
-  - Tab. 1 comparison;
-  - Tab. 2 split audit;
-  - Tab. 3 IO-CLS;
-  - Tab. 4 detection and segmentation;
-  - Tab. 5 state-of-the-art check;
-  - `numbers.tex` with every result number used in the text.
-- `out/supp/`: Tabs. S1 and S3–S9.
 
-The state-of-the-art verdict in Tab. 5 is computed from the frozen rule in `plan.json`, never typed by hand.
+## Build the dataset from the upstream releases
 
-The figures built from result files only are:
+See `release/BUILD.md`. In short:
+
 ```bash
-python scripts/make_figures.py out analysis leak
+python -m dentunity.rebuild --pano-root upstream/pano --oral-root upstream/oral --out dentunity_v1
 ```
-Figs. 2–4 and S1 also need the rebuilt dataset and the cached embeddings (see below).
 
-## 2. Rebuild the dataset
+## Results (copy-free test splits)
+
+| Task | Metric (test, %) | Best model | Score |
+|:-|:-|:-|:-|
+| IO-CLS | macro-AP | C2_ensemble | 83.3 |
+| IO-DET | box mAP50-95 | YOLO11s | 14.9 |
+| PX-DET | box mAP50-95 | YOLO11s | 13.5 |
+| PX-SEG | mask mAP50-95 | YOLO11s-seg | 8.7 |
+
+All numbers come from `results/summary_*.json`; two-seed detection rows report the mean.
+
+## Reproduce
+
 ```bash
-kaggle datasets download -d lokisilvres/dental-disease-panoramic-detection-dataset -p upstream/pano --unzip
-kaggle datasets download -d salmansajid05/oral-diseases -p upstream/oral --unzip
-python -m unidental.rebuild --pano-root upstream/pano --oral-root upstream/oral --out dentunity_v1
+python run_experiment.py build        # lineages, splits, manifests, audits
+python run_experiment.py queue        # one guarded chunk of the frozen plan (repeat until done)
+python run_experiment.py summarize    # results/summary_*.json
+python scripts/make_tables.py ../../paper && python scripts/fig_dataset.py && python scripts/fig_teaser.py
 ```
-`dentunity_v1/verify.json` must report `matches_expected: true` for every task.
 
-## 3. Re-run the experiments
-The plan in `plan.json` was frozen before any test evaluation, and every later change is a
-dated amendment.
-```bash
-python run_experiment.py --smoke        # 1-minute self-test of the lineage split and metrics on synthetic images
-python scripts/run_queue.py 560         # one chunk of the frozen plan (repeat until it prints ALLDONE)
-python run_experiment.py summarize      # results/summary_*.json
+The frozen plan with timestamped amendments is `plan.json`.
+
+## Data access
+
+DentUnity is released as a build kit: we re-host no images and no upstream annotation
+files. Download the two public upstream releases yourself (Kaggle), accept their terms,
+and the kit rebuilds the benchmark by sha256. The build kit
+(manifests, labels, splits) is in [`dataset/`](dataset/); trained model weights are in `weights/`. Licence evidence per source:
+`release/licence_table.md`.
+
+## Citation
+
+If you use DentUnity, please cite:
+
+```bibtex
+@inproceedings{dentunity2027,
+  title  = {DentUnity: One Copy-Free Dataset to Train and Evaluate Dental Classification, Detection and Segmentation},
+  author = {Anonymous},
+  year   = {2027},
+  note   = {Under review}
+}
 ```
-- **Training:** `unidental/yolo_train.py`, `unidental/cls_frozen.py` and `unidental/cls_finetune.py`.
-- **Evaluation:** `unidental/eval_shipped.py`, `unidental/subset_eval.py` and `unidental/dentex.py`.
-- **Inputs:** they read the rebuilt dataset via the YOLO trees written by `unidental/yolo_export.py`.
 
-## What is not released, and why
-- `unidental/inventory.py` and `unidental/build.py` show how the manifests were produced. They need intermediate inventories from earlier audits of the downloads (`data/upstream/*`), which list original file paths. Those paths contain personal names, so the inventories are not released. The manifests are the authoritative output of that step.
-- `data/bench.json`, cached embeddings and per-image predictions are keyed by local file paths for the same reason. They can be regenerated after a rebuild.
+## License
 
-## Layout
-
-| Path | Content |
-|---|---|
-| `unidental/` | Library: taxonomy, lineage linking, splits, training and evaluation |
-| `scripts/` | Tables, figures, summaries, queue |
-| `results/` | Every result file used in the paper |
-| `release/` | Build kit, manifests and licence evidence (`licence_inventory.json`, `licence_table.md`) |
-| `plan.json` | Frozen experiment plan with amendments |
-| `figures/` | Plots generated by `scripts/make_figures.py` |
-| `sample_data/synthetic/` | Synthetic images for the smoke test |
-
-Code: MIT licence. For data terms, see `release/licence_table.md`.
+Code: MIT (`LICENSE`). Build kit (manifests, harmonised labels, splits, lineage ids): CC BY-NC 4.0. Released model weights: AGPL-3.0.
+Images: not distributed; upstream terms apply.

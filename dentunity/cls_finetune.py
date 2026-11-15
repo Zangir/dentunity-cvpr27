@@ -6,7 +6,7 @@ RandomResizedCrop(0.65-1)+flip+colour jitter, BCE multi-label loss; epoch chosen
 validation macro-AP. Writes data/preds/cls_ft_<model>_s<seed>.npz and
 results/cls_ft_<model>_s<seed>.json.
 
-  python -m unidental.cls_finetune --model convnext_t --seed 0 --budget 540
+  python -m dentunity.cls_finetune --model convnext_t --seed 0 --budget 540
 """
 from __future__ import annotations
 

@@ -1,0 +1,76 @@
+{
+ "provenance": "run",
+ "n_common_test_images": 132,
+ "models": {
+  "vits14_last_cls": {
+   "hash_split_full_test": 0.8054594072362128,
+   "lineage_split_full_test": 0.6593564390371582,
+   "common_test_trained_on_hash_split": 0.838780334765211,
+   "common_test_trained_on_lineage_split": 0.6920329814516034,
+   "inflation_common_test": 0.14674735331360755
+  },
+  "vits14_dinov2_lin": {
+   "hash_split_full_test": 0.8876247027569781,
+   "lineage_split_full_test": 0.7589355184625646,
+   "common_test_trained_on_hash_split": 0.9287208774393538,
+   "common_test_trained_on_lineage_split": 0.7744287237123512,
+   "inflation_common_test": 0.15429215372700267
+  },
+  "vits14_lattice": {
+   "hash_split_full_test": 0.8908780014531028,
+   "lineage_split_full_test": 0.8225387169424261,
+   "common_test_trained_on_hash_split": 0.955024201241121,
+   "common_test_trained_on_lineage_split": 0.8618786067267701,
+   "inflation_common_test": 0.0931455945143509
+  },
+  "vitb14_last_cls": {
+   "hash_split_full_test": 0.8464148394898152,
+   "lineage_split_full_test": 0.6931903209093776,
+   "common_test_trained_on_hash_split": 0.887943749105749,
+   "common_test_trained_on_lineage_split": 0.7152317326503154,
+   "inflation_common_test": 0.17271201645543366
+  },
+  "vitb14_dinov2_lin": {
+   "hash_split_full_test": 0.9019288269424016,
+   "lineage_split_full_test": 0.7889291479205043,
+   "common_test_trained_on_hash_split": 0.952651096664094,
+   "common_test_trained_on_lineage_split": 0.829834277415476,
+   "inflation_common_test": 0.12281681924861798
+  },
+  "vitb14_lattice": {
+   "hash_split_full_test": 0.9210140541299089,
+   "lineage_split_full_test": 0.8144860413084593,
+   "common_test_trained_on_hash_split": 0.964743423715217,
+   "common_test_trained_on_lineage_split": 0.8702689133595453,
+   "inflation_common_test": 0.09447451035567178
+  },
+  "convnext_t_last_cls": {
+   "hash_split_full_test": 0.8476289906947102,
+   "lineage_split_full_test": 0.737493817790336,
+   "common_test_trained_on_hash_split": 0.8591625758340992,
+   "common_test_trained_on_lineage_split": 0.7929084763977015,
+   "inflation_common_test": 0.0662540994363977
+  },
+  "convnext_t_dinov2_lin": {
+   "hash_split_full_test": 0.8825611805473584,
+   "lineage_split_full_test": 0.7592748533713053,
+   "common_test_trained_on_hash_split": 0.8941461971963364,
+   "common_test_trained_on_lineage_split": 0.809207676353418,
+   "inflation_common_test": 0.08493852084291842
+  },
+  "convnext_t_lattice": {
+   "hash_split_full_test": 0.8840416962180483,
+   "lineage_split_full_test": 0.7990569839760037,
+   "common_test_trained_on_hash_split": 0.9235362535339298,
+   "common_test_trained_on_lineage_split": 0.840615716678012,
+   "inflation_common_test": 0.08292053685591771
+  },
+  "multi_lattice": {
+   "hash_split_full_test": 0.9196037982118548,
+   "lineage_split_full_test": 0.8313567668946433,
+   "common_test_trained_on_hash_split": 0.959342506895064,
+   "common_test_trained_on_lineage_split": 0.8468429241931164,
+   "inflation_common_test": 0.1124995827019476
+  }
+ }
+}

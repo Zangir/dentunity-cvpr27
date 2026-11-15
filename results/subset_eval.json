@@ -1,0 +1,77 @@
+{
+ "provenance": "run (post-hoc descriptive)",
+ "models": {
+  "shipped_yolov8x_seg|pxdet": {
+   "metric": "box mAP50-95",
+   "full_test": 0.16446980769338354,
+   "n_full": 1186,
+   "no_copy_subset": 0.18965277485115387,
+   "n_subset": 153,
+   "with_copy_subset": 0.1791329628635858,
+   "n_with_copy": 1033,
+   "no_copy_ci95": [
+    0.1846602943331202,
+    0.23504999098082352
+   ],
+   "per_image_stats_file": "data/subset_stats/shipped_yolov8x_seg_pxdet.npy"
+  },
+  "shipped_yolov8x_seg|pxseg": {
+   "metric": "mask mAP50-95",
+   "full_test": 0.1087972988623796,
+   "n_full": 1055,
+   "no_copy_subset": 0.1757500944040617,
+   "n_subset": 112,
+   "with_copy_subset": 0.11032348769458393,
+   "n_with_copy": 943,
+   "no_copy_ci95": [
+    0.16254293384939172,
+    0.2197732342379704
+   ],
+   "per_image_stats_file": "data/subset_stats/shipped_yolov8x_seg_pxseg.npy"
+  },
+  "pxdet_y11s_s0|pxdet": {
+   "metric": "box mAP50-95",
+   "full_test": 0.1351975515299281,
+   "n_full": 1186,
+   "no_copy_subset": 0.20460289044569582,
+   "n_subset": 153,
+   "with_copy_subset": 0.13887777699507545,
+   "n_with_copy": 1033,
+   "no_copy_ci95": [
+    0.1935866414391738,
+    0.2594598724558427
+   ],
+   "per_image_stats_file": "data/subset_stats/pxdet_y11s_s0_pxdet.npy"
+  },
+  "pxseg_y11s_s0|pxseg": {
+   "metric": "mask mAP50-95",
+   "full_test": 0.0898458896664724,
+   "n_full": 1055,
+   "no_copy_subset": 0.16145848412750924,
+   "n_subset": 112,
+   "with_copy_subset": 0.0904264901931192,
+   "n_with_copy": 943,
+   "no_copy_ci95": [
+    0.14567198022169014,
+    0.19676479301251584
+   ],
+   "per_image_stats_file": "data/subset_stats/pxseg_y11s_s0_pxseg.npy"
+  }
+ },
+ "paired_no_copy_subset": {
+  "pxdet_y11s_s0|pxdet-minus-shipped": {
+   "diff": 0.014950115594541957,
+   "ci95": [
+    -0.00769673899292868,
+    0.04452625237521055
+   ]
+  },
+  "pxseg_y11s_s0|pxseg-minus-shipped": {
+   "diff": -0.014291610276552458,
+   "ci95": [
+    -0.04484075663419042,
+    0.0072047678487519255
+   ]
+  }
+ }
+}

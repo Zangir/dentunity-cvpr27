@@ -6,7 +6,7 @@ next call resumes from last.pt. Checkpoint selection = best validation fitness
 (Ultralytics best.pt). The test split is evaluated once, after training, and the
 numbers are written to results/yolo_<run>.json.
 
-  python -m unidental.yolo_train --run pxdet_y11s_640_s0 --data pxdet --model yolo11s.pt \
+  python -m dentunity.yolo_train --run pxdet_y11s_640_s0 --data pxdet --model yolo11s.pt \
       --imgsz 640 --epochs 40 --seed 0 --budget 560
 """
 from __future__ import annotations
@@ -20,6 +20,35 @@ from pathlib import Path
 from .common import DATA, REPO, RESULTS, stable_seed, write_json
 
 RUNS = DATA / "runs"
+
+
+def _patch_mps_unique():
+    """MPS workaround: torch.unique(return_counts=True) on MPS occasionally returns
+    garbage counts, which crashed DENTEX training ('zeros: Dimension size must be
+    non-negative'). Count targets per image with bincount on CPU instead; the loss is
+    mathematically unchanged."""
+    import torch
+    from ultralytics.utils import loss as L
+    from ultralytics.utils.ops import xywh2xyxy
+
+    def preprocess(self, targets, batch_size, scale_tensor):
+        nl, ne = targets.shape
+        if nl == 0:
+            return torch.zeros(batch_size, 0, ne - 1, device=self.device)
+        batch_idx = targets[:, 0].long()
+        cmax = int(torch.bincount(batch_idx.cpu(), minlength=batch_size).max())
+        out = torch.zeros(batch_size, cmax, ne - 1, device=self.device)
+        offsets = torch.zeros(batch_size + 1, dtype=torch.long, device=self.device)
+        offsets.scatter_add_(0, batch_idx + 1, torch.ones_like(batch_idx))
+        offsets = offsets.cumsum(0)
+        within_idx = torch.arange(nl, device=self.device) - offsets[batch_idx]
+        out[batch_idx, within_idx] = targets[:, 1:]
+        out[..., 1:5] = xywh2xyxy(out[..., 1:5].mul_(scale_tensor))
+        return out
+    L.v8DetectionLoss.preprocess = preprocess
+
+
+_patch_mps_unique()
 WEIGHTS = DATA / "weights"
 T0 = time.time()
 

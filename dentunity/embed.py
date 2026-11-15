@@ -2,7 +2,7 @@
 link embeddings): whole image resized to 224x224, flip-symmetrised DINOv2 ViT-S/14
 class token, L2-normalised. Resumable per group; writes data/linkemb_<group>.npz.
 
-  python -m unidental.embed <group> <list.txt>   (one image path per line)
+  python -m dentunity.embed <group> <list.txt>   (one image path per line)
 """
 from __future__ import annotations
 
