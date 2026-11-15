@@ -1,0 +1,542 @@
+{
+ "provenance": "run (scripts/split_class_stats.py over release/manifests/*.csv)",
+ "io_cls": {
+  "images": {
+   "train": 2697,
+   "val": 394,
+   "test": 808
+  },
+  "lineages": {
+   "train": 277,
+   "val": 90,
+   "test": 153
+  },
+  "annotations": {
+   "train": 3022,
+   "val": 430,
+   "test": 855
+  },
+  "per_concept": {
+   "calculus": {
+    "train": 584,
+    "val": 81,
+    "test": 164
+   },
+   "gingivitis": {
+    "train": 1131,
+    "val": 162,
+    "test": 323
+   },
+   "hypodontia": {
+    "train": 874,
+    "val": 122,
+    "test": 246
+   },
+   "caries": {
+    "train": 141,
+    "val": 20,
+    "test": 40
+   },
+   "mouth ulcer": {
+    "train": 170,
+    "val": 25,
+    "test": 48
+   },
+   "tooth discoloration": {
+    "train": 122,
+    "val": 20,
+    "test": 34
+   }
+  },
+  "per_concept_images": {
+   "calculus": {
+    "train": 584,
+    "val": 81,
+    "test": 164
+   },
+   "gingivitis": {
+    "train": 1131,
+    "val": 162,
+    "test": 323
+   },
+   "hypodontia": {
+    "train": 874,
+    "val": 122,
+    "test": 246
+   },
+   "caries": {
+    "train": 141,
+    "val": 20,
+    "test": 40
+   },
+   "mouth ulcer": {
+    "train": 170,
+    "val": 25,
+    "test": 48
+   },
+   "tooth discoloration": {
+    "train": 122,
+    "val": 20,
+    "test": 34
+   }
+  },
+  "image_size": {
+   "width_min": 121,
+   "width_median": 612,
+   "width_max": 685,
+   "height_min": 33,
+   "height_median": 319,
+   "height_max": 612
+  },
+  "annotations_per_image": {
+   "min": 1,
+   "median": 1,
+   "p90": 2,
+   "max": 4,
+   "mean": 1.1046422159528084,
+   "empty": 0
+  }
+ },
+ "io_det": {
+  "images": {
+   "train": 963,
+   "val": 137,
+   "test": 273
+  },
+  "lineages": {
+   "train": 198,
+   "val": 48,
+   "test": 72
+  },
+  "annotations": {
+   "train": 2216,
+   "val": 308,
+   "test": 605
+  },
+  "per_concept": {
+   "gingivitis": {
+    "train": 347,
+    "val": 40,
+    "test": 91
+   },
+   "caries": {
+    "train": 1429,
+    "val": 199,
+    "test": 382
+   },
+   "mouth ulcer": {
+    "train": 239,
+    "val": 35,
+    "test": 64
+   },
+   "tooth discoloration": {
+    "train": 201,
+    "val": 34,
+    "test": 68
+   }
+  },
+  "per_concept_images": {
+   "gingivitis": {
+    "train": 106,
+    "val": 13,
+    "test": 31
+   },
+   "caries": {
+    "train": 570,
+    "val": 83,
+    "test": 162
+   },
+   "mouth ulcer": {
+    "train": 169,
+    "val": 24,
+    "test": 49
+   },
+   "tooth discoloration": {
+    "train": 121,
+    "val": 20,
+    "test": 33
+   }
+  },
+  "image_size": {
+   "width_min": 121,
+   "width_median": 303,
+   "width_max": 685,
+   "height_min": 77,
+   "height_median": 198,
+   "height_max": 612
+  },
+  "annotations_per_image": {
+   "min": 1,
+   "median": 2,
+   "p90": 4,
+   "max": 11,
+   "mean": 2.278951201747997,
+   "empty": 0
+  }
+ },
+ "px_det": {
+  "images": {
+   "train": 4150,
+   "val": 593,
+   "test": 1186
+  },
+  "lineages": {
+   "train": 3665,
+   "val": 526,
+   "test": 1062
+  },
+  "annotations": {
+   "train": 39657,
+   "val": 5531,
+   "test": 11602
+  },
+  "per_concept": {
+   "caries": {
+    "train": 2918,
+    "val": 361,
+    "test": 846
+   },
+   "filling": {
+    "train": 14373,
+    "val": 1966,
+    "test": 4052
+   },
+   "root canal treatment": {
+    "train": 4502,
+    "val": 677,
+    "test": 1379
+   },
+   "crown": {
+    "train": 3021,
+    "val": 436,
+    "test": 971
+   },
+   "bone loss": {
+    "train": 2119,
+    "val": 291,
+    "test": 609
+   },
+   "missing tooth": {
+    "train": 1029,
+    "val": 136,
+    "test": 337
+   },
+   "periapical lesion": {
+    "train": 995,
+    "val": 122,
+    "test": 267
+   },
+   "root piece": {
+    "train": 609,
+    "val": 102,
+    "test": 181
+   },
+   "post-core": {
+    "train": 170,
+    "val": 27,
+    "test": 56
+   },
+   "retained root": {
+    "train": 56,
+    "val": 3,
+    "test": 18
+   },
+   "impacted tooth": {
+    "train": 8272,
+    "val": 1189,
+    "test": 2412
+   },
+   "attrition": {
+    "train": 33,
+    "val": 2,
+    "test": 9
+   },
+   "metal band": {
+    "train": 40,
+    "val": 13,
+    "test": 12
+   },
+   "orthodontic wire": {
+    "train": 159,
+    "val": 26,
+    "test": 46
+   },
+   "implant": {
+    "train": 549,
+    "val": 78,
+    "test": 176
+   },
+   "orthodontic bracket": {
+    "train": 97,
+    "val": 11,
+    "test": 28
+   },
+   "abutment": {
+    "train": 25,
+    "val": 2,
+    "test": 6
+   },
+   "supra-eruption": {
+    "train": 34,
+    "val": 6,
+    "test": 8
+   },
+   "temporary anchorage device": {
+    "train": 3,
+    "val": 0,
+    "test": 1
+   },
+   "primary tooth": {
+    "train": 158,
+    "val": 16,
+    "test": 54
+   },
+   "cyst": {
+    "train": 4,
+    "val": 0,
+    "test": 1
+   },
+   "permanent retainer": {
+    "train": 6,
+    "val": 0,
+    "test": 2
+   },
+   "mandibular canal": {
+    "train": 255,
+    "val": 37,
+    "test": 70
+   },
+   "maxillary sinus": {
+    "train": 188,
+    "val": 28,
+    "test": 54
+   },
+   "permanent tooth": {
+    "train": 9,
+    "val": 0,
+    "test": 2
+   },
+   "malaligned tooth": {
+    "train": 7,
+    "val": 1,
+    "test": 1
+   },
+   "gingival former": {
+    "train": 8,
+    "val": 0,
+    "test": 1
+   },
+   "tooth fracture": {
+    "train": 6,
+    "val": 1,
+    "test": 3
+   },
+   "bone plating": {
+    "train": 8,
+    "val": 0,
+    "test": 0
+   },
+   "root resorption": {
+    "train": 3,
+    "val": 0,
+    "test": 0
+   },
+   "bone defect": {
+    "train": 1,
+    "val": 0,
+    "test": 0
+   }
+  },
+  "per_concept_images": {
+   "caries": {
+    "train": 885,
+    "val": 126,
+    "test": 253
+   },
+   "bone loss": {
+    "train": 1004,
+    "val": 143,
+    "test": 287
+   },
+   "missing tooth": {
+    "train": 491,
+    "val": 70,
+    "test": 140
+   },
+   "crown": {
+    "train": 1122,
+    "val": 160,
+    "test": 321
+   },
+   "filling": {
+    "train": 2925,
+    "val": 418,
+    "test": 836
+   },
+   "root canal treatment": {
+    "train": 1602,
+    "val": 229,
+    "test": 458
+   },
+   "periapical lesion": {
+    "train": 605,
+    "val": 86,
+    "test": 173
+   },
+   "root piece": {
+    "train": 256,
+    "val": 36,
+    "test": 73
+   },
+   "post-core": {
+    "train": 98,
+    "val": 14,
+    "test": 28
+   },
+   "retained root": {
+    "train": 24,
+    "val": 3,
+    "test": 7
+   },
+   "impacted tooth": {
+    "train": 3393,
+    "val": 485,
+    "test": 969
+   },
+   "attrition": {
+    "train": 11,
+    "val": 1,
+    "test": 3
+   },
+   "metal band": {
+    "train": 25,
+    "val": 4,
+    "test": 7
+   },
+   "orthodontic wire": {
+    "train": 95,
+    "val": 14,
+    "test": 27
+   },
+   "implant": {
+    "train": 187,
+    "val": 27,
+    "test": 53
+   },
+   "orthodontic bracket": {
+    "train": 53,
+    "val": 7,
+    "test": 15
+   },
+   "abutment": {
+    "train": 16,
+    "val": 2,
+    "test": 4
+   },
+   "supra-eruption": {
+    "train": 27,
+    "val": 4,
+    "test": 8
+   },
+   "temporary anchorage device": {
+    "train": 2,
+    "val": 0,
+    "test": 1
+   },
+   "primary tooth": {
+    "train": 33,
+    "val": 5,
+    "test": 9
+   },
+   "cyst": {
+    "train": 4,
+    "val": 0,
+    "test": 1
+   },
+   "permanent retainer": {
+    "train": 4,
+    "val": 0,
+    "test": 1
+   },
+   "mandibular canal": {
+    "train": 131,
+    "val": 19,
+    "test": 37
+   },
+   "maxillary sinus": {
+    "train": 95,
+    "val": 14,
+    "test": 27
+   },
+   "permanent tooth": {
+    "train": 3,
+    "val": 0,
+    "test": 1
+   },
+   "malaligned tooth": {
+    "train": 4,
+    "val": 1,
+    "test": 1
+   },
+   "gingival former": {
+    "train": 4,
+    "val": 0,
+    "test": 1
+   },
+   "tooth fracture": {
+    "train": 6,
+    "val": 1,
+    "test": 2
+   },
+   "bone plating": {
+    "train": 2,
+    "val": 0,
+    "test": 0
+   },
+   "root resorption": {
+    "train": 2,
+    "val": 0,
+    "test": 0
+   },
+   "bone defect": {
+    "train": 1,
+    "val": 0,
+    "test": 0
+   }
+  },
+  "image_size": {
+   "width_min": 640,
+   "width_median": 1615,
+   "width_max": 1615,
+   "height_min": 640,
+   "height_median": 840,
+   "height_max": 840
+  },
+  "annotations_per_image": {
+   "min": 0,
+   "median": 8,
+   "p90": 19,
+   "max": 60,
+   "mean": 9.57834373418789,
+   "empty": 43
+  }
+ },
+ "px_seg_images": {
+  "train": 3710,
+  "val": 532,
+  "test": 1055
+ },
+ "px_reexports_by_split": {
+  "train": 5611,
+  "val": 784,
+  "test": 1602
+ },
+ "px_reexport_image_size": {
+  "width_min": 640,
+  "width_median": 640,
+  "width_max": 1615,
+  "height_min": 640,
+  "height_median": 640,
+  "height_max": 840
+ }
+}

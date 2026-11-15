@@ -8,7 +8,7 @@ Privacy: file paths, source keys and label paths are used only in memory to alig
 arrays; they are never written to any figure, JSON or log.
 
 Each figure mirrors one element of the IMed-361M paper (see paper/EXEMPLAR_MAP.md):
-  fig_pipeline  <- IMIS Fig. 3 (boxed-stage schematic)
+  fig_pipeline  <- IMIS Fig. 3 (boxed stages) in the multi-panel "glimpse" layout of SiteShift Fig. 1
   fig_overview  <- IMIS Fig. 1 (a-e dataset overview)
   fig_linkqc    <- IMIS Fig. 2 (quality diagnostic with a shaded region)
   fig_analysis  <- IMIS Fig. 5 (radars + breakdown panels)
@@ -73,30 +73,140 @@ def fmt(n):
 
 
 # ----------------------------------------------------------------------------- Fig. 2 pipeline
-def card(ax, x, y, w, h, title, lines, color):
-    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.01,rounding_size=0.02", fc="white", ec=color, lw=1.1))
-    ax.add_patch(FancyBboxPatch((x, y + h - 0.3), w, 0.3, boxstyle="round,pad=0.01,rounding_size=0.02", fc=color, ec=color, lw=1.1))
-    ax.text(x + w / 2, y + h - 0.15, title, ha="center", va="center", color="white", fontsize=6.6, fontweight="bold")
-    for i, l in enumerate(lines):
-        ax.text(x + 0.03, y + h - 0.47 - i * 0.2, l, ha="left", va="center", fontsize=5.6)
+def card(fig, x, w, top, h, num, title, sub, color):
+    """One stage of the glimpse: numbered heading + grey subtitle above a light panel (SiteShift Fig. 1 style).
+    Coordinates in inches from the bottom-left of the figure. Returns the panel rectangle (x, y, w, h)."""
+    W, H = fig.get_size_inches()
+    ax = fig.add_axes([0, 0, 1, 1], facecolor="none"); ax.set_xlim(0, W); ax.set_ylim(0, H); ax.axis("off")
+    ax.text(x, top, f"{num}  {title}", ha="left", va="top", fontsize=7.6, fontweight="bold", color=color)
+    ax.text(x, top - 0.135, sub, ha="left", va="top", fontsize=6.6, color="#666666")
+    y = 0.02
+    ph = top - 0.32 - y
+    ax.add_patch(FancyBboxPatch((x, y), w, ph, boxstyle="round,pad=0,rounding_size=0.04", fc="#F6F6F6", ec="#BBBBBB", lw=0.7))
+    return ax, (x, y, w, ph)
+
+
+def _inset(fig, r, l, b, w, h):
+    """Axes at inches (l, b, w, h) relative to panel rectangle r."""
+    W, H = fig.get_size_inches()
+    return fig.add_axes([(r[0] + l) / W, (r[1] + b) / H, w / W, h / H])
 
 
 def fig_pipeline():
+    """Fig. 2: five construction stages as a multi-panel glimpse (IMIS Fig. 3 stages + SiteShift Fig. 1 layout),
+    each with a small summary drawn from results/dataset_stats.json and the taxonomy; no images, no file names."""
     S = J("dataset_stats.json"); A = S["audit"]
+    LA = J("io_cls_labels_audit.json") or {}
     small()
-    fig, ax = plt.subplots(figsize=(TW, 1.05))
-    ax.set_xlim(0, 5.02); ax.set_ylim(0, 1.0); ax.axis("off")
-    cols = ["#999999", "#CC79A7", "#D55E00", "#0072B2", "#009E73"]
-    cards = [("1 Inventory", [f"{fmt(S['px_files']['files'])} panoramic files", f"{fmt(S['io_cls']['images'])} + {fmt(S['io_det']['images'])} photos", "hashed, no file names"]),
-             ("2 Harmonise", [f"{S['total']['unified_concepts']} unified concepts", "5 clinical families", f"{S['total']['tasks']} tasks, {S['total']['modalities']} modalities"]),
-             ("3 Link copies", ["hash, export key", "registered copies", "embedding edges"]),
-             ("4 Split lineages", ["whole lineages", "one split, all tasks", "stratified 70/10/20"]),
-             ("5 Audit + release", ["no evaluation image", "has a training copy", "build kit, no images"])]
-    for i, (t, ls) in enumerate(cards):
-        card(ax, 0.02 + i * 1.0, 0.03, 0.9, 0.94, t, ls, cols[i])
-        if i < 4:
-            ax.annotate("", xy=(0.02 + (i + 1) * 1.0 - 0.004, 0.5), xytext=(0.02 + i * 1.0 + 0.904, 0.5),
-                        arrowprops=dict(arrowstyle="-|>", color="#555555", lw=1.0))
+    H = 1.62
+    fig = plt.figure(figsize=(TW, H))
+    gap = 0.2
+    w = (TW - 4 * gap) / 5
+    top = H - 0.01
+    cols = ["#555555", "#CC79A7", "#D55E00", "#0072B2", "#009E73"]
+    xs = [i * (w + gap) for i in range(5)]
+    tx = dict(fontsize=6.8, va="center")
+
+    # 1 Inventory: the three source files sets
+    ax, r = card(fig, xs[0], w, top, H, 1, "Inventory", "two community releases", cols[0])
+    srcs = [("Panoramic release", f"{fmt(S['px_files']['files'])} files"),
+            ("Intraoral photos", f"{fmt(LA.get('original_files', S['io_cls']['images']))} files"),
+            ("Intraoral boxes", f"{fmt(A['io_det_files'])} files")]
+    bh = (r[3] - 0.34) / 3
+    for i, (a, b) in enumerate(srcs):
+        y0 = r[1] + r[3] - 0.05 - (i + 1) * bh + 0.03
+        ax.add_patch(FancyBboxPatch((r[0] + 0.05, y0), r[2] - 0.1, bh - 0.06, boxstyle="round,pad=0,rounding_size=0.03",
+                                    fc="white", ec="#56B4E9" if i == 0 else "#CC79A7", lw=0.8))
+        ax.text(r[0] + 0.09, y0 + (bh - 0.06) * 0.68, a, fontweight="bold", ha="left", **tx)
+        ax.text(r[0] + 0.09, y0 + (bh - 0.06) * 0.27, b, ha="left", color="#333333", **tx)
+    ax.text(r[0] + r[2] / 2, r[1] + 0.2, f"dropped: {S['px_files']['files'] - S['px_files']['usable_files']} invalid,", ha="center", color="#333333", **tx)
+    ax.text(r[0] + r[2] / 2, r[1] + 0.08, f"{A['io_det_exact_duplicate_files_removed']} exact duplicates", ha="center", color="#333333", **tx)
+
+    # 2 Harmonise: unified concepts per clinical family
+    n_src = len(PX_CLASSES) + len(IO_CLS_CLASSES) + len(S["io_det"]["class_boxes"])
+    ax, r = card(fig, xs[1], w, top, H, 2, "Harmonise", f"{n_src} source labels mapped", cols[1])
+    fam_n = Counter(u["family"] for u in UNIFIED)
+    a2 = _inset(fig, r, 0.66, 0.1, r[2] - 0.74, r[3] - 0.33)
+    v = [fam_n[f] for f in FAMILIES][::-1]
+    a2.barh(range(5), v, color=[FAMC[f] for f in FAMILIES][::-1], height=0.66, ec="#444444", lw=0.4)
+    for i, n in enumerate(v):
+        a2.text(n + 0.4, i, str(n), ha="left", va="center", fontsize=6.8)
+    a2.set_yticks(range(5), [FAMS[f] for f in FAMILIES][::-1], fontsize=6.6)
+    a2.tick_params(axis="y", length=0, pad=2); a2.grid(False)
+    a2.set_xticks([]); a2.set_xlim(0, max(v) * 1.22)
+    for sp in ("bottom", "top", "right"):
+        a2.spines[sp].set_visible(False)
+    a2.patch.set_alpha(0)
+    ax.text(r[0] + r[2] / 2, r[1] + r[3] - 0.13, f"{S['total']['unified_concepts']} concepts, 5 families", ha="center", **tx)
+
+    # 3 Link copies: schematic copy graph with the four edge rules
+    ax, r = card(fig, xs[2], w, top, H, 3, "Link copies", "lineage = graph component", cols[2])
+    # two lineages drawn as small file nodes; edge styles = rules
+    L = [(0.17, 0.90), (0.47, 1.00), (0.36, 0.71), (0.74, 0.92), (1.05, 0.98), (0.98, 0.70)]
+    def P(p):
+        return r[0] + p[0], r[1] + p[1] * 0 + p[1]
+    E = [(0, 1, dict(color="#333333", lw=1.1, ls="-")), (0, 2, dict(color="#333333", lw=1.0, ls=(0, (2.5, 1.5)))),
+         (1, 2, dict(color="#D55E00", lw=1.1, ls="-")), (3, 4, dict(color="#333333", lw=1.0, ls=(0, (0.8, 1.2)))),
+         (4, 5, dict(color="#D55E00", lw=1.1, ls="-"))]
+    for i, j, st in E:
+        (x0, y0), (x1, y1) = P(L[i]), P(L[j])
+        ax.plot([x0, x1], [y0, y1], solid_capstyle="round", zorder=2, **st)
+    for k, p in enumerate(L):
+        x0, y0 = P(p)
+        ax.add_patch(FancyBboxPatch((x0 - 0.065, y0 - 0.045), 0.13, 0.09, boxstyle="round,pad=0,rounding_size=0.01",
+                                    fc="white", ec="#0072B2" if k < 3 else "#009E73", lw=0.9, zorder=3))
+    leg = [("-", "#333333", "same sha256"), ((0, (2.5, 1.5)), "#333333", "same export key"),
+           ((0, (0.8, 1.2)), "#333333", f"registered ({A['px_registered_links']})"),
+           ("-", "#D55E00", f"cos $\\geq${A['px_tau_hi']:.3f}")]
+    for i, (ls, c, lab) in enumerate(leg):
+        y0 = r[1] + 0.50 - i * 0.135
+        ax.plot([r[0] + 0.07, r[0] + 0.25], [y0, y0], color=c, ls=ls, lw=1.1)
+        ax.text(r[0] + 0.3, y0, lab, ha="left", **tx)
+
+    # 4 Split lineages: train / val / test image share per task
+    ax, r = card(fig, xs[3], w, top, H, 4, "Split lineages", "whole lineages, all tasks", cols[3])
+    a4 = _inset(fig, r, 0.43, 0.32, r[2] - 0.5, r[3] - 0.4)
+    tasks = [("IO-CLS", S["io_cls"]["split_images"]), ("IO-DET", S["io_det"]["split_images"]),
+             ("PX-DET", S["px_det"]["split_images"]), ("PX-SEG", S["px_seg"]["split_images"])]
+    for i, (t, d) in enumerate(tasks[::-1]):
+        tot = sum(d.values()); left = 0
+        for sp in ("train", "val", "test"):
+            f = d[sp] / tot
+            a4.barh(i, f, left=left, color=SPLITC[sp], height=0.62, ec="white", lw=0.4)
+            left += f
+    a4.set_yticks(range(4), [t for t, _ in tasks[::-1]], fontsize=6.6)
+    a4.set_xticks([]); a4.set_xlim(0, 1); a4.grid(False)
+    for s in ("top", "right", "bottom", "left"):
+        a4.spines[s].set_visible(False)
+    a4.tick_params(axis="y", length=0, pad=2)
+    a4.patch.set_alpha(0)
+    for i, sp in enumerate(("train", "val", "test")):
+        x0 = r[0] + 0.08 + i * 0.4
+        ax.add_patch(plt.Rectangle((x0, r[1] + 0.1), 0.09, 0.09, fc=SPLITC[sp], ec="none"))
+        ax.text(x0 + 0.12, r[1] + 0.145, sp, ha="left", **tx)
+
+    # 5 Audit + release: leaked share of evaluation images
+    ax, r = card(fig, xs[4], w, top, H, 5, "Audit + release", "eval. images with a copy", cols[4])
+    rows = [("shipped PX test", A["px_shipped_test_share_with_train_lineage"]),
+            ("shipped IO-DET val", A["io_det_shipped_val_share_with_train_lineage"]),
+            ("hash IO-CLS test", A["io_cls_hash_split_test_share_with_train_lineage"]),
+            ("DentUnity", max(A["px_test_contamination"], A["io_test_contamination"]))]
+    for i, (lab, v) in enumerate(rows):
+        y0 = r[1] + r[3] - 0.17 - i * 0.235
+        ax.text(r[0] + 0.07, y0 + 0.07, lab, ha="left", fontweight="bold" if i == 3 else "normal", **tx)
+        bw = (r[2] - 0.55) * v
+        ax.add_patch(plt.Rectangle((r[0] + 0.07, y0 - 0.065), max(bw, 0.004), 0.07,
+                                   fc="#009E73" if i == 3 else "#999999", ec="none"))
+        ax.text(r[0] + 0.1 + bw, y0 - 0.03, f"{100 * v:.1f}%", ha="left", **tx)
+    ax.text(r[0] + r[2] / 2, r[1] + 0.13, "build kit, no images", ha="center", color="#333333", **tx)
+
+    # arrows between stages
+    W, Hh = fig.get_size_inches()
+    axa = fig.add_axes([0, 0, 1, 1], facecolor="none"); axa.set_xlim(0, W); axa.set_ylim(0, Hh); axa.axis("off")
+    for i in range(4):
+        x0 = xs[i] + w + 0.03
+        axa.annotate("", xy=(x0 + gap - 0.06, 0.62), xytext=(x0, 0.62),
+                     arrowprops=dict(arrowstyle="-|>", color="#555555", lw=0.9, mutation_scale=7))
     save(fig, "fig_pipeline")
 
 
@@ -113,21 +223,21 @@ def fig_overview():
     tasks = [("IO-CLS", "io_cls", "#CC79A7"), ("IO-DET", "io_det", "#E69F00"), ("PX-DET", "px_det", "#0072B2"), ("PX-SEG", "px_seg", "#56B4E9")]
     ti = [S[k]["images"] for _, k, _ in tasks]
     mod = [S["io_cls"]["images"] + S["io_det"]["images"], S["px_det"]["images"] + S["px_seg"]["images"]]
-    ax.pie(mod, radius=1.0, colors=["#F2D7E6", "#D6E6F4"], startangle=90, counterclock=False,
-           wedgeprops=dict(width=0.28, edgecolor="white"))
-    w, _ = ax.pie(ti, radius=0.72, colors=[c for *_, c in tasks], startangle=90, counterclock=False,
-                  wedgeprops=dict(width=0.16, edgecolor="white"))
+    ax.pie(mod, radius=1.32, colors=["#F2D7E6", "#D6E6F4"], startangle=90, counterclock=False,
+           wedgeprops=dict(width=0.22, edgecolor="white"))
+    w, _ = ax.pie(ti, radius=1.07, colors=[c for *_, c in tasks], startangle=90, counterclock=False,
+                  wedgeprops=dict(width=0.12, edgecolor="white"))
     ang0 = 90
     tot = sum(ti)
     for (lab, k, c), v in zip(tasks, ti):
         ang = ang0 - 360 * v / tot / 2; ang0 -= 360 * v / tot
         x, y = np.cos(np.radians(ang)), np.sin(np.radians(ang))
-        ax.annotate(f"{lab}\n{fmt(v)}", (0.59 * x, 0.59 * y), xytext=(1.22 * x + (0.25 if x > 0 else -0.25), 1.25 * y), ha="center", va="center",
+        ax.annotate(f"{lab}\n{fmt(v)}", (1.0 * x, 1.0 * y), xytext=(1.55 * x + (0.3 if x > 0 else -0.3), 1.58 * y), ha="center", va="center",
                     fontsize=6.4, arrowprops=dict(arrowstyle="-", color="#888888", lw=0.5), annotation_clip=False)
-    ax.set_xlim(-1.7, 1.7); ax.set_ylim(-1.45, 1.45)
-    ax.text(0, 0.2, f"{fmt(S['total']['distinct_images'])}", ha="center", va="center", fontsize=5.8, fontweight="bold")
+    ax.set_xlim(-1.95, 1.95); ax.set_ylim(-1.7, 1.7)
+    ax.text(0, 0.24, f"{fmt(S['total']['distinct_images'])}", ha="center", va="center", fontsize=5.8, fontweight="bold")
     ax.text(0, 0.0, "images", ha="center", va="center", fontsize=5.4)
-    ax.text(0, -0.2, f"{S['total']['unified_concepts']} concepts", ha="center", va="center", fontsize=5.4)
+    ax.text(0, -0.24, f"{S['total']['unified_concepts']} concepts", ha="center", va="center", fontsize=5.4)
     ax.set_title("(a) modalities and tasks", loc="left", x=-0.25)
 
     # (b) family small multiples of annotations per concept
@@ -318,9 +428,7 @@ def _px_models(task):
         pcs = [p for p in pcs if p]
         if pcs:
             out[f] = {c: float(np.mean([p[c] for p in pcs if c in p])) for c in pcs[0]}
-    sh = SH.get(f"{task}_test", {}).get(kind, {}).get("per_class_ap50_95")
-    if sh:
-        out["shipped"] = sh
+    # (user decision 2026-11-15 18:10: the shipped checkpoint is not compared anywhere)
     return out
 
 
@@ -372,20 +480,25 @@ def fig_analysis():
         vals["pxdet_per_class"][k] = pc
     ax.set_xscale("log")
     ax.axvspan(0.7, 100, color="#D55E00", alpha=0.06, lw=0); ax.axvspan(1000, 3e4, color="#0072B2", alpha=0.06, lw=0)
-    G = D.get("groups", {}).get("pxdet_y11s", {})
+    # bin means of the validation-selected PX-DET family (same rule as the tables)
+    import make_tables as _MT
+    _v = _MT.verdict_dense("pxdet")
+    selk = _v["selected"] if _v else "y11s"
+    vals["pxdet_bin_means_family"] = selk
+    G = D.get("groups", {}).get(f"pxdet_{selk}", {})
     for lo, hi, bn in ((1, 100, "tail"), (100, 1000, "medium"), (1000, 2e4, "head")):
         v = G.get(f"test_box_{bn}_map50_95_mean")
         if v is not None:
-            ax.hlines(100 * v, lo, hi, color=COL("y11s"), lw=1.2, linestyles=":")
-            ax.text(np.sqrt(lo * hi), 100 * v + 2.5, f"{100 * v:.1f}", ha="center", fontsize=6.6, color=COL("y11s"),
+            ax.hlines(100 * v, lo, hi, color=COL(selk), lw=1.2, linestyles=":")
+            ax.text(np.sqrt(lo * hi), 100 * v + 2.5, f"{100 * v:.1f}", ha="center", fontsize=6.6, color=COL(selk),
                     bbox=dict(fc="white", ec="none", pad=0.3, alpha=0.85), zorder=4)
     ax.set_xlim(0.7, 3e4); ax.set_ylim(-3, 80)
     ax.set_xlabel("training instances (log)", labelpad=1); ax.set_ylabel("AP$_{50:95}$", labelpad=2)
     ax.text(3, 74, "tail", fontsize=6.6, color="#D55E00"); ax.text(250, 74, "med.", fontsize=6.6, color="#555555", ha="center")
     ax.text(7000, 74, "head", fontsize=6.6, color="#0072B2", ha="center")
     from matplotlib.lines import Line2D
-    ax.legend(handles=[Line2D([], [], marker="o", ls="", color=COL("y11s"), ms=3, label="YOLO11s"),
-                       Line2D([], [], marker="x", ls="", color=COL("shipped"), ms=3, label="shipped$^\\dagger$")],
+    ax.legend(handles=[Line2D([], [], marker="o", ls="", color=COL(k), ms=3, label=MODEL_LABEL[k])
+                       for k in [o for o in order if o in M and o != "shipped"]],
               loc="upper left", bbox_to_anchor=(0.0, 0.92), fontsize=6.6, frameon=False, handletextpad=0.2)
     ax.set_title("(c) PX-DET per class", loc="left")
     # (d) IO-CLS read-out depth
@@ -426,7 +539,7 @@ def fig_analysis():
 def fig_leak():
     small()
     D = J("summary_det.json") or {"runs": {}, "groups": {}}
-    fig, axs = plt.subplots(1, 4, figsize=(TW, 1.75), gridspec_kw=dict(wspace=0.45))
+    fig, axs = plt.subplots(1, 3, figsize=(TW, 1.75), gridspec_kw=dict(wspace=0.4))
     vals = {}
 
     def pbars(ax, labels, a, b, la, lb, ca, cb, title, ylabel, nd=1, legloc="upper left"):
@@ -437,9 +550,9 @@ def fig_leak():
             ax.text(x - 0.19, u + 0.4, f"{u:.{nd}f}", ha="center", fontsize=6.4)
             ax.text(x + 0.19, v + 0.4, f"{v:.{nd}f}", ha="center", fontsize=6.4)
         ax.set_xticks(xs, labels, fontsize=6.4)
-        ax.set_ylim(0, max(max(a), max(b)) * (1.75 if legloc == "upper left" and len(labels) == 1 else 1.35) + 1)
+        ax.set_ylim(0, max(max(a), max(b)) * 1.6 + 1)
         ax.set_title(title, loc="left"); ax.set_ylabel(ylabel)
-        ax.legend(loc=legloc, fontsize=6.4, frameon=True, framealpha=0.9, edgecolor="none")
+        ax.legend(loc="upper left", ncol=2, fontsize=6.4, frameon=False, handlelength=0.9, columnspacing=0.8)
     # (a) L1 controlled swap
     L = D.get("L1_swap")
     if L and L.get("map50_95_clean"):
@@ -452,38 +565,24 @@ def fig_leak():
         vals["L1"] = L
     else:
         pending(axs[0], "(a) controlled swap")
-    # (b) shipped checkpoint vs ours on test images with / without a copy in the shipped training split
-    SE = J("subset_eval.json")
-    sk = "shipped_yolov8x_seg|pxdet"
-    ours = sorted([k for k in (SE or {}).get("models", {}) if k.startswith("pxdet_") and k.endswith("|pxdet")])
-    if SE and sk in SE["models"] and ours:
-        s = SE["models"][sk]
-        o = [SE["models"][k] for k in ours]
-        a = [100 * s["with_copy_subset"], 100 * s["no_copy_subset"]]
-        bb = [100 * np.mean([x["with_copy_subset"] for x in o]), 100 * np.mean([x["no_copy_subset"] for x in o])]
-        pbars(axs[1], ["copy in\nshipped train", "no copy"], a, bb, "shipped$^\\dagger$", "ours", "#555555", "#0072B2",
-              "(b) shipped vs. ours", "PX-DET mAP$_{50:95}$")
-        vals["L4b"] = {"shipped": s, "ours_runs": ours}
-    else:
-        pending(axs[1], "(b) shipped vs. ours")
     # (c) L2 (IO-CLS) and L3 (IO-DET)
     LC = J("summary_leak_cls.json")
     r3 = D.get("runs", {}).get("iodet_shipped_y11s_s0")
     io = D.get("groups", {}).get("iodet_y11s", {}).get("test_box_map50_95_mean")
     if LC and LC["models"].get("vitb14_lattice") and r3:
         m = LC["models"]["vitb14_lattice"]
-        pbars(axs[2], ["IO-CLS\nmacro-AP", "IO-DET\nmAP$_{50:95}$"],
+        pbars(axs[1], ["IO-CLS\nmacro-AP", "IO-DET\nmAP$_{50:95}$"],
               [100 * m["common_test_trained_on_lineage_split"], 100 * io],
               [100 * m["common_test_trained_on_hash_split"], 100 * r3["test"]["box"]["map50_95"]],
-              "copy-free split", "leaky split", "#0072B2", "#D55E00", "(c) intraoral splits", "score")
+              "copy-free split", "leaky split", "#0072B2", "#D55E00", "(b) intraoral splits", "score")
         vals["L2_L3"] = True
     else:
-        pending(axs[2], "(c) intraoral splits")
+        pending(axs[1], "(b) intraoral splits")
     # (d) DENTEX transfer
     G = D.get("groups", {})
     a, c = G.get("dentex_coco_y11s"), G.get("dentex_du_y11s")
     if a and c:
-        ax = axs[3]
+        ax = axs[2]
         for i, (g, lab, col) in enumerate(((a, "COCO", "#999999"), (c, "DentUnity", "#0072B2"))):
             v = [100 * x for x in g["test_box_map50_95_per_seed"]]
             ax.scatter([i] * len(v), v, color=col, s=12, zorder=3)
@@ -504,10 +603,10 @@ def fig_leak():
                 ax.hlines(np.mean(v), 2.05 + i, 2.55 + i, color=col, lw=1.4)
             xt += [2.3, 3.3]; xl += ["PX-DET\nbase", "PX-DET\nD1"]
         ax.set_xticks(xt, xl, fontsize=6.4); ax.set_xlim(-0.6, max(xt) + 0.8)
-        ax.set_title("(d) DENTEX transfer", loc="left"); ax.set_ylabel("mAP$_{50:95}$")
+        ax.set_title("(c) DENTEX transfer", loc="left"); ax.set_ylabel("mAP$_{50:95}$")
         vals["dentex"] = {"coco": a["test_box_map50_95_per_seed"], "dentunity": c["test_box_map50_95_per_seed"]}
     else:
-        pending(axs[3], "(d) DENTEX transfer")
+        pending(axs[2], "(c) DENTEX transfer")
     save(fig, "fig_leak")
     write_json(RESULTS / "fig_leak_values.json", {"provenance": "run (scripts/make_figures.py)",
                                                     "panels_filled": sorted(vals)})

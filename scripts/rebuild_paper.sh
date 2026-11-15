@@ -10,11 +10,13 @@ echo "experiments-agent rebuild $(date '+%F %T') pid $$" > "$L"
 trap 'rm -f "$L"' EXIT
 python3 run_experiment.py summarize >/dev/null 2>&1 || { echo "summarize failed"; exit 1; }
 python3 scripts/make_tables.py ../../paper >/dev/null || { echo "make_tables failed"; exit 1; }
+python3 scripts/split_class_stats.py >/dev/null && python3 scripts/make_appendix_tables.py ../../paper >/dev/null || { echo "make_appendix_tables failed"; exit 1; }
 python3 scripts/make_figures.py ../../paper >/dev/null 2>&1 || { echo "make_figures failed"; exit 1; }
 python3 scripts/make_readme.py >/dev/null
 cd $R/paper
 python3 ../../../tools/compile_paper.py --paper-dir . | tail -1
 echo "main undefined/overfull: $(grep -cE 'Overfull|undefined' main.log)"
+for pg in 8 9; do echo "p$pg: $(pdftotext -f $pg -l $pg main.pdf - 2>/dev/null | grep -oE 'default for public dental data|LLM Usage Statement|^References' | tr '\n' '|')"; done
 python3 ../../../tools/compile_paper.py --paper-dir . --main supplementary.tex | tail -1
 echo "supp undefined/overfull: $(grep -cE 'Overfull|undefined' supplementary.log)"
 ./push_overleaf.sh 2>&1 | tail -2
