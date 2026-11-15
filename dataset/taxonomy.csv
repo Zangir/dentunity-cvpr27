@@ -1,0 +1,37 @@
+id,concept,family,io_cls_label,io_det_label,px_label
+0,caries,pathology,caries,Caries,Caries
+1,calculus,periodontal / soft tissue,calculus,,
+2,gingivitis,periodontal / soft tissue,gingivitis,Gingivitis,
+3,mouth ulcer,periodontal / soft tissue,mouth ulcer,Ulcer,
+4,tooth discoloration,pathology,tooth discoloration,Tooth Discoloration,
+5,hypodontia,tooth status / development,hypodontia,,
+6,periapical lesion,pathology,,,Periapical lesion
+7,bone loss,periodontal / soft tissue,,,Bone Loss
+8,bone defect,pathology,,,bone defect
+9,cyst,pathology,,,Cyst
+10,tooth fracture,pathology,,,Fracture teeth
+11,attrition,pathology,,,attrition
+12,root resorption,pathology,,,Root resorption
+13,missing tooth,tooth status / development,,,Missing teeth
+14,impacted tooth,tooth status / development,,,impacted tooth
+15,malaligned tooth,tooth status / development,,,Malaligned
+16,supra-eruption,tooth status / development,,,Supra Eruption
+17,retained root,tooth status / development,,,Retained root
+18,root piece,tooth status / development,,,Root Piece
+19,permanent tooth,tooth status / development,,,Permanent Teeth
+20,primary tooth,tooth status / development,,,Primary teeth
+21,mandibular canal,anatomy,,,Mandibular Canal
+22,maxillary sinus,anatomy,,,maxillary sinus
+23,crown,restoration / device,,,Crown
+24,filling,restoration / device,,,Filling
+25,root canal treatment,restoration / device,,,Root Canal Treatment
+26,post-core,restoration / device,,,post - core
+27,implant,restoration / device,,,Implant
+28,abutment,restoration / device,,,abutment
+29,gingival former,restoration / device,,,gingival former
+30,orthodontic bracket,restoration / device,,,orthodontic brackets
+31,orthodontic wire,restoration / device,,,wire
+32,metal band,restoration / device,,,metal band
+33,permanent retainer,restoration / device,,,permanent retainer
+34,temporary anchorage device,restoration / device,,,TAD
+35,bone plating,restoration / device,,,plating

@@ -1,0 +1,20 @@
+{
+ "note": "Digests of the rebuilt annotations (order-independent, sha256 over sorted 'image_sha256:label-line' strings) and the expected counts. A rebuild from complete upstream downloads must reproduce them exactly.",
+ "expected_counts": {
+  "io_cls_images": 3899,
+  "io_cls_labels": 4307,
+  "io_det_images": 1373,
+  "io_det_boxes": 3129,
+  "px_det_images": 5929,
+  "px_det_boxes": 56790,
+  "px_seg_images": 5297,
+  "px_seg_instances": 50754,
+  "px_reexport_files": 7997
+ },
+ "content_digests": {
+  "io_cls": "ac7c96a0a0fba9c0804ed3385fcb809f9108bf71dc4157866e02291ca6538c89",
+  "io_det": "d5ad32aad962fd1c3579afadff43f7610098872478b056e4776ed0b5e76a8dc5",
+  "px_det": "962998d33ca71386947f96cae44b3d5ab43542f45fc9b7b4b1936df29cb18d38",
+  "px_seg": "065fb67b199140da1dbd7541a338074c18651e51944e390cbb0801bcd0e03dc2"
+ }
+}

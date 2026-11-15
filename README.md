@@ -3,7 +3,7 @@
 This is the code and the result files behind the anonymous CVPR 2027 submission *DentUnity: One
 Copy-Free Dataset to Train and Evaluate Dental Classification, Detection and Segmentation*.
 
-- **Build kit:** `release/build_dentunity.py` plus `release/manifests/`. The same files are in the DentUnity dataset repository.
+- **Build kit:** `release/build_dentunity.py` plus `release/manifests/`. The full build kit with its dataset card (CC BY-NC 4.0) is in [`dataset/`](dataset/).
 - **Not included:** images, original file names and upstream annotation files.
 
 ## Install
