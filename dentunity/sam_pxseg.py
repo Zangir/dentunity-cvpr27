@@ -117,5 +117,21 @@ def main():
                                "s": r["runtime_s"]}), flush=True)
 
 
+
+def summarize():
+    """Seed means of the test scores (SAM masks and the YOLO11s masks of the same runs), written back
+    into results/sam_pxseg.json so that every number in the paper is a stored value."""
+    out = read_json(OUT)
+    te = {k: r for k, r in out["runs"].items() if k.endswith("/test")}
+    out["summary"] = {"test_seeds": len(te),
+                      "test_mask_map50_95_mean": float(np.mean([r["mask"]["map50_95"] for r in te.values()])),
+                      "test_mask_map50_mean": float(np.mean([r["mask"]["map50"] for r in te.values()])),
+                      "yolo11s_test_mask_map50_95_mean_same_seeds":
+                          float(np.mean([r["yolo_mask_map50_95_recorded"] for r in te.values()]))}
+    write_json(OUT, out)
+    print(json.dumps(out["summary"]))
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    summarize() if sys.argv[1:] == ["summarize"] else main()

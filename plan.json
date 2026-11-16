@@ -207,6 +207,11 @@
    "at": "2026-11-16T13:19+04:00",
    "type": "bug fix and disclosure",
    "change": "The first zero-shot run (13:16-13:18) loaded OpenAI CLIP ViT-B/16 with standard GELU, while its pretrained weights need QuickGELU (open_clip warned of the mismatch), so that model was misconfigured. The whole procedure is re-run with the 'ViT-B-16-quickgelu' config: validation selection over the same 8 candidates, then test once for the selected candidate. Discarded first run, recorded for disclosure: validation macro-AP BiomedCLIP T1-T4 0.204/0.198/0.219/0.203, misconfigured CLIP T1-T4 0.217/0.227/0.217/0.227; selected misconfigured CLIP/T2, test macro-AP 0.194 [0.174, 0.222]. Nothing else changes."
+  },
+  {
+   "at": "2026-11-16T15:52+04:00",
+   "type": "run stopped (author decision)",
+   "change": "The box-prompted SAM PX-SEG run was stopped by the authors (all experiments halted at the user's request) during the seed-1 test pass. Completed and reported: seed 0 validation (SAM masks 8.8 vs YOLO11s masks 11.7 mask mAP50:95, box mAP identical to the recorded run) and seed 0 test (6.6 vs 9.0). Seed 1 (test and validation) was not run. The reference beats no reported model."
   }
  ]
 }

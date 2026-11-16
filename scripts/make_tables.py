@@ -616,22 +616,22 @@ def tab_det2():
                 c = cellv(e, "mask", m, 2, b)
                 cs.append(c.split("\\,{\\scriptsize[")[0] if m == "map50" else c)
             lines.append("YOLO11s boxes + SAM & -- & -- & -- & -- & " + " & ".join(cs) + " \\\\")
-            sam_note = " YOLO11s boxes + SAM: the PX-SEG YOLO11s boxes, classes and scores with the masks of box-prompted SAM ViT-B~\\cite{kirillov2023segment}."
+            sam_note = " + SAM: YOLO11s boxes with box-prompted SAM ViT-B masks~\\cite{kirillov2023segment}."
     body = "\n".join(lines)
     notes = ""
     if "--" in body:
-        notes += " --: not trained for this task (YOLO11m: panoramic tasks only)."
+        notes += " --: not trained for this task."
     if "$^\\ast$" in body:
-        notes += " $^\\ast$Fewer seeds than planned."
+        notes += " $^\\ast$One seed (run stopped)."
     if "$^\\dagger$" in body:
-        notes += " $^\\dagger$One seed, as planned for this model."
+        notes += " $^\\dagger$One seed, as planned."
     if "$^\\circ$" in body:
-        notes += " $^\\circ$One seed: not selected on validation, so no second seed (\\cref{sec:protocol})."
+        notes += " $^\\circ$One seed: not selected on validation (\\cref{sec:protocol})."
     notes += sam_note
     tex = r"""\begin{table*}[t]
 \centering\small
 \setlength{\tabcolsep}{4.5pt}
-\caption{\textbf{Detection and segmentation on the copy-free test splits} (COCO mAP, \%, over the classes present in test). Bold: best mean per column. Two-seed mAP$_{50:95}$ cells give the mean and [min, max], mAP$_{50}$ cells the mean (every run: \cref{tab:app_runs})."""
+\caption{\textbf{Detection and segmentation on the copy-free test splits} (COCO mAP, \%, classes present in test). Bold: best mean. Two-seed mAP$_{50:95}$ cells: mean [min, max]; mAP$_{50}$: mean (all runs: \cref{tab:app_runs})."""
     tex += notes + r"""}
 \label{tab:det}
 \begin{tabular}{lcccccc}
@@ -906,6 +906,10 @@ def numbers():
     dput("ltwoGain", m.get("common_test_trained_on_hash_split"), m.get("common_test_trained_on_lineage_split"))
     r3 = D["runs"].get("iodet_shipped_y11s_s0")
     put("lthreeShip", _get(r3 or {}, "test", "box", "map50_95"))
+    SMS = (_opt("sam_pxseg.json") or {}).get("summary", {})    # amendment 2026-11-16: box-prompted SAM masks
+    put("samSegMap", SMS.get("test_mask_map50_95_mean"))
+    put("samSegYolo", SMS.get("yolo11s_test_mask_map50_95_mean_same_seeds"))
+    mac["samSegSeeds"] = str(SMS.get("test_seeds", "XX"))
     a, c = G.get("dentex_coco_y11s", {}), G.get("dentex_du_y11s", {})
     put("dentexCoco", a.get("test_box_map50_95_mean")); put("dentexDU", c.get("test_box_map50_95_mean"))
     dput("dentexGain", c.get("test_box_map50_95_mean"), a.get("test_box_map50_95_mean"), signed=True)

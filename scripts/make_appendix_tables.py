@@ -750,7 +750,7 @@ def trainfree():
     write("tab_app_trainfree.tex", r"""\begin{table}[t]
 \centering\scriptsize
 \setlength{\tabcolsep}{2.5pt}
-\caption{\textbf{Training-free references} (amendment of 2026-11-16). Zero-shot prompt sets: T1 ``a photo of \{label\}.'', T2 ``an intraoral photograph showing \{label\}.'', T3 ``a clinical photograph of the mouth with \{label\}.'', T4 the mean of T1--T3. Bold: selected on validation. Only the selected candidate is tested. SAM rows: box mAP recomputed / as recorded for the YOLO11s run, which must agree because only the masks change.}
+\caption{\textbf{Training-free references} (amendment of 2026-11-16). Zero-shot prompt sets: T1 ``a photo of \{label\}.'', T2 ``an intraoral photograph showing \{label\}.'', T3 ``a clinical photograph of the mouth with \{label\}.'', T4 the mean of T1--T3. Bold: selected on validation. Only the selected candidate is tested. SAM rows: box mAP recomputed / as recorded for the YOLO11s run, which must agree because only the masks change. The SAM run was stopped by the authors after seed 0.}
 \label{tab:app_trainfree}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}llccc}
 \toprule
