@@ -49,6 +49,8 @@ def task_block(rs, col, count_instances):
     return {"images": {s: out["images"][s] for s in SPLITS},
             "lineages": {s: len(out["lineages"][s]) for s in SPLITS},
             "annotations": {s: out["annotations"][s] for s in SPLITS},
+            "annotations_total": sum(out["annotations"][s] for s in SPLITS),
+            "lineages_total": sum(len(out["lineages"][s]) for s in SPLITS),
             "per_concept": {k: {s: v[s] for s in SPLITS} for k, v in out["per_concept"].items()},
             "per_concept_images": {k: {s: v[s] for s in SPLITS} for k, v in out["per_concept_images"].items()},
             "image_size": size_stats(rs),

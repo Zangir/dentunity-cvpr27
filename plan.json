@@ -190,6 +190,23 @@
    "at": "2026-11-15T15:05+04:00",
    "type": "wording of verdict labels",
    "change": "Verdict labels for tasks without an external comparator (IO-CLS, IO-DET) renamed from 'met' / 'met, tied (ours)' to 'best (ours)' / 'tied (ours)' so that no label implies a state-of-the-art claim. Labels for PX-DET and PX-SEG unchanged."
+  },
+  {
+   "at": "2026-11-16T13:15+04:00",
+   "type": "added reference baseline (user request 2026-11-16, via coordinator; cut-off 2026-11-16 22:00 local)",
+   "before_any_test_evaluation_of_affected_runs": true,
+   "change": "IO-CLS zero-shot vision-language reference, no training. Candidates: 2 local CLIP-family models (BiomedCLIP ViT-B/16 PubMedBERT-256 and OpenAI CLIP ViT-B/16, both loaded with open_clip from the local Hugging Face cache) x 4 prompt-template sets fixed here (T1 'a photo of {}.'; T2 'an intraoral photograph showing {}.'; T3 'a clinical photograph of the mouth with {}.'; T4 = T1+T2+T3 averaged). Label score = cosine similarity between the image embedding and the label's text embedding (mean over the set's templates). Selection: validation macro-AP only. Test: scored once, for the selected candidate only, with macro-AP, macro-AUROC and the same lineage-cluster bootstrap (n=1000, seed 0). Images never leave the machine; no external API. Reported whatever the result in Tab. 3 and one main-text sentence; if it beats a reported reference model the coordinator is told before any claim is reworded."
+  },
+  {
+   "at": "2026-11-16T13:15+04:00",
+   "type": "added reference baseline (user request 2026-11-16, via coordinator; cut-off 2026-11-16 22:00 local)",
+   "before_any_test_evaluation_of_affected_runs": true,
+   "change": "PX-SEG box-prompted SAM reference: SAM ViT-B (Ultralytics sam_b.pt, single-mask output) prompted with the boxes predicted by the validation-selected PX-SEG family (YOLO11s-seg, seeds 0 and 1, best.pt) on the same letterboxed 640-pixel images inside the Ultralytics SegmentationValidator. Boxes, classes and confidences are the YOLO11s ones; only the masks are replaced by SAM masks, resized to the validator's mask resolution, and scored with the same mask mAP50:95 / mAP50. Fixed configuration, so nothing is selected; validation is computed first as a pipeline check, test once per seed. Heavy compute only through run_heavy.sh; anything not finished by 22:00 local is dropped and stated as not run."
+  },
+  {
+   "at": "2026-11-16T13:19+04:00",
+   "type": "bug fix and disclosure",
+   "change": "The first zero-shot run (13:16-13:18) loaded OpenAI CLIP ViT-B/16 with standard GELU, while its pretrained weights need QuickGELU (open_clip warned of the mismatch), so that model was misconfigured. The whole procedure is re-run with the 'ViT-B-16-quickgelu' config: validation selection over the same 8 candidates, then test once for the selected candidate. Discarded first run, recorded for disclosure: validation macro-AP BiomedCLIP T1-T4 0.204/0.198/0.219/0.203, misconfigured CLIP T1-T4 0.217/0.227/0.217/0.227; selected misconfigured CLIP/T2, test macro-AP 0.194 [0.174, 0.222]. Nothing else changes."
   }
  ]
 }

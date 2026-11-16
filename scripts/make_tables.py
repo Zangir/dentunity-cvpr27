@@ -23,8 +23,8 @@ def tab_compare():
              "lv2026benchmark": "COde", "tang2026dinodental": "DinoDental"}
     mod = lambda m: ("P+I" if "intraoral" in m and "panoramic" in m else "P+C" if "CBCT" in m and "panoramic" in m
                      else "I+R" if "intraoral" in m and "radiograph" in m else "P" if "panoramic" in m else "I")
-    def tk(v):
-        return CM if v else XM
+    def tk(v):                      # same key as Tab. A.1: stated / checked and not stated / not stated
+        return CM if v else (XM if v is False else "--")
     def dup(r):
         v = r.get("duplicate_or_leakage_audit_reported")
         return "$\\pm$" if v else (XM if v is False else "--")
@@ -43,22 +43,76 @@ def tab_compare():
     ours = (f"\\rowcolor{{oursbg}}\\textbf{{\\name (ours)}} & P+I & {tot:,} & {CM} & {CM} & {CM} & 36 & {CM} \\\\").replace(",", "{,}", 1) if False else \
         f"\\rowcolor{{oursbg}}\\textbf{{\\name (ours)}} & P+I & {tot:,}".replace(",", "{,}") + f" & {CM} & {CM} & {CM} & 36 & {CM} \\\\"
     body = "\n".join(lines + ["\\midrule", ours])
-    tex = r"""\begin{table}[t]
-\centering\small
-\setlength{\tabcolsep}{2.6pt}
-\caption{\textbf{Comparison with public dental image datasets.} Mod.: P panoramic, I intraoral photograph, R other radiographs, C CBCT. Cls/Det/Inst: tasks stated by each paper. Copy-free: \cmark{} audited across splits, $\pm$ duplicates removed within one source, \xmark{} not reported, -- not checked. Quotes for every cell: \cref{tab:app_survey}.}
+    # user request 2026-11-16: Table 1 spans both columns (table*), at natural size (no \resizebox)
+    tex = r"""\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{\textbf{Comparison with public dental image datasets.} Modality: P panoramic, I intraoral photograph, R other radiographs, C CBCT. Cls/Det/Inst: classification, detection and instance segmentation. Key as in \cref{tab:app_survey}: \cmark{} stated, \xmark{} checked and not stated, -- not stated. Copy-free: \cmark{} audited across splits, $\pm$ duplicates removed within one source. Quotes for every cell: \cref{tab:app_survey}.}
 \label{tab:compare}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{lcrcccrc}
+\begin{tabularx}{\textwidth}{l*{7}{>{\centering\arraybackslash}X}}
 \toprule
-Dataset & Mod. & Images & Cls & Det & Inst & Classes & Copy-free \\
+Dataset & Modality & Images & Cls & Det & Inst & Classes & Copy-free \\
 \midrule
 """ + body + r"""
 \bottomrule
-\end{tabular}}
-\end{table}
+\end{tabularx}
+\end{table*}
 """
     (OUT / "tab_compare.tex").write_text(tex)
+
+
+def _fmt(n):
+    return f"{int(n):,}".replace(",", "{,}")
+
+
+def tab_sources():
+    """Sources and tasks of DentUnity (user request 2026-11-16). One row per task, since each task comes
+    from exactly one source; layout follows MSeg (CVPR 2020) Tab. 1 'Component datasets' (one row per
+    component with its origin and size). Every number comes from dataset_stats.json,
+    split_class_stats.json, io_cls_composite_audit.json and release/licence_inventory.json. The sources
+    carry no patient IDs, so no patient count exists."""
+    S = J("dataset_stats.json")
+    C = J("split_class_stats.json")
+    A = J("io_cls_composite_audit.json")
+    L = json.loads((R.parent / "release" / "licence_inventory.json").read_text())
+    lic = {x["source_id"]: x["declared_licence_verbatim"] for x in L["sources"]}
+    lc = lambda x: "unknown" if x.lower() == "unknown" else x + "$^\\ast$"
+    lin = lambda t: _fmt(C[t]["lineages_total"])
+    spl = lambda d: " / ".join(_fmt(d[x]) for x in ("train", "val", "test"))
+    rows = [
+        ("IO-CLS", lc(lic["ORAL-CALCULUS"]), _fmt(A["total_files_walked"]),
+         _fmt(S["io_cls"]["images"]), lin("io_cls"), _fmt(C["io_cls"]["annotations_total"]) + " labels",
+         len(S["io_cls"]["label_images"]), spl(C["io_cls"]["images"])),
+        ("IO-DET", lc(lic["ORAL-YOLO4"]), _fmt(S["audit"]["io_det_files"]),
+         _fmt(S["io_det"]["images"]), lin("io_det"), _fmt(S["io_det"]["boxes"]) + " boxes",
+         len(S["io_det"]["class_boxes"]), spl(C["io_det"]["images"])),
+        ("PX-DET", lc(lic["PANO-DXPD31"]), _fmt(S["px_files"]["files"]),
+         _fmt(S["px_det"]["images"]), lin("px_det"), _fmt(S["px_det"]["boxes"]) + " boxes",
+         len(S["px_det"]["class_boxes"]), spl(C["px_det"]["images"])),
+        ("PX-SEG", "", "", _fmt(S["px_seg"]["images"]), "as PX-DET",
+         _fmt(S["px_seg"]["instances"]) + " masks", S["px_seg"]["classes_present"], spl(S["px_seg"]["split_images"])),
+    ]
+    assert C["io_cls"]["annotations_total"] + S["io_det"]["boxes"] + S["px_det"]["boxes"] == S["total"]["annotations"]
+    T = S["total"]
+    lines = [" & ".join(str(c) for c in r) + " \\\\" for r in rows]
+    lines += ["\\midrule",
+              f"\\rowcolor{{oursbg}}\\textbf{{\\name}} & & & {_fmt(T['distinct_images'])} & & "
+              f"{_fmt(T['annotations'])} & {T['unified_concepts']} & \\\\"]
+    tex = r"""\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{\textbf{Sources and tasks of \name.} Files as published, images after de-duplication, copy lineages, annotations (PX-SEG masks outline PX-DET objects and are not added to the total) and train / val / test images. IO-CLS (six condition folders) and IO-DET (a detection subset) come from one Kaggle page that states ``multiple hospitals and reputable dental websites'' as origin. PX-DET and PX-SEG share one Kaggle release of radiographs whose metadata names Roboflow, with no project. Upstream owners and consent are not documented, and no source gives patient IDs, so patients cannot be counted. $^\ast$Declared by the re-publisher. Per-class counts: \cref{tab:app_pxclasses,tab:app_ioclasses}.}
+\label{tab:sources}
+\begin{tabularx}{\textwidth}{ll*{3}{>{\raggedleft\arraybackslash}X}r>{\raggedleft\arraybackslash}Xr}
+\toprule
+Task & Licence & Files & Images & Lineages & Annotations & Classes & Train / val / test \\
+\midrule
+""" + "\n".join(lines) + r"""
+\bottomrule
+\end{tabularx}
+\end{table*}
+"""
+    (OUT / "tab_sources.tex").write_text(tex)
 
 
 def pct(x):
@@ -190,51 +244,6 @@ Model & macro-AP & 95\% CI / seeds & AUROC \\
     (OUT / "tab_cls.tex").write_text(tex)
 
 
-def tab_det():
-    D = J("summary_det.json") if (R / "summary_det.json").exists() else {"groups": {}, "runs": {}}
-    G = D["groups"]
-    SH = J("shipped_checkpoint.json") if (R / "shipped_checkpoint.json").exists() else {}
-
-    def cell(group, kind="box", m="map50_95"):
-        g = G.get(group)
-        if not g or f"test_{kind}_{m}_mean" not in g:
-            return "XX"
-        v = g[f"test_{kind}_{m}_per_seed"]
-        s = f"{100*g[f'test_{kind}_{m}_mean']:.1f}"
-        planned = 2 if "y11s" in group else 1
-        if len(v) < planned:
-            return s + "$^\\ast$"
-        return s if len(v) == 1 else s + f"\\,{{\\scriptsize[{100*min(v):.1f}, {100*max(v):.1f}]}}"
-    sh = lambda task, kind, m: f1(_get(SH, f"{task}_test", kind, m))
-    rows = [
-        f"YOLO11n & {cell('iodet_y11n')} & {cell('iodet_y11n', m='map50')} & {cell('pxdet_y11n')} & {cell('pxdet_y11n', m='map50')} & {cell('pxseg_y11n', 'mask')} & {cell('pxseg_y11n', 'mask', 'map50')} \\\\",
-        f"YOLO11s (2 seeds) & {cell('iodet_y11s')} & {cell('iodet_y11s', m='map50')} & {cell('pxdet_y11s')} & {cell('pxdet_y11s', m='map50')} & {cell('pxseg_y11s', 'mask')} & {cell('pxseg_y11s', 'mask', 'map50')} \\\\",
-        f"RT-DETR-l & -- & -- & {cell('pxdet_rtdetrl')} & {cell('pxdet_rtdetrl', m='map50')} & -- & -- \\\\",
-        f"\\rowcolor{{oursbg}}YOLO11s + train re-exports (D1) & -- & -- & {cell('pxdet_reexp_y11s')} & {cell('pxdet_reexp_y11s', m='map50')} & -- & -- \\\\",
-        "\\midrule",
-        f"Shipped YOLOv8x-seg$^\\dagger$ & -- & -- & {sh('pxdet', 'box', 'map50_95')} & {sh('pxdet', 'box', 'map50')} & {sh('pxseg', 'mask', 'map50_95')} & {sh('pxseg', 'mask', 'map50')} \\\\",
-    ]
-    tex = r"""\begin{table*}[t]
-\centering\small
-\setlength{\tabcolsep}{4pt}
-\caption{\textbf{Detection and segmentation results} on the copy-free test splits (\%, COCO mAP over classes present in test; boxes for IO-DET and PX-DET, masks for PX-SEG). Two-seed rows show the mean and [min, max] over seeds. $^\dagger$Checkpoint shipped with the panoramic release, trained on the shipped training split, which holds copies of XX\% of our PX-DET test images: its scores are inflated by construction and shown only for reference. $^\ast$Interim: fewer seeds than planned.}
-\label{tab:det}
-\begin{tabular}{lcccccc}
-\toprule
- & \multicolumn{2}{c}{IO-DET} & \multicolumn{2}{c}{PX-DET} & \multicolumn{2}{c}{PX-SEG (mask)} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
-Model & mAP$_{50:95}$ & mAP$_{50}$ & mAP$_{50:95}$ & mAP$_{50}$ & mAP$_{50:95}$ & mAP$_{50}$ \\
-\midrule
-""" + "\n".join(rows) + r"""
-\bottomrule
-\end{tabular}
-\end{table*}
-"""
-    share = _get(SH, "pxdet_test_share_lineage_in_shipped_train")
-    tex = tex.replace("copies of XX\\%", f"copies of {f1(share)}\\%")
-    (OUT / "tab_det.tex").write_text(tex)
-
-
 def tab_tail():
     D = J("summary_det.json") if (R / "summary_det.json").exists() else {"groups": {}, "px_bins": {}}
     G, B = D["groups"], D.get("px_bins", {})
@@ -242,6 +251,7 @@ def tab_tail():
         return f1(_get(G, group, f"test_{kind}_{bn}_map50_95_mean"))
     rows = []
     for lab, gd, gs in (("YOLO11n", "pxdet_y11n", "pxseg_y11n"), ("YOLO11s", "pxdet_y11s", "pxseg_y11s"),
+                        ("YOLO11m", "pxdet_y11m", "pxseg_y11m"),
                         ("YOLO11s + re-exports (D1)", "pxdet_reexp_y11s", None)):
         seg = [c(gs, "mask", b) if gs else "--" for b in ("head", "medium", "tail")]
         rows.append(f"{lab} & " + " & ".join(c(gd, "box", b) for b in ("head", "medium", "tail")) + " & " + " & ".join(seg) + " \\\\")
@@ -373,21 +383,25 @@ Model & val & test & """ + head + r""" \\
             ("DET 11m s0", "pxdet_y11m_s0", "box"), ("DET 11n", "pxdet_y11n_s0", "box"),
             ("SEG 11s s0", "pxseg_y11s_s0", "mask"), ("SEG 11s s1", "pxseg_y11s_s1", "mask"),
             ("SEG 11m s0", "pxseg_y11m_s0", "mask")]
+    def head_of(rn):                 # one header style: TASK size seed (QA 2026-11-16)
+        t, rest = rn.split("_", 1)
+        fam, seed = rest.rsplit("_", 1)
+        size = {"y11n": "11n", "y11s": "11s", "y11m": "11m", "reexp_y11s": "11s+D1", "rtdetrl": "RT-DETR-l"}.get(fam, fam)
+        return f"{'DET' if t == 'pxdet' else 'SEG'} {size} {seed}"
     for rn in sorted(runs):          # any further PX attempt (second YOLO11m seed, D1, RT-DETR-l)
         if rn.startswith(("pxdet_", "pxseg_")) and rn not in [c[1] for c in cols]:
-            cols.append((rn.replace("pxdet_", "DET ").replace("pxseg_", "SEG ").replace("_", " "), rn,
-                         "mask" if rn.startswith("pxseg") else "box"))
-    # (user decision 2026-11-15 18:10: no comparison with the shipped checkpoint anywhere)
+            cols.append((None, rn, "mask" if rn.startswith("pxseg") else "box"))
+    cols = sorted(((head_of(rn), rn, k) for _, rn, k in cols), key=lambda c: (c[1].startswith("pxseg"), c[0]))
     lines = []
     for c in sorted(PX_CLASSES, key=lambda c: -tr.get(c, 0)):
         cells = []
         for _, rn, kind in cols:
             v = runs.get(rn, {}).get("test", {}).get(kind, {}).get("per_class_ap50")
             cells.append("XX" if v is None else (f1(v[c]) if c in v else "--"))
-        lines.append(f"{c.replace('_', ' ')} & {tr.get(c, 0)} & " + " & ".join(cells) + " \\\\")
+        lines.append(f"{c.replace('_', ' ')} & {_fmt(tr.get(c, 0))} & " + " & ".join(cells) + " \\\\")
     t2 = (r"""\begin{table*}[t]
 \centering\scriptsize
-\caption{\textbf{Panoramic per-class test AP$_{50}$} (\%), classes sorted by PX-DET training instances (n). DET: PX-DET boxes, SEG: PX-SEG masks, 11n/11s/11m: YOLO11 sizes, s0/s1: seeds. --: class absent from that test split.}
+\caption{\textbf{Panoramic per-class test AP$_{50}$} (\%), classes sorted by PX-DET training instances (n). Classes are the source labels. DET: PX-DET boxes, SEG: PX-SEG masks, 11n/11s/11m: YOLO11 sizes, +D1: with re-exports, s0/s1: seeds. --: class absent from that test split.}
 \label{tab:supp_px}
 \setlength{\tabcolsep}{3pt}
 \resizebox{\textwidth}{!}{%
@@ -434,7 +448,7 @@ Class & YOLO11s s0 & YOLO11s s1 & YOLO11n \\
 # render as XX; the state-of-the-art verdict is computed from the frozen rule, never typed.
 SUPP = OUT.parent / "supp"
 NAME = {"y11n": "YOLO11n", "y11s": "YOLO11s", "y11m": "YOLO11m", "reexp_y11s": "YOLO11s + re-exports (D1)",
-        "rtdetrl": "RT-DETR-l", "shipped": r"Shipped YOLOv8x-seg$^\dagger$"}
+        "rtdetrl": "RT-DETR-l"}
 CLSNAME = {"multi_lattice": "C1 multi-encoder lattice", "C2_ensemble": "C2 ensemble (FT ConvNeXt-T + C1)",
            "ft_convnext_t_seedavg": "fine-tuned ConvNeXt-T", "ft_vits14_seedavg": "fine-tuned ViT-S/14"}
 for _a, _n in (("vits14", "ViT-S/14"), ("vitb14", "ViT-B/14"), ("convnext_t", "ConvNeXt-T")):
@@ -466,7 +480,6 @@ def families(task):
 def verdict_dense(task):
     kind, _ = TASKS[task]
     F = families(task)
-    SH = _opt("shipped_checkpoint.json") or {}
     key = f"val_{kind}_map50_95_mean"
     cands = {f: e for f, e in F.items() if key in e and f"test_{kind}_map50_95_per_seed" in e}
     if not cands:
@@ -476,9 +489,7 @@ def verdict_dense(task):
     sel = max(eligible, key=lambda f: eligible[f][key])
     s = cands[sel]
     others = {f: max(e[f"test_{kind}_map50_95_per_seed"]) for f, e in cands.items() if f != sel}
-    sh = _get(SH, f"{task}_test", kind, "map50_95")
-    if sh is not None:
-        others["shipped"] = sh
+    sh = None          # no external checkpoint is compared (user decision 2026-11-15)
     best_o = max(others, key=others.get) if others else None
     lo = min(s[f"test_{kind}_map50_95_per_seed"])
     missing = [f for f in REQUIRED[task] if f not in cands]
@@ -587,16 +598,36 @@ def tab_det2():
                     c = c.split("\\,{\\scriptsize[")[0]
                 if fam == "y11m" and not_selected(task, fam) and c != "XX":
                     c += "$^\\circ$"
+                elif e is not None and len(e.get(f"test_{kind}_{m}_per_seed", [])) == 1 and c != "XX" and "ast" not in c:
+                    c += "$^\\dagger$"           # one seed, as planned (QA 2026-11-16: mark every single-seed cell)
                 cells.append(c)
         lines.append(f"{NAME[fam]} & " + " & ".join(cells) + " \\\\")
+    # amendment 2026-11-16 13:15: box-prompted SAM masks on the boxes of the selected PX-SEG family (YOLO11s)
+    sam_note = ""
+    if (R / "sam_pxseg.json").exists():
+        SM = J("sam_pxseg.json")["runs"]
+        tv = {m: [SM[k]["mask"][m] for k in sorted(SM) if k.endswith("/test")] for m in ("map50_95", "map50")}
+        if tv["map50_95"]:
+            e = {f"test_mask_{m}_per_seed": v for m, v in tv.items()}
+            e.update({f"test_mask_{m}_mean": float(np.mean(v)) for m, v in tv.items()})
+            cs = []
+            for m in ("map50_95", "map50"):
+                b = best[("pxseg", m)] is not None and e[f"test_mask_{m}_mean"] > best[("pxseg", m)] + 1e-12
+                c = cellv(e, "mask", m, 2, b)
+                cs.append(c.split("\\,{\\scriptsize[")[0] if m == "map50" else c)
+            lines.append("YOLO11s boxes + SAM & -- & -- & -- & -- & " + " & ".join(cs) + " \\\\")
+            sam_note = " YOLO11s boxes + SAM: the PX-SEG YOLO11s boxes, classes and scores with the masks of box-prompted SAM ViT-B~\\cite{kirillov2023segment}."
     body = "\n".join(lines)
     notes = ""
     if "--" in body:
-        notes += " --: YOLO11m was trained for the panoramic tasks only."
+        notes += " --: not trained for this task (YOLO11m: panoramic tasks only)."
     if "$^\\ast$" in body:
-        notes += " $^\\ast$Fewer seeds than planned so far."
+        notes += " $^\\ast$Fewer seeds than planned."
+    if "$^\\dagger$" in body:
+        notes += " $^\\dagger$One seed, as planned for this model."
     if "$^\\circ$" in body:
         notes += " $^\\circ$One seed: not selected on validation, so no second seed (\\cref{sec:protocol})."
+    notes += sam_note
     tex = r"""\begin{table*}[t]
 \centering\small
 \setlength{\tabcolsep}{4.5pt}
@@ -643,10 +674,18 @@ def tab_cls2():
             row("ft_convnext_t_seedavg", "ConvNeXt-T", "convnext_t"), row("ft_vits14_seedavg", "DINOv2 ViT-S/14", "vits14"),
             "\\midrule\\multicolumn{4}{l}{\\textit{Candidates declared in advance}} \\\\",
             row("multi_lattice", "C1: multi-encoder lattice"), row("C2_ensemble", "C2: FT ConvNeXt-T + C1")]
+    # amendment 2026-11-16 13:15: zero-shot vision-language reference, selected on validation, test scored once
+    if (R / "cls_zeroshot.json").exists():
+        Z = J("cls_zeroshot.json")
+        mname = {"clip_vitb16": "CLIP ViT-B/16~\\cite{radford2021learning}",
+                 "biomedclip": "BiomedCLIP~\\cite{zhang2025multimodal}"}[Z["selected"].split("/")[0]]
+        rows += ["\\midrule\\multicolumn{4}{l}{\\textit{Zero-shot vision-language, no training}} \\\\",
+                 f"{mname} & {f1(Z['test_macro_ap'])} & "
+                 f"[{100*Z['test_ci95'][0]:.1f}, {100*Z['test_ci95'][1]:.1f}] & {f1(Z['test_macro_auroc'])} \\\\"]
     tex = r"""\begin{table}[t]
 \centering\small
 \setlength{\tabcolsep}{1.5pt}
-\caption{\textbf{IO-CLS read-outs and models} (test macro-AP and macro-AUROC in \%, with 95\% intervals from a bootstrap over test lineages). Frozen read-outs use a 1{,}024-d PCA of the features; feature sizes and every seed are in \cref{tab:app_cls_full}.}
+\caption{\textbf{IO-CLS read-outs and models} (test macro-AP and macro-AUROC in \%, with 95\% intervals from a bootstrap over test lineages). Bold: best macro-AP, the primary metric. Read-outs with more than 1{,}024 features (lattices, linear eval) use a 1{,}024-d PCA; feature sizes and every seed are in \cref{tab:app_cls_full}.""" + (" Zero-shot: model and prompts chosen on validation, no training." if (R / "cls_zeroshot.json").exists() else "") + r"""}
 \label{tab:cls}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lccc}
 \toprule
@@ -662,7 +701,7 @@ Model & macro-AP & 95\% CI & AUROC \\
 
 SHORT = {"multi_lattice": "C1", "C2_ensemble": "C2", "vits14_lattice": "ViT-S lattice", "vitb14_lattice": "ViT-B lattice",
          "convnext_t_lattice": "ConvNeXt lattice", "ft_convnext_t_seedavg": "FT ConvNeXt-T", "ft_vits14_seedavg": "FT ViT-S"}
-SHORTD = {"y11n": "YOLO11n", "y11s": "YOLO11s", "y11m": "YOLO11m", "reexp_y11s": "D1", "shipped": "Shipped$^\\dagger$"}
+SHORTD = {"y11n": "YOLO11n", "y11s": "YOLO11s", "y11m": "YOLO11m", "reexp_y11s": "D1"}
 
 
 def tab_sota():
@@ -746,8 +785,6 @@ def supp_leak():
     D = _sumdet()
     L1 = D.get("L1_swap", {})
     LC = _opt("summary_leak_cls.json") or {"models": {}}
-    SE = _opt("subset_eval.json") or {"models": {}, "paired_no_copy_subset": {}}
-    SH = _opt("shipped_checkpoint.json") or {}
     rows = []
     n1 = len(L1.get("map50_95_clean", []))
     for s in range(max(n1, 2)):
@@ -767,7 +804,7 @@ def supp_leak():
     body1 = "\n".join(rows)
     tex = r"""\begin{table*}[t]
 \centering\small
-\caption{\textbf{Leakage experiments} (detection mAP$_{50:95}$ and classification macro-AP, \%). L1 keeps the test set and the training-set size fixed and swaps in copies of test images, L2 scores both models on the test images the two splits share, and L3 compares different evaluation images for scale.}
+\caption{\textbf{Leakage experiments} (detection mAP$_{50:95}$ and classification macro-AP, \%). L1 keeps the test set and the training-set size fixed and swaps in copies of test images, L2 scores both models on the test images the two splits share, and L3 compares different evaluation images for scale. $\Delta$ is computed from unrounded scores.}
 \label{tab:supp_leak}
 \begin{tabular}{llccc}
 \toprule
@@ -801,10 +838,8 @@ def numbers():
     """sec/numbers.tex: every result number used in the prose, as macros (XX when pending).
     Derived values are also written to paper/number_whitelist.json with their formula."""
     D = _sumdet(); G = D["groups"]
-    SH = _opt("shipped_checkpoint.json") or {}
     SC = _opt("summary_cls.json") or {"models": {}}
     LC = _opt("summary_leak_cls.json") or {"models": {}}
-    SE = _opt("subset_eval.json") or {"models": {}, "paired_no_copy_subset": {}}
     O = _opt("dentex_overlap.json") or {}
     mac, derived = {}, []
 
@@ -860,9 +895,6 @@ def numbers():
         dput(T + "SizeGain", e_s and e_s.get(f"test_{kind}_map50_95_mean"), e_n and e_n.get(f"test_{kind}_map50_95_mean"), signed=True)
         e_m = G.get(f"{task}_y11m")
         put(T + "Medium", e_m and e_m.get(f"test_{kind}_map50_95_mean"))
-    put("shipDet", _get(SH, "pxdet_test", "box", "map50_95")); put("shipSeg", _get(SH, "pxseg_test", "mask", "map50_95"))
-    put("shipDetShare", _get(SH, "pxdet_test_share_lineage_in_shipped_train"))
-    put("shipSegShare", _get(SH, "pxseg_test_share_lineage_in_shipped_train"))
     L1 = D.get("L1_swap", {})
     put("leakAbs", L1.get("map50_95_diff_mean"), nd=2); put("leakRel", L1.get("map50_95_rel_gain_mean"))
     put("leakClean", np.mean(L1["map50_95_clean"]) if L1.get("map50_95_clean") else None, nd=2)
@@ -874,20 +906,6 @@ def numbers():
     dput("ltwoGain", m.get("common_test_trained_on_hash_split"), m.get("common_test_trained_on_lineage_split"))
     r3 = D["runs"].get("iodet_shipped_y11s_s0")
     put("lthreeShip", _get(r3 or {}, "test", "box", "map50_95"))
-    for task, T in (("pxdet", "Det"), ("pxseg", "Seg")):
-        s = SE["models"].get(f"shipped_yolov8x_seg|{task}", {})
-        put(f"lfourShipNo{T}", s.get("no_copy_subset")); put(f"lfourShipWith{T}", s.get("with_copy_subset"))
-        mac[f"lfourN{T}"] = str(s.get("n_subset", "XX"))
-        sel = (verdict_dense(task) or {}).get("selected")
-        ours = [k for k in SE["models"] if k.startswith(f"{task}_{sel}_s") and k.endswith("|" + task)] if sel else []
-        put(f"lfourOursNo{T}", np.mean([SE["models"][k]["no_copy_subset"] for k in ours]) if ours else None)
-        put(f"lfourOursWith{T}", np.mean([SE["models"][k]["with_copy_subset"] for k in ours]) if ours else None)   # presentation: same JSON field as Fig. 6b
-        prs = [SE.get("paired_no_copy_subset", {}).get(f"{k}-minus-shipped") for k in ours]
-        prs = [p for p in prs if p]
-        if prs:
-            mac[f"lfourDiff{T}"] = ", ".join(f"{100*p['diff']:+.1f} [{100*p['ci95'][0]:+.1f}, {100*p['ci95'][1]:+.1f}]" for p in prs)
-        else:
-            mac[f"lfourDiff{T}"] = "XX"
     a, c = G.get("dentex_coco_y11s", {}), G.get("dentex_du_y11s", {})
     put("dentexCoco", a.get("test_box_map50_95_mean")); put("dentexDU", c.get("test_box_map50_95_mean"))
     dput("dentexGain", c.get("test_box_map50_95_mean"), a.get("test_box_map50_95_mean"), signed=True)
@@ -913,6 +931,7 @@ if __name__ == "__main__":
     SUPP.mkdir(exist_ok=True)
     tab_taxonomy()
     tab_compare()
+    tab_sources()
     tab_audit()
     tab_cls2()
     tab_det2()
@@ -922,6 +941,8 @@ if __name__ == "__main__":
     supp_dentex()
     supp_tail()
     numbers()
+    for f in SUPP.glob("tab_supp_*.tex"):             # appendix column tables may sit in the text (QA 2026-11-16)
+        f.write_text(f.read_text().replace("\\begin{table}[t]", "\\begin{table}[!htbp]"))
     for old in ("tab_leak.tex", "tab_sota.tex"):          # moved to the supplement (Fig. 6 carries the main-paper view)
         if (OUT / old).exists():
             (OUT / old).unlink()

@@ -2,7 +2,6 @@
   python scripts/make_appendix_tables.py <paper_dir>
 Writes <paper_dir>/supp/tab_app_*.tex. Reads results/*.json, never release images.
 Missing runs are skipped (pending runs appear once their result file exists).
-The shipped YOLOv8x-seg checkpoint is never rendered (user decision 2026-11-15).
 """
 import json, sys
 from pathlib import Path
@@ -37,6 +36,8 @@ def esc(t):
 def write(name, tex):
     # no \resizebox: fonts keep their nominal size (legibility); tables are sized to fit instead
     tex = tex.replace("\\resizebox{\\columnwidth}{!}{%\n", "").replace("\\end{tabular}}", "\\end{tabular}")
+    # column tables may sit in the text (QA 2026-11-16: fewer near-empty float pages in the appendix)
+    tex = tex.replace("\\begin{table}[t]", "\\begin{table}[!htbp]")
     (OUT / name).write_text(tex)
 
 
@@ -58,7 +59,10 @@ def survey():
         lic = r.get("licence")
         lic = esc(lic) if lic else "--"
         name = esc(r["name"]).replace("(STS-2D-Tooth / STS-3D-Tooth)", "")
-        lines.append(f"{name}~\\cite{{{r['bibkey']}}} & {esc(r['modality'])} & {n(r.get('n_images'))} & "
+        ni = n(r.get('n_images'))
+        if r["bibkey"] == "sosnin2025alphadent" and ni != "--":
+            ni = "$>$" + ni          # "contains over 1200 images", as in Tab. 1
+        lines.append(f"{name}~\\cite{{{r['bibkey']}}} & {esc(r['modality'])} & {ni} & "
                      f"{n(r.get('n_annotations_or_null'))} & {tk(t.get('classification'))} & {tk(t.get('detection'))} & "
                      f"{tk(t.get('instance_segmentation'))} & {tk(t.get('semantic_segmentation'))} & "
                      f"{n(r.get('n_classes'))} & {lic} & {tk(r.get('duplicate_or_leakage_audit_reported'))} & "
@@ -66,9 +70,9 @@ def survey():
     write("tab_app_survey.tex", r"""\begin{table*}[t]
 \centering\scriptsize
 \setlength{\tabcolsep}{2.5pt}
-\caption{\textbf{Survey of public dental image datasets} (built 2026-11-11 from the papers and official pages, every non-empty field backed by a quoted source in \texttt{results/comparison\_matrix.json}). CLS: classification, DET: detection, ISEG / SSEG: instance / semantic segmentation, Dup.: the paper reports duplicate removal, a leak check or a patient-level split. \cmark: stated, \xmark: checked and not stated or not used, --: not stated or not checked. Licence is the verbatim data licence, never the article licence.}
+\caption{\textbf{Survey of public dental image datasets} (built 2026-11-11 from the papers and official pages, every non-empty field backed by a quoted source in \texttt{results/comparison\_matrix.json}). CLS: classification, DET: detection, ISEG / SSEG: instance / semantic segmentation, Dup.: the paper reports duplicate removal, a leak check or a patient-level split. \cmark: stated, \xmark: checked and not stated, --: not stated. Licence is the verbatim data licence, never the article licence.}
 \label{tab:app_survey}
-\begin{tabularx}{\textwidth}{p{3.6cm}p{2.5cm}rrccccrXcc}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{2.5cm}rrccccr>{\raggedright\arraybackslash}Xcc}
 \toprule
 Dataset & Modality & Images & Annot. & CLS & DET & ISEG & SSEG & Classes & Licence & Dup. & Split \\
 \midrule
@@ -203,7 +207,8 @@ def linkqc():
         ("Panoramic", "registered cross-stem copies", n(A["px_registered_links"])),
         ("Panoramic", "families from hash, source key and registration", n(A["px_lineages_source_hash_registered"])),
         ("Panoramic", "copy families with a usable file", n(A["px_copy_families_used"])),
-        ("Panoramic", "lineages after embedding edges", n(A["px_lineages_final"])),
+        ("Panoramic", "lineages after embedding edges (all files)", n(A["px_lineages_final"])),
+        ("Panoramic", "lineages with a usable radiograph (released)", n(J("split_class_stats.json")["px_det"]["lineages_total"])),
         ("Intraoral", "precision threshold", f"{A['io_tau_hi']:.3f}"),
         ("Intraoral", "recall threshold (5th pct. of augmented copies)", f"{A['io_tau_split']:.3f}"),
         ("Intraoral", "random pairs sampled", n(Q["io_random_pairs"])),
@@ -526,7 +531,7 @@ def leak_cls():
     write("tab_app_leak_cls.tex", r"""\begin{table}[t]
 \centering\scriptsize
 \setlength{\tabcolsep}{2.5pt}
-\caption{\textbf{L2 for every frozen read-out} (macro-AP, \%). Full test: each model on its own split's test set. Shared: both models on the """ + n(S["n_common_test_images"]) + r""" test images the two splits share; $\Delta$ is the inflation on these shared images.}
+\caption{\textbf{L2 for every frozen read-out} (macro-AP, \%). Full test: each model on its own split's test set. Shared: both models on the """ + n(S["n_common_test_images"]) + r""" test images the two splits share; $\Delta$ is the inflation on these shared images, computed from unrounded scores.}
 \label{tab:app_leak_cls}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lccccc}
@@ -644,7 +649,7 @@ def families():
     write("tab_app_families.tex", r"""\begin{table}[t]
 \centering\scriptsize
 \setlength{\tabcolsep}{3pt}
-\caption{\textbf{Test AP$_{50:95}$ per clinical family} (\%, class-mean over the classes of the family present in test, per-class values averaged over the available seeds), the values behind \mainref{fig:analysis}{Fig.~5}a,b. --: no class of the family in the PX-SEG test split.}
+\caption{\textbf{Test AP$_{50:95}$ per clinical family} (\%, class-mean over the classes of the family present in test, per-class values averaged over the available seeds), the values behind panels (a, b) of \mainref{fig:analysis}{Fig.~4}. --: no class of the family in the PX-SEG test split.}
 \label{tab:app_families}
 \begin{tabular}{llccccc}
 \toprule
@@ -711,9 +716,54 @@ Task & unit & min & median & p90 & max & mean & empty \\
 """)
 
 
+def trainfree():
+    """Training-free references added by the 2026-11-16 amendment: every zero-shot IO-CLS candidate
+    with its validation macro-AP (selection) and the single test score of the selected one, and the
+    box-prompted SAM PX-SEG runs with the box-mAP pipeline check."""
+    Z, SM = J("cls_zeroshot.json"), J("sam_pxseg.json")
+    if Z is None and SM is None:
+        return
+    lines = []
+    if Z is not None:
+        mn = {"biomedclip": "BiomedCLIP~\\cite{zhang2025multimodal}", "clip_vitb16": "CLIP ViT-B/16~\\cite{radford2021learning}"}
+        lines.append("\\multicolumn{5}{l}{\\textit{IO-CLS zero-shot (macro-AP, \\%; chance on test: "
+                     f"{f1(Z['test_chance_macro_ap'])})}}}} \\\\")
+        lines.append("Model & prompts & val & test & test AUROC \\\\")
+        lines.append("\\midrule")
+        for k, v in Z["candidates_val_macro_ap"].items():
+            m, t = k.split("/")
+            sel = k == Z["selected"]
+            te = f1(Z["test_macro_ap"]) if sel else "--"
+            au = f1(Z["test_macro_auroc"]) if sel else "--"
+            vv = f1(v)
+            if sel:
+                vv = "\\textbf{" + vv + "}"
+            lines.append(f"{mn[m]} & {t} & {vv} & {te} & {au} \\\\")
+    if SM is not None and SM.get("runs"):
+        lines += ["\\midrule", "\\multicolumn{5}{l}{\\textit{PX-SEG, YOLO11s boxes + SAM ViT-B~\\cite{kirillov2023segment} masks (mAP$_{50:95}$, \\%)}} \\\\",
+                  "Run & split & SAM mask & YOLO11s mask & box (check) \\\\", "\\midrule"]
+        for k in sorted(SM["runs"], key=lambda x: (x.split("/")[0], x.split("/")[1] != "val")):
+            r = SM["runs"][k]
+            run, split = k.split("/")
+            lines.append(f"YOLO11s seed {run[-1]} & {split} & {f1(r['mask']['map50_95'])} & "
+                         f"{f1(r['yolo_mask_map50_95_recorded'])} & {f1(r['box']['map50_95'])} / {f1(r['box_map50_95_recorded'])} \\\\")
+    write("tab_app_trainfree.tex", r"""\begin{table}[t]
+\centering\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\caption{\textbf{Training-free references} (amendment of 2026-11-16). Zero-shot prompt sets: T1 ``a photo of \{label\}.'', T2 ``an intraoral photograph showing \{label\}.'', T3 ``a clinical photograph of the mouth with \{label\}.'', T4 the mean of T1--T3. Bold: selected on validation. Only the selected candidate is tested. SAM rows: box mAP recomputed / as recorded for the YOLO11s run, which must agree because only the masks change.}
+\label{tab:app_trainfree}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}llccc}
+\toprule
+""" + "\n".join(lines) + r"""
+\bottomrule
+\end{tabular*}
+\end{table}
+""")
+
+
 if __name__ == "__main__":
     for fn in (survey, splits, px_classes, io_classes, linkqc, runs_table, px_ap5095, io_ap, cls_full, cls_paired,
-               cls_curves, leak_cls, leak_px_classes, dentex, speed, families, cls_ft_labels, per_image_table):
+               cls_curves, leak_cls, leak_px_classes, dentex, speed, families, cls_ft_labels, per_image_table, trainfree):
         fn()
     px_ap5095("val")
     print("appendix tables:", len(list(OUT.glob("tab_app_*.tex"))))

@@ -38,17 +38,27 @@ TW, CW = 6.9, 3.3            # CVPR text width / column width in inches
 J = lambda n: json.loads((RESULTS / n).read_text()) if (RESULTS / n).exists() else None
 # fixed model colours across every result figure (IMIS keeps one colour per model)
 MODEL_LABEL = {"y11n": "YOLO11n", "y11s": "YOLO11s", "y11m": "YOLO11m", "reexp_y11s": "YOLO11s+D1",
-               "rtdetrl": "RT-DETR-l", "shipped": "shipped YOLOv8x-seg$^\\dagger$"}
-for k in ("y11s", "y11m", "y11n", "reexp_y11s", "rtdetrl", "shipped"):
+               "rtdetrl": "RT-DETR-l"}
+for k in ("y11s", "y11m", "y11n", "reexp_y11s", "rtdetrl"):
     METHOD_COLORS.assign(k)
-COL = lambda k: "#555555" if k == "shipped" else METHOD_COLORS.assign(k)
+COL = lambda k: METHOD_COLORS.assign(k)
 
+
+
+def plainlog(ax, axis="y"):
+    """Log axis with plain tick labels (1, 10, 100, 1k, 10k): superscript exponents would print below 7 pt."""
+    from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
+    f = FuncFormatter(lambda v, _: (f"{v / 1000:g}k" if v >= 1000 else f"{v:g}") if v >= 1 else f"{v:g}")
+    a = ax.yaxis if axis == "y" else ax.xaxis
+    a.set_major_locator(LogLocator(base=10, numticks=12))
+    a.set_major_formatter(f)
+    a.set_minor_formatter(NullFormatter())
 
 def small():
     style()
     # presentation (2026-11-14 review): sizes chosen so every label prints at >= ~6.5 pt
-    plt.rcParams.update({"font.size": 7.5, "axes.labelsize": 7.5, "axes.titlesize": 8, "legend.fontsize": 6.8,
-                         "xtick.labelsize": 6.8, "ytick.labelsize": 6.8, "axes.titlepad": 3})
+    plt.rcParams.update({"font.size": 7.5, "axes.labelsize": 7.5, "axes.titlesize": 8, "legend.fontsize": 7.2,
+                         "xtick.labelsize": 7.2, "ytick.labelsize": 7.2, "axes.titlepad": 3})
 
 
 def save(fig, name):
@@ -79,7 +89,7 @@ def card(fig, x, w, top, h, num, title, sub, color):
     W, H = fig.get_size_inches()
     ax = fig.add_axes([0, 0, 1, 1], facecolor="none"); ax.set_xlim(0, W); ax.set_ylim(0, H); ax.axis("off")
     ax.text(x, top, f"{num}  {title}", ha="left", va="top", fontsize=7.6, fontweight="bold", color=color)
-    ax.text(x, top - 0.135, sub, ha="left", va="top", fontsize=6.6, color="#666666")
+    ax.text(x, top - 0.135, sub, ha="left", va="top", fontsize=7.2, color="#666666")
     y = 0.02
     ph = top - 0.32 - y
     ax.add_patch(FancyBboxPatch((x, y), w, ph, boxstyle="round,pad=0,rounding_size=0.04", fc="#F6F6F6", ec="#BBBBBB", lw=0.7))
@@ -105,7 +115,7 @@ def fig_pipeline():
     top = H - 0.01
     cols = ["#555555", "#CC79A7", "#D55E00", "#0072B2", "#009E73"]
     xs = [i * (w + gap) for i in range(5)]
-    tx = dict(fontsize=6.8, va="center")
+    tx = dict(fontsize=7.2, va="center")
 
     # 1 Inventory: the three source files sets
     ax, r = card(fig, xs[0], w, top, H, 1, "Inventory", "two community releases", cols[0])
@@ -130,8 +140,8 @@ def fig_pipeline():
     v = [fam_n[f] for f in FAMILIES][::-1]
     a2.barh(range(5), v, color=[FAMC[f] for f in FAMILIES][::-1], height=0.66, ec="#444444", lw=0.4)
     for i, n in enumerate(v):
-        a2.text(n + 0.4, i, str(n), ha="left", va="center", fontsize=6.8)
-    a2.set_yticks(range(5), [FAMS[f] for f in FAMILIES][::-1], fontsize=6.6)
+        a2.text(n + 0.4, i, str(n), ha="left", va="center", fontsize=7.2)
+    a2.set_yticks(range(5), [FAMS[f] for f in FAMILIES][::-1], fontsize=7.2)
     a2.tick_params(axis="y", length=0, pad=2); a2.grid(False)
     a2.set_xticks([]); a2.set_xlim(0, max(v) * 1.22)
     for sp in ("bottom", "top", "right"):
@@ -140,7 +150,7 @@ def fig_pipeline():
     ax.text(r[0] + r[2] / 2, r[1] + r[3] - 0.13, f"{S['total']['unified_concepts']} concepts, 5 families", ha="center", **tx)
 
     # 3 Link copies: schematic copy graph with the four edge rules
-    ax, r = card(fig, xs[2], w, top, H, 3, "Link copies", "lineage = graph component", cols[2])
+    ax, r = card(fig, xs[2], w, top, H, 3, "Link copies", "lineage = component", cols[2])
     # two lineages drawn as small file nodes; edge styles = rules
     L = [(0.17, 0.90), (0.47, 1.00), (0.36, 0.71), (0.74, 0.92), (1.05, 0.98), (0.98, 0.70)]
     def P(p):
@@ -157,9 +167,10 @@ def fig_pipeline():
                                     fc="white", ec="#0072B2" if k < 3 else "#009E73", lw=0.9, zorder=3))
     leg = [("-", "#333333", "same sha256"), ((0, (2.5, 1.5)), "#333333", "same export key"),
            ((0, (0.8, 1.2)), "#333333", f"registered ({A['px_registered_links']})"),
-           ("-", "#D55E00", f"cos $\\geq${A['px_tau_hi']:.3f}")]
+           ("-", "#D55E00", f"PX: cos \u2265 {A['px_tau_hi']:.3f}"),
+           ("-", "#D55E00", f"IO: {A['io_tau_hi']:.3f} / {A['io_tau_split']:.3f}")]
     for i, (ls, c, lab) in enumerate(leg):
-        y0 = r[1] + 0.50 - i * 0.135
+        y0 = r[1] + 0.555 - i * 0.12
         ax.plot([r[0] + 0.07, r[0] + 0.25], [y0, y0], color=c, ls=ls, lw=1.1)
         ax.text(r[0] + 0.3, y0, lab, ha="left", **tx)
 
@@ -174,7 +185,7 @@ def fig_pipeline():
             f = d[sp] / tot
             a4.barh(i, f, left=left, color=SPLITC[sp], height=0.62, ec="white", lw=0.4)
             left += f
-    a4.set_yticks(range(4), [t for t, _ in tasks[::-1]], fontsize=6.6)
+    a4.set_yticks(range(4), [t for t, _ in tasks[::-1]], fontsize=7.2)
     a4.set_xticks([]); a4.set_xlim(0, 1); a4.grid(False)
     for s in ("top", "right", "bottom", "left"):
         a4.spines[s].set_visible(False)
@@ -216,7 +227,7 @@ def fig_overview():
     b = json.loads((DATA / "bench.json").read_text())
     small()
     fig = plt.figure(figsize=(TW, 4.0))
-    gs = fig.add_gridspec(2, 6, height_ratios=[1.0, 0.78], hspace=1.2, wspace=1.05)
+    gs = fig.add_gridspec(2, 6, height_ratios=[1.0, 0.7], hspace=1.55, wspace=1.05)
     vals = {}
     # (a) modality -> task donut
     ax = fig.add_subplot(gs[0, 0:2])
@@ -233,16 +244,17 @@ def fig_overview():
         ang = ang0 - 360 * v / tot / 2; ang0 -= 360 * v / tot
         x, y = np.cos(np.radians(ang)), np.sin(np.radians(ang))
         ax.annotate(f"{lab}\n{fmt(v)}", (1.0 * x, 1.0 * y), xytext=(1.55 * x + (0.3 if x > 0 else -0.3), 1.58 * y), ha="center", va="center",
-                    fontsize=6.4, arrowprops=dict(arrowstyle="-", color="#888888", lw=0.5), annotation_clip=False)
+                    fontsize=7.2, arrowprops=dict(arrowstyle="-", color="#888888", lw=0.5), annotation_clip=False)
     ax.set_xlim(-1.95, 1.95); ax.set_ylim(-1.7, 1.7)
-    ax.text(0, 0.24, f"{fmt(S['total']['distinct_images'])}", ha="center", va="center", fontsize=5.8, fontweight="bold")
-    ax.text(0, 0.0, "images", ha="center", va="center", fontsize=5.4)
-    ax.text(0, -0.24, f"{S['total']['unified_concepts']} concepts", ha="center", va="center", fontsize=5.4)
+    ax.text(0, 0.24, f"{fmt(S['total']['distinct_images'])}", ha="center", va="center", fontsize=6.6, fontweight="bold")
+    ax.text(0, 0.0, "images", ha="center", va="center", fontsize=6.6)     # donut centre keeps its size (user: do not touch Fig. 3a)
+    ax.text(0, -0.24, f"{S['total']['unified_concepts']} concepts", ha="center", va="center", fontsize=6.6)
     ax.set_title("(a) modalities and tasks", loc="left", x=-0.25)
 
     # (b) family small multiples of annotations per concept
     cnt = J("fig_stats_values.json")["annotations_per_concept"]
-    sub = gs[0, 2:6].subgridspec(1, 5, wspace=0.12, width_ratios=[7, 5, 9, 2, 13])
+    nfam = [sum(1 for c in UNIFIED if c["family"] == f) for f in FAMILIES]    # one tick slot per concept
+    sub = gs[0, 2:6].subgridspec(1, 5, wspace=0.12, width_ratios=[n + 0.3 for n in nfam])
     hatch = {"cls": "////", "iodet": "....", "px": ""}
     axs = []
     for j, fam in enumerate(FAMILIES):
@@ -258,20 +270,20 @@ def fig_overview():
                       hatch=hatch[k], edgecolor="white", linewidth=0.2)
             ticks.append((x + 0.4, c["name"]))
             x += 1
-        a.set_yscale("log"); a.set_ylim(0.7, 6e4)
-        a.set_xticks([t for t, _ in ticks], [n.replace("temporary anchorage device", "TAD").replace("root canal treatment", "root canal") for _, n in ticks], rotation=90, fontsize=5.7)
+        a.set_yscale("log"); a.set_ylim(0.7, 6e4); plainlog(a)
+        a.set_xticks([t for t, _ in ticks], [n.replace("temporary anchorage device", "TAD").replace("root canal treatment", "root canal") for _, n in ticks], rotation=90, fontsize=7)
         a.set_xlim(-0.3, x)
-        a.set_title(FAMS[fam], fontsize=6.6, color="#B09A00" if fam == "anatomy" else FAMC[fam])
+        a.set_title(FAMS[fam], fontsize=7.2, color="#B09A00" if fam == "anatomy" else FAMC[fam])
         a.grid(axis="x", visible=False)
         if j:
             plt.setp(a.get_yticklabels(), visible=False)
         else:
             a.set_ylabel("annotations", labelpad=1)
-            a.tick_params(axis="y", labelsize=6, pad=1)
+            a.tick_params(axis="y", labelsize=7.2, pad=1)
     axs[0].text(0, 1.2, "(b) annotations per concept and family", transform=axs[0].transAxes, fontsize=8)
     axs[-1].legend(handles=[Patch(facecolor="white", edgecolor="k", hatch=h, label=l, linewidth=0.4)
                             for l, h in (("IO-CLS", "////"), ("IO-DET", "...."), ("PX", ""))],
-                   loc="upper right", bbox_to_anchor=(1.0, 1.0), ncol=1, fontsize=6, handlelength=1.2,
+                   loc="upper right", bbox_to_anchor=(1.0, 1.0), ncol=1, fontsize=7.2, handlelength=1.2,
                    frameon=False, borderaxespad=0.0)
     # (c) image resolution per modality
     ax = fig.add_subplot(gs[1, 0:2])
@@ -284,10 +296,11 @@ def fig_overview():
     xs = np.arange(5)
     ax.bar(xs - 0.2, hi, 0.4, color="#CC79A7", label="intraoral")
     ax.bar(xs + 0.2, hp, 0.4, color="#0072B2", label="panoramic")
-    ax.set_yscale("log"); ax.set_ylim(0.8, 3e4)
-    ax.set_xticks(xs, labs, fontsize=6); ax.set_ylabel("images"); ax.set_xlabel("long side (px)", labelpad=1)
-    ax.legend(loc="lower right", bbox_to_anchor=(1.0, 1.0), ncol=2, fontsize=6, frameon=False, borderaxespad=0.1)
-    ax.set_title("(c) image resolution", loc="left", pad=11)
+    ax.set_yscale("log"); ax.set_ylim(0.8, 3e5); plainlog(ax)
+    ax.set_xticks(xs, labs, fontsize=7.2, rotation=30, ha="right", rotation_mode="anchor"); ax.set_ylabel("images")
+    ax.set_xlabel("long side (px)", labelpad=1)
+    ax.legend(loc="upper left", ncol=2, fontsize=7.2, frameon=False, borderaxespad=0.1, handlelength=1.0, columnspacing=0.8)
+    ax.set_title("(c) image resolution", loc="left")
     vals["resolution_bins"] = labs
     vals["resolution_intraoral"] = hi.tolist(); vals["resolution_panoramic"] = hp.tolist()
     vals["panoramic_long_side_1615"] = int(sum(1 for v in px if v == 1615))
@@ -305,30 +318,32 @@ def fig_overview():
     e2 = [0, 0.005, 0.01, 0.02, 0.05, 0.1, 1.01]
     l2 = ["<.5", ".5-1", "1-2", "2-5", "5-10", "10+"]
     di, _ = np.histogram(ai, e2); dp, _ = np.histogram(ap, e2)
-    ax.plot(range(6), di, "o-", color="#CC79A7", ms=3, lw=1, label="IO-DET boxes")
-    ax.plot(range(6), dp, "s-", color="#0072B2", ms=3, lw=1, label="PX boxes")
-    ax.set_yscale("log"); ax.set_xticks(range(6), l2, fontsize=6); ax.set_ylabel("boxes")
+    ax.plot(range(6), di, "o-", color="#CC79A7", ms=3, lw=1, label="IO-DET")
+    ax.plot(range(6), dp, "s-", color="#0072B2", ms=3, lw=1, label="PX")
+    ax.set_yscale("log"); ax.set_ylim(100, 4e5); plainlog(ax); ax.set_xticks(range(6), l2, fontsize=7.2, rotation=30, ha="right", rotation_mode="anchor")
+    ax.set_ylabel("boxes")
     ax.set_xlabel("box area / image area (%)", labelpad=1)
-    ax.legend(loc="upper right", fontsize=6, frameon=False)
-    ax.set_title("(d) object size", loc="left", pad=11)
+    ax.legend(loc="upper right", ncol=2, fontsize=7.2, frameon=False, handlelength=1.4, columnspacing=0.8, borderaxespad=0.1)
+    ax.set_title("(d) object size", loc="left")
     vals["box_area_bins"] = l2; vals["box_area_iodet"] = di.tolist(); vals["box_area_px"] = dp.tolist()
     vals["px_box_share_below_2pct"] = float(np.mean(np.array(ap) < 0.02))
     vals["iodet_box_share_below_2pct"] = float(np.mean(np.array(ai) < 0.02))
     # (e) copy structure: raw files -> distinct -> lineages
     ax = fig.add_subplot(gs[1, 4:6])
     rows = [("PX raw", S["px_files"]["files"], "#999999"), ("PX distinct", S["px_det"]["images"], "#0072B2"),
-            ("PX lin.", A["px_lineages_final"], "#56B4E9"),
-            ("IO files", S["io_cls"]["images"] and 5563 + A["io_det_files"], "#999999"),
+            # lineages that hold a usable radiograph (2 of the 5,255 graph lineages hold only dropped files)
+            ("PX lin.", J("split_class_stats.json")["px_det"]["lineages_total"], "#56B4E9"),
+            ("IO files", J("io_cls_composite_audit.json")["total_files_walked"] + A["io_det_files"], "#999999"),
             ("IO distinct", S["io_cls"]["images"] + S["io_det"]["images"] - A["io_det_bytes_identical_to_cls"], "#CC79A7"),
             ("IO lin.", A["io_components"], "#E8B9D4")]
     lab = J("io_cls_labels_audit.json")
     rows[3] = ("IO raw", lab["original_files"] + A["io_det_files"], "#999999")
     for i, (l, v, c) in enumerate(rows):
         ax.barh(i, v, color=c, height=0.66)
-        ax.text(v + 250, i, fmt(v), va="center", fontsize=6)
-    ax.set_yticks(range(len(rows)), [r[0] for r in rows], fontsize=6.2); ax.invert_yaxis()
+        ax.text(v + 250, i, fmt(v), va="center", fontsize=7.2)
+    ax.set_yticks(range(len(rows)), [r[0] for r in rows], fontsize=7.2); ax.invert_yaxis()
     ax.set_xlim(0, rows[0][1] * 1.32); ax.set_xticks([0, 5000, 10000], ["0", "5k", "10k"])
-    ax.set_title("(e) copies collapse", loc="left", pad=11)
+    ax.set_title("(e) copies collapse", loc="left")
     vals["copy_rows"] = {l: int(v) for l, v, _ in rows}
     save(fig, "fig_overview")
     write_json(RESULTS / "fig_overview_values.json", dict(provenance="run (scripts/make_figures.py)", **vals))
@@ -362,7 +377,7 @@ def fig_linkqc():
     aug = np.array([r["max_sim"] for r in b["io_aug"]])
     small()
     plt.rcParams.update({"font.size": 7.2, "axes.labelsize": 7.2, "axes.titlesize": 7.6,
-                         "xtick.labelsize": 6.8, "ytick.labelsize": 6.8})
+                         "xtick.labelsize": 7.2, "ytick.labelsize": 7.2})
     fig, axs = plt.subplots(1, 2, figsize=(3.05, 1.45), gridspec_kw=dict(wspace=0.38))
     bins = np.linspace(0.3, 1.0, 71)
     ax = axs[0]
@@ -370,12 +385,14 @@ def fig_linkqc():
     ax.hist(rand, bins, density=True, color="#999999", alpha=0.8, label="random pairs")
     ax.hist(reex, bins, density=True, color="#0072B2", alpha=0.75, label="re-export pairs")
     ax.axvline(tau, color="#D55E00", lw=0.8)
-    ax.set_yscale("log"); ax.set_xlabel("cosine similarity", labelpad=1); ax.set_ylabel("density")
+    ax.set_yscale("log"); plainlog(ax); ax.set_xlabel("cosine similarity", labelpad=1); ax.set_ylabel("density")
     yl = ax.get_ylim()
-    ax.text(tau - 0.012, np.sqrt(yl[0] * yl[1]), f"{tau:.3f}", ha="right", va="center", fontsize=6.8, color="#D55E00",
-            bbox=dict(fc="white", ec="none", pad=0.6))
-    ax.set_title("(a) panoramic", loc="left", pad=19)
-    ax.legend(loc="upper left", fontsize=6.6, frameon=False, handlelength=0.9, borderaxespad=0.1)
+    # threshold label and legend sit in the empty low-similarity region (QA 2026-11-16: no overlap with bars)
+    ax.annotate(f"{tau:.3f}", xy=(tau, yl[1] * 0.25), xytext=(0.62, yl[1] * 0.25), ha="center", va="center",
+                fontsize=7.2, color="#D55E00", arrowprops=dict(arrowstyle="-", color="#D55E00", lw=0.6))
+    ax.set_title("(a) panoramic", loc="left", pad=22)
+    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.98), fontsize=7.2, frameon=False, handlelength=0.9,
+              borderaxespad=0.0, labelspacing=0.2)
     ax.set_xticks([0.4, 0.6, 0.8, 1.0])
     ax = axs[1]
     ax.axvspan(A["io_tau_split"], 1.0, color="#E69F00", alpha=0.10, lw=0)
@@ -384,13 +401,13 @@ def fig_linkqc():
     ax.hist(aug, bins, density=True, color="#CC79A7", alpha=0.75, label="augmented copies")
     for t in (A["io_tau_split"], A["io_tau_hi"]):
         ax.axvline(t, color="#D55E00", lw=0.8)
-    ax.set_yscale("log"); ax.set_xlabel("cosine similarity", labelpad=1)
+    ax.set_yscale("log"); plainlog(ax); ax.set_xlabel("cosine similarity", labelpad=1)
     yl = ax.get_ylim()
     for t in (A["io_tau_split"], A["io_tau_hi"]):
-        ax.text(t - 0.012, yl[1] * 0.5, f"{t:.3f}", ha="right", va="top", fontsize=6.6, color="#D55E00", rotation=90,
+        ax.text(t - 0.012, yl[1] * 0.5, f"{t:.3f}", ha="right", va="top", fontsize=7.2, color="#D55E00", rotation=90,
                 bbox=dict(fc="white", ec="none", pad=0.4))
     ax.set_title("(b) intraoral", loc="left", pad=19)
-    ax.legend(loc="lower left", bbox_to_anchor=(-0.08, 0.98), ncol=1, fontsize=6.6, frameon=False, borderaxespad=0.1,
+    ax.legend(loc="lower left", bbox_to_anchor=(-0.08, 0.98), ncol=1, fontsize=7.2, frameon=False, borderaxespad=0.1,
               handlelength=0.9, labelspacing=0.2)
     ax.set_xticks([0.4, 0.6, 0.8, 1.0])
     save(fig, "fig_linkqc")
@@ -416,7 +433,6 @@ def _family_of_px():
 def _px_models(task):
     """Per-class test AP50:95 (seed-averaged) for every evaluated PX model family."""
     D = J("summary_det.json") or {"runs": {}}
-    SH = J("shipped_checkpoint.json") or {}
     kind = "mask" if task == "pxseg" else "box"
     out = {}
     fams = defaultdict(list)
@@ -428,7 +444,6 @@ def _px_models(task):
         pcs = [p for p in pcs if p]
         if pcs:
             out[f] = {c: float(np.mean([p[c] for p in pcs if c in p])) for c in pcs[0]}
-    # (user decision 2026-11-15 18:10: the shipped checkpoint is not compared anywhere)
     return out
 
 
@@ -438,9 +453,9 @@ def fig_analysis():
     D = J("summary_det.json") or {}
     tr = D.get("px_train_instances", {})
     fig = plt.figure(figsize=(TW, 2.35))
-    gs = fig.add_gridspec(1, 4, width_ratios=[0.95, 0.95, 1.2, 1.5], wspace=0.7)
+    gs = fig.add_gridspec(1, 4, width_ratios=[0.95, 0.95, 1.2, 1.5], wspace=0.95)
     vals = {}
-    order = ["y11n", "y11s", "y11m", "reexp_y11s", "rtdetrl", "shipped"]
+    order = ["y11n", "y11s", "y11m", "reexp_y11s", "rtdetrl"]
     for j, task in enumerate(("pxdet", "pxseg")):
         ax = fig.add_subplot(gs[j], projection="polar")
         M = _px_models(task)
@@ -452,22 +467,20 @@ def fig_analysis():
             r = [np.mean([v for c, v in pc.items() if fam_of.get(c) == f]) for f in present]
             vals[task][k] = dict(zip(present, map(float, r)))
             rr = np.r_[r, r[0]]; tt = np.r_[th, th[0]]
-            ls = "--" if k == "shipped" else "-"
-            ax.plot(tt, 100 * rr, ls, color=COL(k), lw=1.0, label=MODEL_LABEL[k])
-            if k != "shipped":
-                ax.fill(tt, 100 * rr, color=COL(k), alpha=0.12)
+            ax.plot(tt, 100 * rr, "-", color=COL(k), lw=1.0, label=MODEL_LABEL[k])
+            ax.fill(tt, 100 * rr, color=COL(k), alpha=0.12)
         ABR = {"pathology": "path.", "periodontal / soft tissue": "perio.", "tooth status / development": "tooth",
                "anatomy": "anat.", "restoration / device": "restor."}
-        ax.set_xticks(th, [ABR[f] for f in present], fontsize=6.8)
+        ax.set_xticks(th, [ABR[f] for f in present], fontsize=7.2)
         ax.tick_params(axis="x", pad=1)
         ax.set_rlabel_position(np.degrees(th[1] / 2) if len(th) > 1 else 45)   # between the first two spokes
         top = max([100 * max(v.values()) for v in vals[task].values()] + [10]) * 1.15
         tk = [5, 10, 20, 30, 40, 50, 60]; tk = [x for x in tk if x < top][-1:]
-        ax.set_ylim(0, top); ax.set_yticks(tk, [str(x) for x in tk], fontsize=6.5, color="#555555")
+        ax.set_ylim(0, top); ax.set_yticks(tk, [str(x) for x in tk], fontsize=7.2, color="#555555")
         ax.set_title(f"({'ab'[j]}) {'PX-DET, box' if task == 'pxdet' else 'PX-SEG, mask'}", loc="left",
                      fontsize=7.6, pad=12, x=-0.25)
         if j == 0:
-            ax.legend(loc="upper left", bbox_to_anchor=(-0.45, -0.2), ncol=1, fontsize=6.6, frameon=False)
+            ax.legend(loc="upper left", bbox_to_anchor=(-0.45, -0.2), ncol=1, fontsize=7.2, frameon=False)
     # (c) per-class AP vs training instances
     ax = fig.add_subplot(gs[2])
     M = _px_models("pxdet")
@@ -475,10 +488,10 @@ def fig_analysis():
     for k in [o for o in order if o in M]:
         pc = M[k]
         xs = [max(tr.get(c, 0), 1) for c in pc]
-        ax.scatter(xs, [100 * v for v in pc.values()], s=7 if k != "shipped" else 9, color=COL(k),
-                   marker="o" if k != "shipped" else "x", lw=0.7, label=MODEL_LABEL[k], alpha=0.85, zorder=3)
+        ax.scatter(xs, [100 * v for v in pc.values()], s=7, color=COL(k),
+                   marker="o", lw=0.7, label=MODEL_LABEL[k], alpha=0.85, zorder=3)
         vals["pxdet_per_class"][k] = pc
-    ax.set_xscale("log")
+    ax.set_xscale("log"); plainlog(ax, "x")
     ax.axvspan(0.7, 100, color="#D55E00", alpha=0.06, lw=0); ax.axvspan(1000, 3e4, color="#0072B2", alpha=0.06, lw=0)
     # bin means of the validation-selected PX-DET family (same rule as the tables)
     import make_tables as _MT
@@ -490,16 +503,14 @@ def fig_analysis():
         v = G.get(f"test_box_{bn}_map50_95_mean")
         if v is not None:
             ax.hlines(100 * v, lo, hi, color=COL(selk), lw=1.2, linestyles=":")
-            ax.text(np.sqrt(lo * hi), 100 * v + 2.5, f"{100 * v:.1f}", ha="center", fontsize=6.6, color=COL(selk),
+            ax.text(np.sqrt(lo * hi), 100 * v + 2.5, f"{100 * v:.1f}", ha="center", fontsize=7.2, color=COL(selk),
                     bbox=dict(fc="white", ec="none", pad=0.3, alpha=0.85), zorder=4)
     ax.set_xlim(0.7, 3e4); ax.set_ylim(-3, 80)
     ax.set_xlabel("training instances (log)", labelpad=1); ax.set_ylabel("AP$_{50:95}$", labelpad=2)
-    ax.text(3, 74, "tail", fontsize=6.6, color="#D55E00"); ax.text(250, 74, "med.", fontsize=6.6, color="#555555", ha="center")
-    ax.text(7000, 74, "head", fontsize=6.6, color="#0072B2", ha="center")
-    from matplotlib.lines import Line2D
-    ax.legend(handles=[Line2D([], [], marker="o", ls="", color=COL(k), ms=3, label=MODEL_LABEL[k])
-                       for k in [o for o in order if o in M and o != "shipped"]],
-              loc="upper left", bbox_to_anchor=(0.0, 0.92), fontsize=6.6, frameon=False, handletextpad=0.2)
+    ax.text(10, 74, "tail", fontsize=7.2, color="#D55E00", ha="center")
+    ax.text(310, 74, "mid", fontsize=7.2, color="#555555", ha="center")
+    ax.text(5000, 66, "head", fontsize=7.2, color="#0072B2", ha="center")      # staggered: no overlap with "mid"
+    # model colours are keyed once, by the legend under panel (a) (QA 2026-11-16: this legend covered points)
     ax.set_title("(c) PX-DET per class", loc="left")
     # (d) IO-CLS read-out depth
     ax = fig.add_subplot(gs[3])
@@ -527,9 +538,10 @@ def fig_analysis():
             ax.errorbar(x, 100 * m["test_macro_ap"], yerr=[[100 * (m["test_macro_ap"] - lo)], [100 * (hi - m["test_macro_ap"])]],
                         color="#333333", lw=0.6, capsize=1.5)
             vals["cls"][k] = m["test_macro_ap"]
-    ax.set_xticks([0, 1, 2, 3.0, 3.62], ["ViT-S", "ViT-B", "CNX-T", "C1", "C2"], fontsize=6.2)
+    ax.set_xticks([0, 1, 2, 3.0, 3.62], ["ViT-S", "ViT-B", "CNX-T", "C1", "C2"], fontsize=7.2, rotation=35, ha="right",
+                  rotation_mode="anchor")
     ax.set_ylim(40, 112); ax.set_yticks([40, 60, 80, 100]); ax.set_ylabel("IO-CLS macro-AP")
-    ax.legend(loc="upper left", fontsize=6.4, ncol=2, handlelength=0.8, columnspacing=0.6, borderaxespad=0.2)
+    ax.legend(loc="upper left", fontsize=7.2, ncol=2, handlelength=0.8, columnspacing=0.6, borderaxespad=0.2)
     ax.set_title("(d) IO-CLS read-outs", loc="left")
     save(fig, "fig_analysis")
     write_json(RESULTS / "fig_analysis_values.json", dict(provenance="run (scripts/make_figures.py)", **vals))
@@ -547,12 +559,12 @@ def fig_leak():
         ax.bar(xs - 0.19, a, 0.36, color=ca, label=la)
         ax.bar(xs + 0.19, b, 0.36, color=cb, label=lb)
         for x, u, v in zip(xs, a, b):
-            ax.text(x - 0.19, u + 0.4, f"{u:.{nd}f}", ha="center", fontsize=6.4)
-            ax.text(x + 0.19, v + 0.4, f"{v:.{nd}f}", ha="center", fontsize=6.4)
-        ax.set_xticks(xs, labels, fontsize=6.4)
+            ax.text(x - 0.19, u + 0.4, f"{u:.{nd}f}", ha="center", fontsize=7.2)
+            ax.text(x + 0.19, v + 0.4, f"{v:.{nd}f}", ha="center", fontsize=7.2)
+        ax.set_xticks(xs, labels, fontsize=7.2)
         ax.set_ylim(0, max(max(a), max(b)) * 1.6 + 1)
         ax.set_title(title, loc="left"); ax.set_ylabel(ylabel)
-        ax.legend(loc="upper left", ncol=2, fontsize=6.4, frameon=False, handlelength=0.9, columnspacing=0.8)
+        ax.legend(loc="upper left", ncol=2, fontsize=7.2, frameon=False, handlelength=0.9, columnspacing=0.8)
     # (a) L1 controlled swap
     L = D.get("L1_swap")
     if L and L.get("map50_95_clean"):
@@ -560,7 +572,7 @@ def fig_leak():
         pbars(axs[0], [f"seed {i}" for i in range(len(c))], c, l, "clean control", "leaky", "#0072B2", "#D55E00",
               "(a) controlled swap", "PX-DET mAP$_{50:95}$", nd=2, legloc="upper left")
         for i, (u, v) in enumerate(zip(c, l)):
-            axs[0].text(i + 0.19, v + 1.8, f"{100 * (v - u) / u:+.1f}%", ha="center", fontsize=6.5, fontweight="bold",
+            axs[0].text(i + 0.19, v + 1.8, f"{100 * (v - u) / u:+.1f}%", ha="center", fontsize=7.2, fontweight="bold",
                         color="#D55E00")
         vals["L1"] = L
     else:
@@ -574,7 +586,7 @@ def fig_leak():
         pbars(axs[1], ["IO-CLS\nmacro-AP", "IO-DET\nmAP$_{50:95}$"],
               [100 * m["common_test_trained_on_lineage_split"], 100 * io],
               [100 * m["common_test_trained_on_hash_split"], 100 * r3["test"]["box"]["map50_95"]],
-              "copy-free split", "leaky split", "#0072B2", "#D55E00", "(b) intraoral splits", "score")
+              "copy-free", "leaky", "#0072B2", "#D55E00", "(b) intraoral splits", "score")
         vals["L2_L3"] = True
     else:
         pending(axs[1], "(b) intraoral splits")
@@ -587,22 +599,17 @@ def fig_leak():
             v = [100 * x for x in g["test_box_map50_95_per_seed"]]
             ax.scatter([i] * len(v), v, color=col, s=12, zorder=3)
             ax.hlines(np.mean(v), i - 0.25, i + 0.25, color=col, lw=1.4)
-            ax.text(i + 0.28, np.mean(v), f"{np.mean(v):.1f}", va="center", fontsize=6.4)
+            ax.text(i + 0.28, np.mean(v), f"{np.mean(v):.1f}", va="center", fontsize=7.2)
         allv = [100 * x for g in (a, c) for x in g["test_box_map50_95_per_seed"]]
         ax.set_ylim(0, max(allv) * 1.5)
         dm = 100 * (np.mean(c["test_box_map50_95_per_seed"]) - np.mean(a["test_box_map50_95_per_seed"]))
         ns = min(len(a["test_box_map50_95_per_seed"]), len(c["test_box_map50_95_per_seed"]))
         ax.text(0.03, 0.97, f"mean change {dm:+.1f}\n(seeds: {ns}, 50 images)", transform=ax.transAxes, va="top",
-                fontsize=6.4, bbox=dict(fc="white", ec="#cccccc", lw=0.4, pad=1.5))
+                fontsize=7.2, bbox=dict(fc="white", ec="#cccccc", lw=0.4, pad=1.5))
         xt, xl = [0, 1], ["COCO\ninit", "DentUnity\ninit"]
-        e_s, e_d = G.get("pxdet_y11s"), G.get("pxdet_reexp_y11s")
-        if e_s and e_d:      # D1 vs base on PX-DET (plan F6d), drawn on the same axis
-            for i, (g, col) in enumerate(((e_s, "#999999"), (e_d, "#0072B2"))):
-                v = [100 * x for x in g["test_box_map50_95_per_seed"]]
-                ax.scatter([2.3 + i] * len(v), v, color=col, s=12, marker="s", zorder=3)
-                ax.hlines(np.mean(v), 2.05 + i, 2.55 + i, color=col, lw=1.4)
-            xt += [2.3, 3.3]; xl += ["PX-DET\nbase", "PX-DET\nD1"]
-        ax.set_xticks(xt, xl, fontsize=6.4); ax.set_xlim(-0.6, max(xt) + 0.8)
+        # UR 2026-11-16: the PX-DET D1-vs-base pair is no longer drawn on this DENTEX axis (different benchmark,
+        # overlapping tick labels, not in the caption); D1 is reported in Sec. 5.4 and Tab. J.1.
+        ax.set_xticks(xt, xl, fontsize=7.2); ax.set_xlim(-0.6, max(xt) + 0.8)
         ax.set_title("(c) DENTEX transfer", loc="left"); ax.set_ylabel("mAP$_{50:95}$")
         vals["dentex"] = {"coco": a["test_box_map50_95_per_seed"], "dentunity": c["test_box_map50_95_per_seed"]}
     else:
@@ -627,8 +634,8 @@ def fig_supp_lineage():
         edges = [1, 2, 3, 5, 10, 100, 10 ** 6]
         h, _ = np.histogram(sz, edges)
         ax.bar(range(len(h)), h, color=col)
-        ax.set_xticks(range(len(h)), ["1", "2", "3-4", "5-9", "10-99", "100+"], fontsize=6.6, rotation=45)
-        ax.set_yscale("log"); ax.set_title(lab, loc="left", fontsize=7.4); ax.set_ylabel("lineages")
+        ax.set_xticks(range(len(h)), ["1", "2", "3-4", "5-9", "10-99", "100+"], fontsize=7.2, rotation=45)
+        ax.set_yscale("log"); plainlog(ax); ax.set_title(lab, loc="left", fontsize=7.4); ax.set_ylabel("lineages")
         vals[lab[:3]] = {"hist": h.tolist(), "n_lineages": int(len(sz)), "max_size": int(sz.max())}
     save(fig, "fig_supp_lineage")
     write_json(RESULTS / "fig_supp_lineage_values.json", dict(provenance="run (scripts/make_figures.py)", **vals))

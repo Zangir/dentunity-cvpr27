@@ -30,7 +30,6 @@ JOBS = [
     ("cls_ft_convnext_t_s0", "cls_ft_convnext_t_s0.json", [PY, "-u", "-m", "dentunity.cls_finetune", "--model", "convnext_t", "--seed", "0"]),
     ("cls_ft_vits14_s0", "cls_ft_vits14_s0.json", [PY, "-u", "-m", "dentunity.cls_finetune", "--model", "vits14", "--seed", "0"]),
     ("pxdet_y11s_s0",) + Y("pxdet_y11s_s0", "pxdet", "yolo11s.pt", 20, 0, 2),
-    ("shipped_ckpt", "shipped_checkpoint.json.done", [PY, "-u", "-m", "dentunity.eval_shipped"]),
     ("leak_leaky_s0",) + Y("pxleak_y11n_leaky_s0", "pxdet_leaky", "yolo11n.pt", 15, 0),
     ("leak_clean_s0",) + Y("pxleak_y11n_cleanctl_s0", "pxdet_cleanctl", "yolo11n.pt", 15, 0),
     ("dentex_prep", "dentex_overlap.json", [PY, "-u", "-c",
@@ -38,9 +37,6 @@ JOBS = [
         "sys.exit(9) if n<705 else subprocess.check_call([sys.executable,'-m','dentunity.dentex'])"]),
     ("dentex_coco_s0",) + Y("dentex_coco_y11s_s0", "dentex", "yolo11s.pt", 40, 0, 1, ("--final", "last")),
     ("dentex_du_s0",) + Y("dentex_du_y11s_s0", "dentex", "runs/pxdet_y11s_s0/weights/best.pt", 40, 0, 1, ("--final", "last")),
-    ("subset_eval_1", "subset_eval_1.flag", [PY, "-u", "-c",
-        "import subprocess,sys,pathlib;subprocess.check_call([sys.executable,'-u','-m','dentunity.subset_eval']);"
-        "pathlib.Path('results/subset_eval_1.flag').write_text('ok')"]),
     ("pxseg_y11m_s0",) + Y("pxseg_y11m_s0", "pxseg", "yolo11m-seg.pt", 20, 0, 4, ("--batch", "4")),
     ("cls_frozen_hash", "cls_frozen_hash.json.done", [PY, "-u", "-m", "dentunity.cls_frozen", "--split", "split_hash", "--tag", "_hash"]),
     ("cls_ft_convnext_t_s1", "cls_ft_convnext_t_s1.json", [PY, "-u", "-m", "dentunity.cls_finetune", "--model", "convnext_t", "--seed", "1"]),
@@ -61,9 +57,6 @@ JOBS = [
     ("dentex_du_s1",) + Y("dentex_du_y11s_s1", "dentex", "runs/pxdet_y11s_s1/weights/best.pt", 40, 1, 1, ("--final", "last")),
     ("pxseg_y11m_s1",) + Y("pxseg_y11m_s1", "pxseg", "yolo11m-seg.pt", 20, 1, 4, ("--batch", "4")),
     ("pxdet_y11m_s1",) + Y("pxdet_y11m_s1", "pxdet", "yolo11m.pt", 20, 1, 4, ("--batch", "4")),
-    ("subset_eval_2", "subset_eval_2.flag", [PY, "-u", "-c",
-        "import subprocess,sys,pathlib;subprocess.check_call([sys.executable,'-u','-m','dentunity.subset_eval']);"
-        "pathlib.Path('results/subset_eval_2.flag').write_text('ok')"]),
     ("pxdet_y11n_s0",) + Y("pxdet_y11n_s0", "pxdet", "yolo11n.pt", 20, 0),
     ("pxseg_y11n_s0",) + Y("pxseg_y11n_s0", "pxseg", "yolo11n-seg.pt", 20, 0, 1, ("--batch", "4")),
     ("pxdet_reexp_s0",) + Y("pxdet_reexp_y11s_s0", "pxdet_reexp", "yolo11s.pt", 9, 0, 4),

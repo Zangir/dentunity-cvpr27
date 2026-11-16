@@ -54,7 +54,7 @@ def main():
     cols = [wa, ratio(rd["path"], 0) * H, ratio(rp["path"], .03) * H, ratio(rs["path"], .03) * H,
             max(ratio(tr["path"], .03), ratio(te["path"], .03)) * (H - gap) / 2]
     W = sum(cols) + gap * (len(cols) - 1)
-    figw = 7.0          # presentation (2026-11-14): drawn near print width so labels print at >= 6.5 pt
+    figw = 6.875        # drawn at the print width (\linewidth), so a 7.2 pt label prints at 7.2 pt (QA 2026-11-16)
     TOP = 0.50
     fig = plt.figure(figsize=(figw, figw * (H + TOP) / W))
     sx, sy = 1 / W, 1 / (H + TOP)
@@ -65,7 +65,7 @@ def main():
         return fig.add_axes([xx * sx, (y0 + yy) * sy, w * sx, h * sy])
 
     def tag(ax, text):
-        ax.text(0.03, 0.96, text, transform=ax.transAxes, fontsize=6.8, color="white", va="top",
+        ax.text(0.03, 0.96, text, transform=ax.transAxes, fontsize=7.2, color="white", va="top",
                 bbox=dict(fc="black", alpha=0.6, pad=0.8, lw=0), linespacing=1.0)
     hh = (H - gap) / 2
     for k, r in enumerate((c1, c2)):
@@ -104,7 +104,7 @@ def main():
              f"(e) leak: {100 * A['px_shipped_test_share_with_train_lineage']:.1f}% of\nshipped test are copies",
              ha="center", fontsize=7.2, linespacing=1.0)
     from matplotlib.patches import Patch
-    fig.legend(handles=[Patch(color=v, label=k) for k, v in FAMC.items()], ncol=5, fontsize=7.0,
+    fig.legend(handles=[Patch(color=v, label=k) for k, v in FAMC.items()], ncol=5, fontsize=7.2,
                loc="upper center", bbox_to_anchor=(0.5, 1.0), frameon=False)
     out = REPO / "figures"
     out = Path(sys.argv[1]) if len(sys.argv) > 1 else out

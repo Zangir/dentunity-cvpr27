@@ -51,7 +51,7 @@
  "copy_rows": {
   "PX raw": 13932,
   "PX distinct": 5929,
-  "PX lin.": 5255,
+  "PX lin.": 5253,
   "IO raw": 7071,
   "IO distinct": 4527,
   "IO lin.": 544

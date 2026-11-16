@@ -16,6 +16,8 @@
    "val": 430,
    "test": 855
   },
+  "annotations_total": 4307,
+  "lineages_total": 520,
   "per_concept": {
    "calculus": {
     "train": 584,
@@ -113,6 +115,8 @@
    "val": 308,
    "test": 605
   },
+  "annotations_total": 3129,
+  "lineages_total": 318,
   "per_concept": {
    "gingivitis": {
     "train": 347,
@@ -190,6 +194,8 @@
    "val": 5531,
    "test": 11602
   },
+  "annotations_total": 56790,
+  "lineages_total": 5253,
   "per_concept": {
    "caries": {
     "train": 2918,

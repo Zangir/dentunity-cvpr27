@@ -1,0 +1,63 @@
+{
+ "provenance": "run",
+ "amendment": "2026-11-16T13:15+04:00",
+ "labels": [
+  "caries",
+  "calculus",
+  "gingivitis",
+  "mouth ulcer",
+  "tooth discoloration",
+  "hypodontia"
+ ],
+ "templates": {
+  "T1": [
+   "a photo of {}."
+  ],
+  "T2": [
+   "an intraoral photograph showing {}."
+  ],
+  "T3": [
+   "a clinical photograph of the mouth with {}."
+  ],
+  "T4": [
+   "a photo of {}.",
+   "an intraoral photograph showing {}.",
+   "a clinical photograph of the mouth with {}."
+  ]
+ },
+ "models": {
+  "biomedclip": "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224",
+  "clip_vitb16": "('ViT-B-16-quickgelu', 'openai')"
+ },
+ "selection": "validation macro-AP only; test scored once for the selected candidate",
+ "candidates_val_macro_ap": {
+  "biomedclip/T1": 0.20363437590182176,
+  "biomedclip/T2": 0.19782818021252566,
+  "biomedclip/T3": 0.2187174050429527,
+  "biomedclip/T4": 0.20279525193619072,
+  "clip_vitb16/T1": 0.19739886422596173,
+  "clip_vitb16/T2": 0.21881139562309085,
+  "clip_vitb16/T3": 0.22236196134402778,
+  "clip_vitb16/T4": 0.22065745686293878
+ },
+ "selected": "clip_vitb16/T3",
+ "val_macro_ap": 0.22236196134402778,
+ "test_macro_ap": 0.2103849754930969,
+ "test_macro_auroc": 0.43373195474871934,
+ "test_per_class_ap": [
+  0.23656702189189108,
+  0.04229352833003915,
+  0.6861270251673386,
+  0.2321334510425785,
+  0.03111201998066695,
+  0.03407680654606735
+ ],
+ "test_ci95": [
+  0.19134831145246387,
+  0.2385745646156468
+ ],
+ "n_test": 808,
+ "runtime_s": 114.7,
+ "test_chance_macro_ap": 0.17636139690876007,
+ "bug_fix_amendment": "2026-11-16T13:19+04:00 (first run used GELU for OpenAI CLIP; discarded and disclosed in plan.json)"
+}
