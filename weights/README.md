@@ -1,14 +1,16 @@
 # DentUnity reference model weights
 
+The validation-selected reference model of each dense task (seed 0), as reported in the paper.
+
 | File | Model | Task |
 |---|---|---|
-| dentunity_pxdet_y11s_s0.pt | YOLO11s | Panoramic tooth/finding detection (PX-DET), seed 0 |
-| dentunity_pxseg_y11s_s0.pt | YOLO11s-seg | Panoramic instance segmentation (PX-SEG), seed 0 |
-| dentunity_iodet_y11s_s0.pt | YOLO11s | Intraoral finding detection (IO-DET), seed 0 |
+| dentunity_iodet_y11n_s0.pt | YOLO11n | Intraoral finding detection (IO-DET) |
+| dentunity_pxdet_y11m_s0.pt | YOLO11m | Panoramic detection (PX-DET) |
+| dentunity_pxseg_y11s_s0.pt | YOLO11s-seg | Panoramic instance segmentation (PX-SEG) |
 
-These are snapshots and will be updated with the final selected models.
+Load with `from ultralytics import YOLO; YOLO("dentunity_pxdet_y11m_s0.pt")`. Optimizer state and
+local training paths were removed.
 
-**Licence:** these weights are fine-tuned from Ultralytics base weights and are released under
-**AGPL-3.0** (https://www.gnu.org/licenses/agpl-3.0.html), which applies to this `weights/`
-folder only. The code in this repository is MIT. The training images remain under their
-upstream publishers' terms (see the dataset card); the weights are provided for research use.
+**Licence:** fine-tuned from Ultralytics base weights and released under **AGPL-3.0**, which applies
+to this `weights/` folder only. The code is MIT. Training images remain under their upstream
+publishers' terms; the weights are provided for research use.
