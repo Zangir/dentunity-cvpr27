@@ -1,0 +1,36 @@
+{
+ "provenance": "run (scripts/strict_link_audit.py; plan amendment 2026-11-17 09:32)",
+ "intraoral_strict": {
+  "tau_precision": 0.9503251314163208,
+  "edges": "sha256 + mutual 3-NN above the precision threshold",
+  "lineages": 3051,
+  "largest_lineage": 19,
+  "io_cls_hash_split_test_share_with_train_lineage": 0.2847124824684432,
+  "io_det_shipped_val_share_with_train_lineage": 0.6111111111111112,
+  "io_det_shipped_val_share_with_cls_train_lineage": 0.6388888888888888,
+  "io_cls_test_share_with_shipped_det_train_lineage": 0.23775388291517324,
+  "dentunity_test_contamination": 0.0,
+  "dentunity_val_contamination": 0.0,
+  "all_links": {
+   "io_cls_hash_split_test_share_with_train_lineage": 0.9102384291725105,
+   "io_det_shipped_val_share_with_train_lineage": 0.9722222222222222,
+   "io_det_shipped_val_share_with_cls_train_lineage": 0.6388888888888888,
+   "io_cls_test_share_with_shipped_det_train_lineage": 0.4994026284348865,
+   "io_test_contamination": 0.0,
+   "io_val_contamination": 0.0,
+   "largest_lineage": 1789,
+   "lineages": 544
+  },
+  "reproduction_all_links_hash_test_leak": 0.9102384291725105,
+  "reproduction_all_links_largest": 1789
+ },
+ "panoramic_keys_only": {
+  "edges": "export key + sha256 + registration (no embedding edges)",
+  "px_shipped_test_share_with_train_lineage": 0.9607594936708861,
+  "px_shipped_valid_share_with_train_lineage": 0.4329501915708812,
+  "all_links": {
+   "px_shipped_test_share_with_train_lineage": 0.9613924050632912,
+   "px_shipped_valid_share_with_train_lineage": 0.542319749216301
+  }
+ }
+}

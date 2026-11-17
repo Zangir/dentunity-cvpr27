@@ -334,6 +334,14 @@ def short(rn):
     return r.replace("y11", "11").replace("_s", " s").replace("reexp", "D1").replace("_", " ")
 
 
+
+LOW_N = 10       # review fix (2026-11-16): classes with fewer PX-DET evaluation boxes are marked as low support
+
+
+def low(concept, split="test"):
+    pc = J("split_class_stats.json")["px_det"]["per_concept"]
+    return concept in pc and pc[concept]["val" if split != "test" else "test"] < LOW_N
+
 def px_ap5095(split="test"):
     runs = _runs()
     tr = J("summary_det.json")["px_train_instances"]
@@ -350,13 +358,14 @@ def px_ap5095(split="test"):
                 cells.append(f1(v[c]) if c in v else "--")
             if all(x == "--" for x in cells):
                 continue
-            lines.append(f"{PX2U[c]['name']} & {FAMS[PX2U[c]['family']]} & {n(tr.get(c, 0))} & " + " & ".join(cells) + " \\\\")
+            nm = PX2U[c]['name'] + ("$^\\dagger$" if low(PX2U[c]['name'], split) else "")
+            lines.append(f"{nm} & {FAMS[PX2U[c]['family']]} & {n(tr.get(c, 0))} & " + " & ".join(cells) + " \\\\")
         word = "test" if split == "test" else "validation"
         env = "table*" if len(cols) > 4 else "table"     # more runs than fit one column -> full width
         write(f"tab_app_{task}{sp}_ap.tex", r"""\begin{""" + env + r"""}[t]
 \centering\scriptsize
 \setlength{\tabcolsep}{2.5pt}
-\caption{\textbf{""" + lab + " " + word + r""" AP$_{50:95}$ per class} (\%) for every run (11n/11s/11m: YOLO11 size, s0/s1: seed), sorted by PX-DET training instances (n). Classes absent from the """ + word + r""" split are omitted.}
+\caption{\textbf{""" + lab + " " + word + r""" AP$_{50:95}$ per class} (\%) for every run (11n/11s/11m: YOLO11 size, s0/s1: seed), sorted by PX-DET training instances (n). Classes absent from the """ + word + r""" split are omitted. $^\dagger$Low support: fewer than """ + str(LOW_N) + " PX-DET " + word + r""" boxes, so the AP is unstable.}
 \label{tab:app_""" + task + sp + r"""_ap}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{llr""" + "c" * len(cols) + r"""}

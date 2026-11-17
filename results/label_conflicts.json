@@ -1,0 +1,8 @@
+{
+ "provenance": "run (scripts/label_conflicts.py over data/inv_io_det.json)",
+ "io_det_files": 1508,
+ "io_det_exact_duplicate_groups": 101,
+ "io_det_exact_duplicate_files_removed": 135,
+ "io_det_duplicate_groups_with_conflicting_boxes": 79,
+ "conflicting_share_of_duplicate_groups": 0.7821782178217822
+}

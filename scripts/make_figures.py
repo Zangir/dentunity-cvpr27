@@ -198,17 +198,23 @@ def fig_pipeline():
 
     # 5 Audit + release: leaked share of evaluation images
     ax, r = card(fig, xs[4], w, top, H, 5, "Audit + release", "eval. images with a copy", cols[4])
-    rows = [("shipped PX test", A["px_shipped_test_share_with_train_lineage"]),
-            ("shipped IO-DET val", A["io_det_shipped_val_share_with_train_lineage"]),
-            ("hash IO-CLS test", A["io_cls_hash_split_test_share_with_train_lineage"]),
-            ("DentUnity", max(A["px_test_contamination"], A["io_test_contamination"]))]
-    for i, (lab, v) in enumerate(rows):
+    # round 7: intraoral bars show the strict-link share (conservative); all links in brackets
+    SL = J("strict_link_audit.json")["intraoral_strict"]
+    rows = [("shipped PX test", A["px_shipped_test_share_with_train_lineage"], None),
+            ("shipped IO-DET val", SL["io_det_shipped_val_share_with_train_lineage"], A["io_det_shipped_val_share_with_train_lineage"]),
+            ("hash IO-CLS test", SL["io_cls_hash_split_test_share_with_train_lineage"], A["io_cls_hash_split_test_share_with_train_lineage"]),
+            ("DentUnity", max(A["px_test_contamination"], A["io_test_contamination"]), None)]
+    for i, (lab, v, vall) in enumerate(rows):
         y0 = r[1] + r[3] - 0.17 - i * 0.235
         ax.text(r[0] + 0.07, y0 + 0.07, lab, ha="left", fontweight="bold" if i == 3 else "normal", **tx)
         bw = (r[2] - 0.55) * v
-        ax.add_patch(plt.Rectangle((r[0] + 0.07, y0 - 0.065), max(bw, 0.004), 0.07,
-                                   fc="#009E73" if i == 3 else "#999999", ec="none"))
-        ax.text(r[0] + 0.1 + bw, y0 - 0.03, f"{100 * v:.1f}%", ha="left", **tx)
+        if i == 3:      # round 5: our splits are reported as copy-lineage-disjoint, not as a 0% figure
+            assert v == 0.0
+            ax.text(r[0] + 0.07, y0 - 0.03, "no detected copy", ha="left", color="#009E73", **tx)
+            continue
+        ax.add_patch(plt.Rectangle((r[0] + 0.07, y0 - 0.065), max(bw, 0.004), 0.07, fc="#999999", ec="none"))
+        ax.text(r[0] + 0.1 + bw, y0 - 0.03, f"{100 * v:.1f}%" + (f" ({100 * vall:.0f}%)" if vall is not None else ""),
+                ha="left", **tx)
     ax.text(r[0] + r[2] / 2, r[1] + 0.13, "build kit, no images", ha="center", color="#333333", **tx)
 
     # arrows between stages

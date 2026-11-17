@@ -14,6 +14,10 @@ python3 scripts/split_class_stats.py >/dev/null && python3 scripts/make_appendix
 python3 scripts/make_figures.py ../../paper >/dev/null 2>&1 || { echo "make_figures failed"; exit 1; }
 python3 scripts/make_readme.py >/dev/null
 cd $R/paper
+# main <-> supplement pointers are static text generated from the .aux files (make_supprefs.py), so both
+# documents also compile alone on Overleaf: main -> pointers -> supplement -> pointers -> main
+python3 ../../../tools/compile_paper.py --paper-dir . >/dev/null; python3 make_supprefs.py >/dev/null || exit 1
+python3 ../../../tools/compile_paper.py --paper-dir . --main supplementary.tex >/dev/null; python3 make_supprefs.py || exit 1
 python3 ../../../tools/compile_paper.py --paper-dir . | tail -1
 echo "main undefined/overfull: $(grep -cE 'Overfull|undefined' main.log)"
 for pg in 8 9; do echo "p$pg: $(pdftotext -f $pg -l $pg main.pdf - 2>/dev/null | grep -oE 'default for public dental data|LLM Usage Statement|^References' | tr '\n' '|')"; done

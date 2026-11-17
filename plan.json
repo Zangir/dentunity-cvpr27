@@ -212,6 +212,11 @@
    "at": "2026-11-16T15:52+04:00",
    "type": "run stopped (author decision)",
    "change": "The box-prompted SAM PX-SEG run was stopped by the authors (all experiments halted at the user's request) during the seed-1 test pass. Completed and reported: seed 0 validation (SAM masks 8.8 vs YOLO11s masks 11.7 mask mAP50:95, box mAP identical to the recorded run) and seed 0 test (6.6 vs 9.0). Seed 1 (test and validation) was not run. The reference beats no reported model."
+  },
+  {
+   "at": "2026-11-17T09:32+04:00",
+   "type": "post-hoc descriptive re-audit (user request after external review; CPU only)",
+   "change": "Strict-link re-audit of every intraoral leak figure: rebuild the intraoral copy graph from the cached link embeddings with strict links only (identical sha256 and mutual nearest neighbours at the 0.950 precision threshold; export keys and registration exist only for panoramic files), without the 0.731 recall edges and without the cached preliminary IO-CLS graph, and recompute the hash-deduplicated IO-CLS test leak, the shipped IO-DET validation leak, both cross-task leaks, the largest intraoral lineage and the contamination of the DentUnity splits. For panoramic files, recompute the shipped-test leak with export keys, sha256 and registration only (no embedding edges). No model is trained or selected; the splits are unchanged. Both columns (all links / strict links) are reported whatever the result."
   }
  ]
 }

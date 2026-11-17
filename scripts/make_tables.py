@@ -120,30 +120,37 @@ def pct(x):
 
 
 def tab_audit():
+    # round 7 (plan amendment 2026-11-17 09:32): every leak is shown under all links and under strict links
     A = J("dataset_stats.json")["audit"]
+    SL = J("strict_link_audit.json") if (R / "strict_link_audit.json").exists() else None
+    I = SL["intraoral_strict"] if SL else {}
+    PK = SL["panoramic_keys_only"] if SL else {}
     rows = [
-        ("Shipped panoramic split", "test vs train", A["px_shipped_test_share_with_train_lineage"]),
-        ("Shipped panoramic split", "val vs train", A["px_shipped_valid_share_with_train_lineage"]),
-        ("Shipped IO-DET split", "val vs train", A["io_det_shipped_val_share_with_train_lineage"]),
-        ("Hash-deduplicated IO-CLS split", "test vs train", A["io_cls_hash_split_test_share_with_train_lineage"]),
-        ("Per-task splits, cross-task", "IO-DET val vs IO-CLS train", A["io_det_shipped_val_share_with_cls_train_lineage"]),
-        ("Per-task splits, cross-task", "IO-CLS test vs IO-DET train", A["io_cls_test_share_with_shipped_det_train_lineage"]),
+        ("Shipped panoramic split", "test vs train", A["px_shipped_test_share_with_train_lineage"], PK.get("px_shipped_test_share_with_train_lineage")),
+        ("Shipped panoramic split", "val vs train", A["px_shipped_valid_share_with_train_lineage"], PK.get("px_shipped_valid_share_with_train_lineage")),
+        ("Shipped IO-DET split", "val vs train", A["io_det_shipped_val_share_with_train_lineage"], I.get("io_det_shipped_val_share_with_train_lineage")),
+        ("Hash-deduplicated IO-CLS split", "test vs train", A["io_cls_hash_split_test_share_with_train_lineage"], I.get("io_cls_hash_split_test_share_with_train_lineage")),
+        ("Per-task splits, cross-task", "IO-DET val vs IO-CLS train", A["io_det_shipped_val_share_with_cls_train_lineage"], I.get("io_det_shipped_val_share_with_cls_train_lineage")),
+        ("Per-task splits, cross-task", "IO-CLS test vs IO-DET train", A["io_cls_test_share_with_shipped_det_train_lineage"], I.get("io_cls_test_share_with_shipped_det_train_lineage")),
     ]
-    body = "\n".join(f"{a} & {b} & {pct(v)} \\\\" for a, b, v in rows)
+    sv = lambda v: "--" if v is None else pct(v)
+    body = "\n".join(f"{a} & {b} & {pct(v)} & {sv(w)} \\\\" for a, b, v, w in rows)
     ours = max(A["io_test_contamination"], A["io_val_contamination"], A["px_test_contamination"])
+    ours_s = max(I.get("dentunity_test_contamination", 0) or 0, I.get("dentunity_val_contamination", 0) or 0)
+    nd = lambda v: "none" if v == 0 else pct(v)
     tex = r"""\begin{table}[t]
 \centering\small
 \setlength{\tabcolsep}{3pt}
-\caption{\textbf{Split audit.} Share of evaluation images whose copy lineage also occurs in the training data, for the shipped and earlier splits and for \name.}
+\caption{\textbf{Split audit.} Share of evaluation images whose copy lineage also occurs in the training data. All: every link rule; strict: no recall edges (photographs) and no embedding edges (radiographs).}
 \label{tab:audit}
 \resizebox{\columnwidth}{!}{%
-\begin{tabular}{llr}
+\begin{tabular}{llrr}
 \toprule
-Split & Comparison & Leaked \\
+Split & Comparison & All & Strict \\
 \midrule
 """ + body + r"""
 \midrule
-\rowcolor{oursbg}\name, every task & val/test vs any train & """ + pct(ours) + r""" \\
+\rowcolor{oursbg}\name, every task & val/test vs any train & """ + nd(ours) + " & " + nd(ours_s) + r""" \\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -379,6 +386,9 @@ Model & val & test & """ + head + r""" \\
 """)
     runs = D.get("runs", {})
     tr = D.get("px_train_instances", {})
+    from dentunity.taxonomy import UNIFIED
+    PX2U = {c["sources"]["px"]: c for c in UNIFIED if "px" in c["sources"]}
+    PCT = J("split_class_stats.json")["px_det"]["per_concept"]
     cols = [("DET 11s s0", "pxdet_y11s_s0", "box"), ("DET 11s s1", "pxdet_y11s_s1", "box"),
             ("DET 11m s0", "pxdet_y11m_s0", "box"), ("DET 11n", "pxdet_y11n_s0", "box"),
             ("SEG 11s s0", "pxseg_y11s_s0", "mask"), ("SEG 11s s1", "pxseg_y11s_s1", "mask"),
@@ -398,10 +408,12 @@ Model & val & test & """ + head + r""" \\
         for _, rn, kind in cols:
             v = runs.get(rn, {}).get("test", {}).get(kind, {}).get("per_class_ap50")
             cells.append("XX" if v is None else (f1(v[c]) if c in v else "--"))
-        lines.append(f"{c.replace('_', ' ')} & {_fmt(tr.get(c, 0))} & " + " & ".join(cells) + " \\\\")
+        cpt = PX2U.get(c, {}).get("name")
+        lowc = cpt in PCT and PCT[cpt]["test"] < 10           # review fix: low-support mark, as in Tabs. J.2-J.5
+        lines.append(f"{c.replace('_', ' ')}{'$^\\dagger$' if lowc else ''} & {_fmt(tr.get(c, 0))} & " + " & ".join(cells) + " \\\\")
     t2 = (r"""\begin{table*}[t]
 \centering\scriptsize
-\caption{\textbf{Panoramic per-class test AP$_{50}$} (\%), classes sorted by PX-DET training instances (n). Classes are the source labels. DET: PX-DET boxes, SEG: PX-SEG masks, 11n/11s/11m: YOLO11 sizes, +D1: with re-exports, s0/s1: seeds. --: class absent from that test split.}
+\caption{\textbf{Panoramic per-class test AP$_{50}$} (\%), classes sorted by PX-DET training instances (n). Classes are the source labels. DET: PX-DET boxes, SEG: PX-SEG masks, 11n/11s/11m: YOLO11 sizes, +D1: with re-exports, s0/s1: seeds. --: class absent from that test split. $^\dagger$Fewer than 10 PX-DET test boxes (low support).}
 \label{tab:supp_px}
 \setlength{\tabcolsep}{3pt}
 \resizebox{\textwidth}{!}{%
@@ -895,8 +907,10 @@ def numbers():
         dput(T + "SizeGain", e_s and e_s.get(f"test_{kind}_map50_95_mean"), e_n and e_n.get(f"test_{kind}_map50_95_mean"), signed=True)
         e_m = G.get(f"{task}_y11m")
         put(T + "Medium", e_m and e_m.get(f"test_{kind}_map50_95_mean"))
+        put(T + "Planned", e_s and e_s.get(f"test_{kind}_map50_95_mean"))      # round 7: planned YOLO11s beside post-plan YOLO11m
+        mac[T + "PlannedSeeds"] = str(e_s.get("n_seeds", "XX")) if e_s else "XX"
     L1 = D.get("L1_swap", {})
-    put("leakAbs", L1.get("map50_95_diff_mean"), nd=2); put("leakRel", L1.get("map50_95_rel_gain_mean"))
+    put("leakAbs", L1.get("map50_95_diff_mean"), nd=2); put("leakAbsShort", L1.get("map50_95_diff_mean"), nd=1); put("leakRel", L1.get("map50_95_rel_gain_mean"))
     put("leakClean", np.mean(L1["map50_95_clean"]) if L1.get("map50_95_clean") else None, nd=2)
     put("leakLeaky", np.mean(L1["map50_95_leaky"]) if L1.get("map50_95_leaky") else None, nd=2)
     mac["leakSeeds"] = str(len(L1.get("map50_95", []))) if L1 else "XX"
@@ -945,6 +959,18 @@ if __name__ == "__main__":
     supp_dentex()
     supp_tail()
     numbers()
+    # round 6: main-paper floats point into the supplement with static text (\suppref, see paper/make_supprefs.py),
+    # because Overleaf compiles main.tex without the supplement's .aux
+    import re as _re
+    _aux = OUT.parent / "supplementary.aux"
+    _lab = set(_re.findall(r"\\newlabel\{([^}@]+)@cref\}", _aux.read_text(errors="ignore"))) if _aux.exists() else set()
+    def _conv(m):
+        ks = [k.strip() for k in m.group(2).split(",")]
+        if _lab and all(k in _lab for k in ks):
+            return ("\\Suppref{" if m.group(1) == "C" else "\\suppref{") + m.group(2) + "}"
+        return m.group(0)
+    for f in OUT.glob("tab_*.tex"):
+        f.write_text(_re.sub(r"\\([cC])ref\{([^}]+)\}", _conv, f.read_text()))
     for f in SUPP.glob("tab_supp_*.tex"):             # appendix column tables may sit in the text (QA 2026-11-16)
         f.write_text(f.read_text().replace("\\begin{table}[t]", "\\begin{table}[!htbp]"))
     for old in ("tab_leak.tex", "tab_sota.tex"):          # moved to the supplement (Fig. 6 carries the main-paper view)
