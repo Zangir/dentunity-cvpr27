@@ -217,6 +217,41 @@
    "at": "2026-11-17T09:32+04:00",
    "type": "post-hoc descriptive re-audit (user request after external review; CPU only)",
    "change": "Strict-link re-audit of every intraoral leak figure: rebuild the intraoral copy graph from the cached link embeddings with strict links only (identical sha256 and mutual nearest neighbours at the 0.950 precision threshold; export keys and registration exist only for panoramic files), without the 0.731 recall edges and without the cached preliminary IO-CLS graph, and recompute the hash-deduplicated IO-CLS test leak, the shipped IO-DET validation leak, both cross-task leaks, the largest intraoral lineage and the contamination of the DentUnity splits. For panoramic files, recompute the shipped-test leak with export keys, sha256 and registration only (no embedding edges). No model is trained or selected; the splits are unchanged. Both columns (all links / strict links) are reported whatever the result."
+  },
+  {
+   "at": "2026-11-17T11:07+04:00",
+   "type": "post-hoc robustness analysis (user request 2026-11-17; CPU only)",
+   "change": "Repeated lineage-level 5-fold cross-validation of the IO-CLS frozen read-outs (9 encoder x descriptor read-outs and the C1 multi-encoder lattice) on the cached features: all 3,899 IO-CLS images, the largest lineage kept in training as in the split, the other 519 lineages assigned to 5 folds at random (3 repeats with seeds 0-2). Each read-out keeps the regularisation C chosen on the original validation split (no new selection), standardisation and the 1,024-d PCA are fitted on the training folds. Reported: mean and spread of fold macro-AP per read-out, and tiers (read-outs whose paired fold-level difference to the best has a 95% interval that includes zero). Fine-tuned networks and C2 need training and are not included. Detection stays on the fixed split. Reported whatever the result."
+  },
+  {
+   "at": "2026-11-17T13:05+04:00",
+   "type": "post-plan analysis A (external review request; CPU only)",
+   "reason": "external review request",
+   "change": "Label-conflict breakdown of the IO-DET exact-duplicate groups (data/inv_io_det.json): each of the 79 conflicting groups (of 101) is assigned one type in a fixed order (box count differs; else class multiset differs; else some box's best same-class IoU < 0.5 after optimal matching; else min IoU in [0.5, 0.9); else IoU >= 0.9), and counted by the DentUnity split of the kept copy. Then the IO-DET test mAP50:95 and mAP50 of the validation-selected YOLO11n models (seed 0 = released weight, seed 1) are recomputed from per-image matches with existing weights on all 273 test images and without the test images whose sha256 group has conflicting labels, with a 95% paired image-bootstrap interval (2,000 resamples) for the difference. No training, no selection. Reported whatever the result."
+  },
+  {
+   "at": "2026-11-17T13:05+04:00",
+   "type": "post-plan analysis B (external review request; training via run_heavy.sh)",
+   "reason": "external review request",
+   "change": "DENTEX transfer strengthening, same recipe as the registered DENTEX runs (YOLO11s, 640 px, 40 epochs, batch 8, last checkpoint, no validation selection). (i) 95% paired image-bootstrap interval (2,000 resamples) of DentUnity-init minus COCO-init on the 50 evaluation images from the existing seed 0/1 last.pt files. (ii) Seeds 2, 3, 4 for both inits (DentUnity init = PX-DET YOLO11s best.pt of seed s mod 2, the only two PX-DET YOLO11s checkpoints that exist) -> 5 seeds; report per-seed, mean and the paired interval with images resampled jointly across seeds. (iii) 5-fold cross-validation over the 705 DENTEX training images (folds fixed by a seeded permutation of the sorted file list; train on 4 folds, evaluate the held-out fold with the last checkpoint), both inits, seed 0, DentUnity init = PX-DET YOLO11s seed 0; report per-fold and mean difference with a fold-stratified image-bootstrap interval and a fold-level t interval. All runs reported whatever the result; new DENTEX weights are not released."
+  },
+  {
+   "at": "2026-11-17T13:05+04:00",
+   "type": "post-plan analysis C (external review request; training via run_heavy.sh)",
+   "reason": "external review request",
+   "change": "RT-DETR-L (Ultralytics, COCO init) on IO-DET with the YOLO11 IO-DET protocol where feasible: same data tree and splits, 640 px, 40 epochs, best validation fitness checkpoint, test evaluated once, AMP off (MPS), batch 2 instead of 8 (memory cap), 1 seed. If it exceeds the 0.45 MPS watermark / 5 GB guard or cannot finish by 2026-11-22, the peak memory and point of failure are reported instead of a number. Not used for any selection or claim of the main paper; weights not released."
+  },
+  {
+   "at": "2026-11-17T13:05+04:00",
+   "type": "post-plan analysis D (external review request; CPU only)",
+   "reason": "external review request",
+   "change": "Same-patient candidate bound for the panoramic split: from the cached panoramic link embeddings (data/linkemb_px.npz), count cross-split pairs (val-train, test-train, test-val) with cosine in the high-similarity band [0.95, 0.981) just below the copy threshold (0.9806), and the number of evaluation images with at least one such training partner; also bands [0.90, 0.95) and >= threshold for reference. Counts only, no file names. These are candidates, not confirmed same-patient pairs (no clinician or identity check). A visual spot-check is not performed (no image leaves the machine and none is shown to the analysing agent)."
+  },
+  {
+   "at": "2026-11-17T13:14+04:00",
+   "type": "post-plan analysis D, addition (external review request; CPU only)",
+   "reason": "external review request",
+   "change": "The plain cosine band count of analysis D turned out to be dominated by chance similarity (radiographs are uniformly similar to the descriptor: about 28% of all cross-split canonical pairs fall in [0.95, 0.981), and the >= 0.981 cross-split count matches the 0.1% random-pair rate that defines the threshold). Both counts are still reported. Added a second candidate definition that follows the build's link rule: cross-split pairs that are mutual top-3 nearest neighbours (as for copy links) with cosine in [0.95, 0.981), i.e. pairs that miss a copy link only because of the threshold. Counts only; candidates, not confirmed patients."
   }
  ]
 }

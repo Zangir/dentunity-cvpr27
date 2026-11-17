@@ -1,0 +1,71 @@
+{
+ "provenance": "run (scripts/label_conflict_types.py over data/inv_io_det.json + data/bench.json; post-plan analysis A, external review request)",
+ "io_det_files": 1508,
+ "exact_duplicate_groups": 101,
+ "conflicting_groups": 79,
+ "duplicate_groups_by_split": {
+  "train": 81,
+  "val": 8,
+  "test": 12
+ },
+ "conflicting_groups_by_split": {
+  "train": 67,
+  "val": 5,
+  "test": 7
+ },
+ "type_order": [
+  "count",
+  "class",
+  "iou<0.5",
+  "iou0.5-0.9",
+  "iou>=0.9"
+ ],
+ "exclusive_type_by_split": {
+  "count": {
+   "train": 39,
+   "val": 4,
+   "test": 4,
+   "all": 47
+  },
+  "class": {
+   "train": 2,
+   "val": 0,
+   "test": 0,
+   "all": 2
+  },
+  "iou<0.5": {
+   "train": 9,
+   "val": 0,
+   "test": 1,
+   "all": 10
+  },
+  "iou0.5-0.9": {
+   "train": 17,
+   "val": 1,
+   "test": 2,
+   "all": 20
+  },
+  "iou>=0.9": {
+   "train": 0,
+   "val": 0,
+   "test": 0,
+   "all": 0
+  }
+ },
+ "nonexclusive_type_counts": {
+  "count": 47,
+  "class": 2,
+  "iou<0.5": 17,
+  "iou0.5-0.9": 27,
+  "iou>=0.9": 1
+ },
+ "copies_per_conflicting_group": {
+  "2": 57,
+  "3": 15,
+  "6": 1,
+  "5": 3,
+  "4": 3
+ },
+ "kept_copy_rule": "max (number of boxes, path) per sha256 group (unidental/build.py)",
+ "conflicting_test_images": 7
+}

@@ -1,0 +1,265 @@
+{
+ "provenance": "run (scripts/same_patient_band.py over data/linkemb_px.npz + data/bench.json; post-plan analysis D, external review request)",
+ "tau_copy": 0.9806216955184937,
+ "bands": {
+  "[0.90,0.95)": [
+   0.9,
+   0.95
+  ],
+  "[0.95,tau)": [
+   0.95,
+   0.9806216955184937
+  ],
+  ">=tau": [
+   0.9806216955184937,
+   null
+  ]
+ },
+ "note": "candidates only: high descriptor similarity below the copy threshold; no identity check",
+ "canonical": {
+  "sizes": {
+   "train": 4150,
+   "val": 593,
+   "test": 1186
+  },
+  "val-train": {
+   "[0.90,0.95)": {
+    "pairs": 1370678,
+    "val_images_with_partner": 593,
+    "train_images_with_partner": 4139
+   },
+   "[0.95,tau)": {
+    "pairs": 667766,
+    "val_images_with_partner": 579,
+    "train_images_with_partner": 3986
+   },
+   ">=tau": {
+    "pairs": 1853,
+    "val_images_with_partner": 231,
+    "train_images_with_partner": 799
+   },
+   "max_sim_quantiles_q50_q90_q99_max": [
+    0.9793,
+    0.9842,
+    0.9862,
+    0.9882
+   ],
+   "val_images_whose_nearest_train_is_in_[0.95,tau)": 348
+  },
+  "test-train": {
+   "[0.90,0.95)": {
+    "pairs": 2709367,
+    "test_images_with_partner": 1186,
+    "train_images_with_partner": 4143
+   },
+   "[0.95,tau)": {
+    "pairs": 1396154,
+    "test_images_with_partner": 1162,
+    "train_images_with_partner": 4025
+   },
+   ">=tau": {
+    "pairs": 4250,
+    "test_images_with_partner": 488,
+    "train_images_with_partner": 1144
+   },
+   "max_sim_quantiles_q50_q90_q99_max": [
+    0.9795,
+    0.9842,
+    0.9862,
+    0.9883
+   ],
+   "test_images_whose_nearest_train_is_in_[0.95,tau)": 674
+  },
+  "test-val": {
+   "[0.90,0.95)": {
+    "pairs": 384341,
+    "test_images_with_partner": 1184,
+    "val_images_with_partner": 593
+   },
+   "[0.95,tau)": {
+    "pairs": 195474,
+    "test_images_with_partner": 1130,
+    "val_images_with_partner": 571
+   },
+   ">=tau": {
+    "pairs": 558,
+    "test_images_with_partner": 227,
+    "val_images_with_partner": 162
+   },
+   "max_sim_quantiles_q50_q90_q99_max": [
+    0.9765,
+    0.9821,
+    0.9847,
+    0.9861
+   ],
+   "test_images_whose_nearest_val_is_in_[0.95,tau)": 903
+  }
+ },
+ "all_files": {
+  "sizes": {
+   "train": 9761,
+   "val": 1377,
+   "test": 2788
+  },
+  "val-train": {
+   "[0.90,0.95)": {
+    "pairs": 7599173,
+    "val_images_with_partner": 1377,
+    "train_images_with_partner": 9740
+   },
+   "[0.95,tau)": {
+    "pairs": 3594704,
+    "val_images_with_partner": 1347,
+    "train_images_with_partner": 9386
+   },
+   ">=tau": {
+    "pairs": 9303,
+    "val_images_with_partner": 537,
+    "train_images_with_partner": 1981
+   },
+   "max_sim_quantiles_q50_q90_q99_max": [
+    0.9794,
+    0.9844,
+    0.9864,
+    0.9887
+   ],
+   "val_images_whose_nearest_train_is_in_[0.95,tau)": 810
+  },
+  "test-train": {
+   "[0.90,0.95)": {
+    "pairs": 15253260,
+    "test_images_with_partner": 2788,
+    "train_images_with_partner": 9744
+   },
+   "[0.95,tau)": {
+    "pairs": 7602934,
+    "test_images_with_partner": 2738,
+    "train_images_with_partner": 9493
+   },
+   ">=tau": {
+    "pairs": 21676,
+    "test_images_with_partner": 1155,
+    "train_images_with_partner": 2764
+   },
+   "max_sim_quantiles_q50_q90_q99_max": [
+    0.9796,
+    0.9845,
+    0.9865,
+    0.9885
+   ],
+   "test_images_whose_nearest_train_is_in_[0.95,tau)": 1583
+  },
+  "test-val": {
+   "[0.90,0.95)": {
+    "pairs": 2129883,
+    "test_images_with_partner": 2783,
+    "val_images_with_partner": 1377
+   },
+   "[0.95,tau)": {
+    "pairs": 1052733,
+    "test_images_with_partner": 2657,
+    "val_images_with_partner": 1332
+   },
+   ">=tau": {
+    "pairs": 2741,
+    "test_images_with_partner": 549,
+    "val_images_with_partner": 381
+   },
+   "max_sim_quantiles_q50_q90_q99_max": [
+    0.9765,
+    0.9822,
+    0.9849,
+    0.9866
+   ],
+   "test_images_whose_nearest_val_is_in_[0.95,tau)": 2108
+  }
+ },
+ "mutual_top3_near_miss": {
+  "k": 3,
+  "mutual_pairs_total": 11918,
+  "by_band": {
+   "[0.95,tau)": {
+    "val-train": {
+     "pairs_all_files": 71,
+     "val_files_involved": 49,
+     "val_canonical_images_involved": 23,
+     "pairs_both_canonical": 17,
+     "val_copy_families_involved": 34,
+     "train_copy_families_involved": 38
+    },
+    "test-train": {
+     "pairs_all_files": 162,
+     "test_files_involved": 118,
+     "test_canonical_images_involved": 70,
+     "pairs_both_canonical": 48,
+     "test_copy_families_involved": 89,
+     "train_copy_families_involved": 90
+    },
+    "test-val": {
+     "pairs_all_files": 23,
+     "test_files_involved": 16,
+     "test_canonical_images_involved": 10,
+     "pairs_both_canonical": 8,
+     "test_copy_families_involved": 13,
+     "val_copy_families_involved": 13
+    },
+    "within_split_pairs_all_files": 269
+   },
+   "[0.90,0.95)": {
+    "val-train": {
+     "pairs_all_files": 1,
+     "val_files_involved": 1,
+     "val_canonical_images_involved": 1,
+     "pairs_both_canonical": 0,
+     "val_copy_families_involved": 1,
+     "train_copy_families_involved": 1
+    },
+    "test-train": {
+     "pairs_all_files": 6,
+     "test_files_involved": 5,
+     "test_canonical_images_involved": 3,
+     "pairs_both_canonical": 2,
+     "test_copy_families_involved": 3,
+     "train_copy_families_involved": 3
+    },
+    "test-val": {
+     "pairs_all_files": 9,
+     "test_files_involved": 5,
+     "test_canonical_images_involved": 3,
+     "pairs_both_canonical": 3,
+     "test_copy_families_involved": 3,
+     "val_copy_families_involved": 3
+    },
+    "within_split_pairs_all_files": 4
+   },
+   ">=tau": {
+    "val-train": {
+     "pairs_all_files": 0,
+     "val_files_involved": 0,
+     "val_canonical_images_involved": 0,
+     "pairs_both_canonical": 0,
+     "val_copy_families_involved": 0,
+     "train_copy_families_involved": 0
+    },
+    "test-train": {
+     "pairs_all_files": 0,
+     "test_files_involved": 0,
+     "test_canonical_images_involved": 0,
+     "pairs_both_canonical": 0,
+     "test_copy_families_involved": 0,
+     "train_copy_families_involved": 0
+    },
+    "test-val": {
+     "pairs_all_files": 0,
+     "test_files_involved": 0,
+     "test_canonical_images_involved": 0,
+     "pairs_both_canonical": 0,
+     "test_copy_families_involved": 0,
+     "val_copy_families_involved": 0
+    },
+    "within_split_pairs_all_files": 11373
+   }
+  },
+  "note": "cross-split pairs at >= tau that are mutual top-3 would be copy links; the build merged them into one lineage, so this count must be 0 by construction"
+ }
+}

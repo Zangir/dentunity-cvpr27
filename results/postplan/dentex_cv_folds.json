@@ -1,0 +1,32 @@
+{
+ "provenance": "run (scripts/make_dentex_cv.py; post-plan analysis B(iii))",
+ "n_images": 705,
+ "assignment_sha256": "602b2ddf5b39c529052799e014a48ec480aae885ed1791af92d38d0422df131d",
+ "folds": {
+  "0": {
+   "held_out_images": 141,
+   "held_out_boxes": 742,
+   "train_images": 564
+  },
+  "1": {
+   "held_out_images": 141,
+   "held_out_boxes": 726,
+   "train_images": 564
+  },
+  "2": {
+   "held_out_images": 141,
+   "held_out_boxes": 740,
+   "train_images": 564
+  },
+  "3": {
+   "held_out_images": 141,
+   "held_out_boxes": 645,
+   "train_images": 564
+  },
+  "4": {
+   "held_out_images": 141,
+   "held_out_boxes": 676,
+   "train_images": 564
+  }
+ }
+}
