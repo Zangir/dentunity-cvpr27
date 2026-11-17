@@ -633,7 +633,7 @@ def speed():
             lines.append(f"{nm} & {sz} & {v['n']} & {v['s']:.1f} & {v['img_per_s']:.2f} \\\\")
     write("tab_app_speed.tex", r"""\begin{table}[t]
 \centering\scriptsize
-\caption{\textbf{Training-speed probe} before the plan was frozen: images per second for a short training run on the laptop GPU (MPS) under the memory cap. The probe set the model sizes of the frozen plan.}
+\caption{\textbf{Training-speed probe} before the plan was frozen: images per second for a short training run on the GPU under the memory cap. The probe set the model sizes of the frozen plan.}
 \label{tab:app_speed}
 \begin{tabular}{lcrrr}
 \toprule
@@ -770,9 +770,38 @@ def trainfree():
 """)
 
 
+def cls_cv():
+    """Repeated lineage-level 5-fold CV of the IO-CLS frozen read-outs (plan amendment 2026-11-17 11:07)."""
+    V = J("cls_lineage_cv.json")
+    if V is None:
+        return
+    order = sorted(V["models"], key=lambda m: -V["models"][m]["mean"])
+    name = lambda m: "C1 multi-encoder lattice" if m == "multi_lattice" else short_cls(m)
+    lines = []
+    for m in order:
+        e, t = V["models"][m], V["tiers"][m]
+        ci = "--" if m == V["best"] else f"[{100 * t['ci95'][0]:.1f}, {100 * t['ci95'][1]:.1f}]"
+        lines.append(f"{name(m)} & {f1(e['mean'])} $\\pm$ {f1(e['sd'])} & [{f1(e['min'])}, {f1(e['max'])}] & {ci} & "
+                     f"{'\\cmark' if t['tied_with_best'] else ''} \\\\")
+    write("tab_app_cls_cv.tex", r"""\begin{table}[!htbp]
+\centering\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\caption{\textbf{IO-CLS read-outs under repeated lineage-level cross-validation} (macro-AP, \%; """ + str(V["repeats"]) + " repeats of " + str(V["folds"]) + r"""-fold CV over """ + n(V["lineages_folded"]) + r""" lineages, the largest lineage kept in training). Mean $\pm$ s.d. and range over folds. Best $-$ read-out: fold-paired 95\% interval. \cmark: top tier (interval includes zero). C is fixed from the original validation split.}
+\label{tab:app_cls_cv}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccc}
+\toprule
+Read-out & macro-AP & range & best $-$ this & tier \\
+\midrule
+""" + "\n".join(lines) + r"""
+\bottomrule
+\end{tabular*}
+\end{table}
+""")
+
+
 if __name__ == "__main__":
     for fn in (survey, splits, px_classes, io_classes, linkqc, runs_table, px_ap5095, io_ap, cls_full, cls_paired,
-               cls_curves, leak_cls, leak_px_classes, dentex, speed, families, cls_ft_labels, per_image_table, trainfree):
+               cls_curves, leak_cls, leak_px_classes, dentex, speed, families, cls_ft_labels, per_image_table, trainfree, cls_cv):
         fn()
     px_ap5095("val")
     print("appendix tables:", len(list(OUT.glob("tab_app_*.tex"))))

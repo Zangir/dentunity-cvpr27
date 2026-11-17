@@ -1,4 +1,4 @@
-"""Measure YOLO training throughput on this laptop (img/s) to size the plan."""
+"""Measure YOLO training throughput on this machine's GPU (img/s) to size the plan."""
 import json, sys, time
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))

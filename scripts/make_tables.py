@@ -51,7 +51,7 @@ def tab_compare():
 \label{tab:compare}
 \begin{tabularx}{\textwidth}{l*{7}{>{\centering\arraybackslash}X}}
 \toprule
-Dataset & Modality & Images & Cls & Det & Inst & Classes & Copy-free \\
+Dataset & Modality & Images & Cls & Det & Inst & Classes & Lineage-disjoint \\
 \midrule
 """ + body + r"""
 \bottomrule
@@ -643,7 +643,7 @@ def tab_det2():
     tex = r"""\begin{table*}[t]
 \centering\small
 \setlength{\tabcolsep}{4.5pt}
-\caption{\textbf{Detection and segmentation on the copy-free test splits} (COCO mAP, \%, classes present in test). Bold: best mean. Two-seed mAP$_{50:95}$ cells: mean [min, max]; mAP$_{50}$: mean (all runs: \cref{tab:app_runs})."""
+\caption{\textbf{Detection and segmentation on the copy-lineage-disjoint test splits} (COCO mAP, \%, classes present in test). Bold: best mean. Two-seed mAP$_{50:95}$ cells: mean [min, max]; mAP$_{50}$: mean (all runs: \cref{tab:app_runs})."""
     tex += notes + r"""}
 \label{tab:det}
 \begin{tabular}{lcccccc}
@@ -820,7 +820,7 @@ def supp_leak():
 \label{tab:supp_leak}
 \begin{tabular}{llccc}
 \toprule
-Setting & Test images & copy-free train & leaky train & $\Delta$ \\
+Setting & Test images & lineage-disjoint train & leaky train & $\Delta$ \\
 \midrule
 """ + body1 + r"""
 \bottomrule

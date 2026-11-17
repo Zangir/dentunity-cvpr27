@@ -592,7 +592,7 @@ def fig_leak():
         pbars(axs[1], ["IO-CLS\nmacro-AP", "IO-DET\nmAP$_{50:95}$"],
               [100 * m["common_test_trained_on_lineage_split"], 100 * io],
               [100 * m["common_test_trained_on_hash_split"], 100 * r3["test"]["box"]["map50_95"]],
-              "copy-free", "leaky", "#0072B2", "#D55E00", "(b) intraoral splits", "score")
+              "copy-lineage-disjoint", "leaky", "#0072B2", "#D55E00", "(b) intraoral splits", "score")
         vals["L2_L3"] = True
     else:
         pending(axs[1], "(b) intraoral splits")
